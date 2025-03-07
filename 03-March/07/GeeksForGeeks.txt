@@ -1,0 +1,50 @@
+Longest Palindromic Subsequence
+________________________________________________________
+
+
+class Solution {
+    public int longestPalinSubseq(String s) {
+        // code here
+        int n = s.length();
+        int dp[][] = new int[n][n];
+        for (int[] row : dp) Arrays.fill(row, -1);
+        return helper(dp, s, 0, n - 1);
+    }
+
+    private int helper(int dp[][] , String s, int i, int j) {
+        if (i > j) return 0;
+        
+        if (i == j) return 1;
+        
+        if (dp[i][j] != -1) return dp[i][j];
+
+        if (s.charAt(i) == s.charAt(j))
+            dp[i][j] = helper(dp,s, i + 1, j - 1) + 2; 
+        else
+            dp[i][j] = Math.max(helper(dp,s, i + 1, j), helper(dp,s, i, j - 1));
+
+        return dp[i][j];
+    }
+}
+
+________________________________________________________
+
+Explaination
+
+The task is to find the length of the longest palindromic subsequence in a given string s. A subsequence is formed by deleting some or no characters from the string without changing the order of the remaining characters. A palindromic subsequence reads the same forwards and backwards.
+
+Approach:
+Dynamic Programming (DP) Table:
+We use a 2D DP table dp[i][j] to store the length of the longest palindromic subsequence between indices i and j of the string s. The size of the DP table is n x n, where n is the length of the string s.
+
+Recursive Helper Function:
+The helper function is used to compute the length of the longest palindromic subsequence for any substring s[i...j]. We employ memoization (storing results in the dp table) to avoid redundant calculations. The function works as follows:
+
+If the characters at positions i and j are the same, the length of the longest palindromic subsequence is 2 plus the result of the substring s[i+1...j-1].
+If the characters at positions i and j are different, we take the maximum of the two possible subsequences: one by ignoring the character at i and the other by ignoring the character at j.
+Base Cases:
+
+If i > j, return 0 (no subsequence).
+If i == j, return 1 (a single character is a palindrome of length 1).
+Result:
+The final result, which is the length of the longest palindromic subsequence for the entire string s, is stored in dp[0][n-1].

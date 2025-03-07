@@ -1,0 +1,51 @@
+2523. Closest Prime Numbers in Range
+___________________________________________________________________
+
+class Solution {
+    public int[] closestPrimes(int left, int right) {
+        ArrayList<Integer> primes = new ArrayList<>();
+        addprimes(left,right,primes);
+        int res[] = mindiff(primes);
+        return res;
+    }
+    public static int[] mindiff(ArrayList<Integer> arr){
+        int []res = new int[2];
+        res[0]=-1; res[1]=-1;
+        int mindiff = Integer.MAX_VALUE;
+        for(int i=1 ; i<arr.size() ; i++){
+            int diff = arr.get(i)-arr.get(i-1);
+            if(diff<mindiff){
+                mindiff = diff;
+                res[0]=arr.get(i-1);
+                res[1]=arr.get(i);
+            }
+        }
+        return res;
+    }
+    public static void addprimes(int left,int right, ArrayList<Integer> arr){
+        for(int i=left ; i<=right ; i++){
+            if (i==1) continue;
+            if (i > 2 && i % 2 == 0) continue;
+            int flag=0;
+            for(int j=2 ; j<=Math.sqrt(i) ; j++){
+                if(i%j==0){
+                    flag=1; break;
+                }
+            }
+            if(flag==1)continue;
+            else arr.add(i);
+        }
+    }
+}
+___________________________________________________________________
+
+Explaination
+
+This problem requires finding two prime numbers, num1 and num2, within a given range [left, right] such that the difference between num2 and num1 is minimized. If there are multiple pairs with the same minimal difference, the pair with the smaller num1 should be returned. If no prime pairs exist in the range, the function should return [-1, -1].
+
+Approach:
+Prime Number Generation: The function addprimes iterates through all integers in the range [left, right] and checks if they are prime. This is done by checking divisibility by numbers from 2 to sqrt(i). Even numbers greater than 2 are skipped as they are not prime. All primes numbers are found and stored in an arraylist.
+
+Finding the Closest Primes: The mindiff function processes the list of prime numbers found in the given range. It calculates the difference between consecutive prime numbers and tracks the pair with the smallest difference.
+
+Edge Cases: If no prime numbers are found in the range, the function returns [-1, -1].
