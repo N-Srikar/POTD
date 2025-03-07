@@ -1,0 +1,50 @@
+Longest Common Subsequence
+__________________________________________________________
+
+
+class Solution {
+    static int lcs(String s1, String s2) {
+        // code here
+        int m = s1.length();
+        int n = s2.length();
+        int dp[][] = new int[m + 1][n + 1];
+        
+        for (int i=1 ; i<=m ; i++) {
+            for (int j=1 ; j<=n ; j++) {
+                if (s1.charAt(i-1) == s2.charAt(j-1)) 
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                else  
+                    dp[i][j] = Math.max(dp[i-1][j] , dp[i][j-1]);
+            }
+        }
+        
+        return dp[m][n];
+    }
+}
+
+__________________________________________________________
+
+Explaination
+
+
+Problem Statement:
+You are given two strings, s1 and s2. The task is to find the length of their Longest Common Subsequence (LCS). A subsequence is a sequence that can be derived from the string by deleting some or no characters without changing the order of the remaining characters. If there is no common subsequence, return 0.
+
+For example:
+
+Subsequence: "ABE" is a subsequence of "ABCDE" because "ABE" can be obtained by deleting "C" and "D" from "ABCDE".
+The goal is to find the longest subsequence common to both strings s1 and s2.
+
+Approach:
+Dynamic Programming (DP) Solution:
+We solve the problem using a dynamic programming approach where we create a 2D DP table dp such that dp[i][j] stores the length of the longest common subsequence of the substrings s1[0...i-1] and s2[0...j-1].
+
+DP Recurrence Relation:
+
+If the characters at s1[i-1] and s2[j-1] are equal, then dp[i][j] = dp[i-1][j-1] + 1 because we extend the common subsequence by including this character.
+If the characters are not equal, then we take the maximum value between excluding the character from s1 or excluding the character from s2. This is given by dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]).
+Base Case:
+
+If either string is empty (i = 0 or j = 0), the longest common subsequence is 0 because an empty string has no common subsequence with any string.
+Final Answer:
+After filling the DP table, dp[m][n] (where m and n are the lengths of s1 and s2, respectively) will contain the length of the longest common subsequence of the two strings.

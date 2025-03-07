@@ -1,0 +1,58 @@
+2965. Find Missing and Repeated Values
+___________________________________________________________________
+
+class Solution {
+    public int[] findMissingAndRepeatedValues(int[][] grid) {
+        HashMap<Integer,Integer> freq = new HashMap<>();
+        
+        for (int i=0 ; i<grid.length ; i++) {
+            for (int j=0 ; j<grid.length ; j++) {
+                int num = grid[i][j];
+                freq.put(num , freq.getOrDefault(num,0) + 1);
+            }
+        }
+        
+        int repeat = 0, miss = 0;
+        int n = grid.length * grid.length; 
+
+        for (int i=1 ; i<=n ; i++) {
+            if (freq.getOrDefault(i,0) == 2) repeat = i;
+            if (freq.getOrDefault(i,0) == 0) miss = i;
+        }
+
+        return new int[] {repeat, miss};
+    }
+}
+
+___________________________________________________________________
+
+Explaination
+
+Problem Statement:
+You are given a 0-indexed 2D integer matrix grid of size n x n containing values in the range [1, n^2]. The matrix consists of integers where:
+
+Each number from the range [1, n^2] appears exactly once, except for one number a which appears twice and another number b which is missing.
+Your task is to find the two integers:
+
+a: The number that appears twice (repeated number).
+b: The number that is missing from the grid.
+Return an array of size 2 where:
+
+ans[0] = a (the repeated number),
+ans[1] = b (the missing number).
+
+
+Approach:
+
+Grid Traversal and Frequency Count:
+
+The approach begins by using a frequency map (HashMap) to track the occurrence of each integer in the grid.
+We traverse the entire grid and for each number, we increment its count in the frequency map. This will allow us to detect which number appears twice (the repeated number) and which number is missing (appears zero times).
+Find Repeated and Missing Numbers:
+
+After populating the frequency map, we iterate through the range of possible numbers (from 1 to n^2), checking the frequency of each number:
+If a number's frequency is 2, it is the repeated number (a).
+If a number's frequency is 0, it is the missing number (b).
+
+Result:
+Once we find the repeated and missing numbers, we return them in an array: [a, b].
