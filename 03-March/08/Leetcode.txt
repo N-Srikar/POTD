@@ -1,0 +1,49 @@
+2379. Minimum Recolors to Get K Consecutive Black Blocks
+________________________________________________________
+
+class Solution {
+    public int minimumRecolors(String str, int k) {
+        int res=Integer.MAX_VALUE;
+        int count=0;
+        for(int i=0 ; i<str.length() ; i++){
+            if(str.charAt(i)=='W') count++;
+
+            if(i>=k){
+                if(str.charAt(i-k)=='W') count--;
+            }
+            
+            if(i>=k-1) res = Math.min(count,res);
+        }
+        return res;
+    }
+}
+________________________________________________________
+
+Problem Statement
+You are given a string blocks consisting of characters 'W' (white) and 'B' (black), representing a sequence of blocks. You are also given an integer k, which specifies the number of consecutive black ('B') blocks you want.
+
+In one operation, you can change a 'W' block to 'B'. The task is to determine the minimum number of operations required to ensure there is at least one occurrence of k consecutive 'B' blocks.
+
+Approach Used in the Code
+The problem can be efficiently solved using the Sliding Window technique:
+
+Initialize Variables:
+
+res = Integer.MAX_VALUE: This keeps track of the minimum number of white ('W') blocks that need to be recolored.
+count = 0: This counts the number of white ('W') blocks in the current window of size k.
+Sliding Window Traversal:
+
+Traverse the string and count the number of white ('W') blocks in the first k elements.
+For every new character added to the window (i >= k), remove the contribution of the leftmost character that is sliding out.
+If the leftmost character was 'W', decrement the count.
+Update Result:
+
+After the first valid window (i >= k - 1), update res with the minimum number of recoloring operations required.
+Return res:
+
+The final answer is the minimum number of white ('W') blocks found in any valid k-sized window.
+
+
+Complexity Analysis
+Time Complexity: O(n) → The string is traversed once using a sliding window.
+Space Complexity: O(1) → Only a few integer variables are used.
