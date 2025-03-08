@@ -1,0 +1,73 @@
+Longest Palindrome in a String
+
+_____________________________
+
+class Solution {
+    static String longestPalindrome(String s) {
+        int start = 0;
+        int maxLength = 1; 
+        
+        for (int i = 0; i < s.length(); i++) {
+            
+            int len1 = findlength(s, i, i); //for odd length palindrome
+            int len2 = findlength(s, i, i + 1); //for even length palindrome
+
+            int len = Math.max(len1, len2);
+
+            if (len > maxLength) {
+                maxLength = len;
+                start = i - (len - 1) / 2;
+            }
+        }
+
+        return s.substring(start, start + maxLength);
+    }
+
+    public static int findlength(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
+}
+
+___________________________________________________
+
+Problem Statement
+Given a string s, the goal is to find the longest palindromic substring (a contiguous sequence of characters that reads the same forward and backward). If multiple palindromic substrings of the same length exist, return the first occurrence from left to right.
+
+Approach Used in the Code
+The problem is solved using the Expand Around Center approach.
+
+Key Idea
+Every palindrome has a center, and we can expand outwards from this center to find the longest palindrome that has it as a middle point. This method efficiently finds palindromes without requiring nested loops over all substrings.
+
+Steps
+Initialize Variables:
+
+start = 0: Stores the starting index of the longest palindromic substring found.
+maxLength = 1: Keeps track of the length of the longest palindrome found.
+Iterate Over Each Character as a Potential Center:
+
+For each index i, consider two possible palindromes:
+Odd-length palindrome (single-character center): Call findlength(s, i, i).
+Even-length palindrome (double-character center): Call findlength(s, i, i+1).
+Find Maximum Length Palindrome:
+
+The function findlength(s, left, right) expands the palindrome outward as long as the characters at left and right match.
+It returns the length of the found palindrome.
+If this length is greater than maxLength, update maxLength and adjust start accordingly.
+Extract the Longest Palindromic Substring:
+
+The final answer is obtained using s.substring(start, start + maxLength).
+Helper Function: findlength
+Expands outward from the given center(s) while s[left] == s[right].
+Stops when left goes below 0 or right exceeds the string length.
+Returns the length of the palindrome found.
+
+Complexity Analysis
+The function findlength runs in O(n) time in the worst case.
+We call findlength twice for each character, making the overall complexity O(n²).
+This is much more efficient than the brute-force O(n³) approach that checks all substrings.
+
