@@ -1,0 +1,62 @@
+3208. Alternating Groups II
+_______________________________________________
+
+class Solution {
+    public int numberOfAlternatingGroups(int[] colors, int k) {
+        int n = colors.length;
+        int[] temp = new int[n+k-1];
+
+        for (int i=0 ; i<n ; i++) temp[i] = colors[i];
+        for (int i=0 ; i<k-1 ; i++) temp[n+i] = colors[i];
+
+        int count = 0;
+        int left = 0;
+
+        for (int right=0 ; right<temp.length ; right++) {
+            if (right>0 && temp[right]==temp[right-1]) {
+                left = right;
+            }
+            if (right-left+1 >= k) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+}
+
+____________________________________________________________
+
+Problem Statement
+You are given an array colors representing a circle of red (0) and blue (1) tiles. You also have an integer k, which represents the number of contiguous tiles in an alternating group.
+
+An alternating group is defined as:
+A group of k consecutive tiles where colors alternate (no two adjacent tiles have the same color).
+Since the array represents a circle, the first and last elements are considered adjacent.
+The goal is to return the number of alternating groups of size k.
+
+Approach Used in the Code
+The problem is solved using a sliding window approach while handling the circular nature of the array.
+
+Key Idea
+Since colors represents a circle, we need to consider cases where groups wrap around from the end of the array back to the start. To handle this, we extend the array by copying the first (k-1) elements to the end.
+
+Steps
+
+Extend the Array:
+Create a new array temp of size (n + k - 1).
+Copy colors[] into the first n positions.
+Copy the first (k-1) elements of colors[] to the end of temp[] to simulate circular behavior.
+
+Sliding Window Approach:
+Initialize a left pointer at the start.
+Iterate over temp[] using a right pointer.
+If two adjacent tiles in temp[] are the same, move left forward (left = right), breaking the alternating pattern.
+Whenever the window size reaches k, we count it as an alternating group.
+
+Return the Count:
+The total number of valid k-length alternating groups is returned.
+
+Complexity Analysis:
+Time Complexity: O(n + k) → Copying the elements takes O(n), and the sliding window runs in O(n + k).
+Space Complexity: O(n + k) → The extra temp array takes O(n + k) space.
