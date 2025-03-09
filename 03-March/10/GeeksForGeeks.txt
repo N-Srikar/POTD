@@ -1,0 +1,82 @@
+Edit Distance
+
+______________________________________________________
+
+class Solution {
+    public int editDistance(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        int[][] dp = new int[m + 1][n + 1];
+
+        for (int i = 0; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
+                dp[i][j] = -1;
+            }
+        }
+
+        return solve(s1, s2, m, n, dp);
+    }
+
+    private int solve(String s1, String s2, int i, int j, int[][] dp) {
+        if (i == 0) return j;
+        if (j == 0) return i;
+
+        if (dp[i][j] != -1) return dp[i][j];
+
+        if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+            dp[i][j] = solve(s1, s2, i - 1, j - 1, dp);
+        }
+        else {
+            int insert = solve(s1, s2, i, j - 1, dp);
+            int delete = solve(s1, s2, i - 1, j, dp);
+            int replace = solve(s1, s2, i - 1, j - 1, dp);
+
+            dp[i][j] = Math.min(insert, Math.min(delete, replace)) + 1;
+        }
+
+        return dp[i][j];
+    }
+}
+
+______________________________________________________
+
+Problem Statement
+You are given two strings, s1 and s2. You need to find the minimum number of operations required to convert s1 into s2. The allowed operations are:
+
+Insert: Add a character at any position in the string.
+Remove: Delete a character from the string.
+Replace: Change a character to another character.
+The goal is to determine the minimum number of these operations needed to make s1 and s2 identical.
+
+Approach Used in the Code
+The problem is solved using Dynamic Programming (DP) with Memoization (Top-Down Approach).
+
+1. Define the State
+Let dp[i][j] represent the minimum edit distance required to convert the first i characters of s1 into the first j characters of s2.
+
+2. Base Cases
+If s1 is empty (i == 0), we need j insertions to make it s2. So, dp[i][j] = j.
+If s2 is empty (j == 0), we need i deletions to remove all characters from s1. So, dp[i][j] = i.
+
+3. Recursive Relation
+If s1[i-1] == s2[j-1]:
+The characters are the same, so no operation is needed, and we move to dp[i-1][j-1].
+
+If s1[i-1] != s2[j-1]:
+We can perform one of three operations:
+
+Insert: Insert s2[j-1] into s1, reducing j (dp[i][j-1] + 1).
+Delete: Remove s1[i-1], reducing i (dp[i-1][j] + 1).
+Replace: Replace s1[i-1] with s2[j-1], reducing both i and j (dp[i-1][j-1] + 1).
+
+We take the minimum of the three operations:
+dp[i][j]=min(insert,delete,replace)+1
+
+4. Memoization
+To avoid recalculating results, the dp table stores previously computed values.
+
+Time & Space Complexity
+Time Complexity: 
+O(m×n), where m and n are the lengths of s1 and s2, respectively.
+Space Complexity: 
+O(m×n) due to the dp table storing results.
