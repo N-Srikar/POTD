@@ -1,0 +1,64 @@
+Palindrome SubStrings
+______________________________________________
+
+class Solution {
+    public int countPS(String s) {
+        // code here
+        int size = s.length();
+        int count=0;
+        
+        for(int i=0 ; i<size ; i++){
+            count += findall(s,i,i);
+            count += findall(s,i,i+1);
+        }
+        return count;
+    }
+    public int findall(String str , int left , int right){
+        int count=0;
+        while(left>=0 && right<str.length() && str.charAt(left)==str.charAt(right)){
+            if(right-left+1 >= 2) count++;
+            left--;
+            right++;
+        }
+        return count;
+    }
+}
+
+___________________________________________________
+
+Problem Statement
+Given a string s, the goal is to count all palindromic substrings with a length of at least 2.
+
+A palindrome is a sequence of characters that reads the same forward and backward. A substring is a contiguous sequence of characters within a string.
+
+Approach Used in the Code
+The problem is efficiently solved using the Expand Around Center technique.
+
+Key Idea
+Each palindrome has a center, and we can expand outward from this center to count all valid palindromic substrings.
+
+Steps
+
+Initialize Variables:
+count = 0: Stores the total number of palindromic substrings found.
+
+Iterate Over Each Character as a Potential Center:
+Consider odd-length palindromes (single-character center) by calling findall(s, i, i).
+Consider even-length palindromes (two-character center) by calling findall(s, i, i+1).
+
+Expand and Count Valid Palindromes:
+The function findall(s, left, right) expands outward while s[left] == s[right].
+It increments count whenever a palindrome of length ≥ 2 is found.
+
+Return count:
+After checking all possible centers, the function returns the total count.
+
+Helper Function: findall
+Expands outward while s[left] == s[right].
+If the length of the palindrome (right - left + 1) is at least 2, it increments count.
+Stops when left moves out of bounds (left < 0) or right exceeds the string length.
+
+Complexity Analysis
+Time Complexity: O(n²) → Each character is a potential center, and we expand from it.
+Space Complexity: O(1) → Only integer variables are used.
+This is much more efficient than a brute-force O(n³) approach, which would check all substrings individually.
