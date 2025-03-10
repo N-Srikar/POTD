@@ -1,0 +1,95 @@
+3306. Count of Substrings Containing Every Vowel and K Consonants II
+
+_______________________________________________________
+
+class Solution {
+    public long countOfSubstrings(String word, int k) {
+        HashMap<Character, Integer> map = new HashMap<>();
+        int count = 0;
+        long res = 0;
+        int left = 0;
+
+        for (int right = 0; right < word.length(); right++) {
+            char c = word.charAt(right);
+
+            if (isVowel(c)) {
+                map.put(c, map.getOrDefault(c, 0) + 1);
+            } 
+            else {
+                count++;
+            }
+
+            while (count > k) {
+                char ch = word.charAt(left);
+                if (isVowel(ch)) {
+                    if (map.get(ch) == 1) {
+                        map.remove(ch);
+                    } 
+                    else {
+                        map.put(ch, map.get(ch) - 1);
+                    }
+                } 
+                else {
+                    count--;
+                }
+                left++;
+            }
+
+            if (map.size() == 5 && count == k) {
+                int t = left;
+                while (t < right && isVowel(word.charAt(t)) && map.get(word.charAt(t)) > 1) {
+                    char d = word.charAt(t);
+                    map.put(d, map.get(d) - 1);
+                    t++;
+                }
+                res += (t - left + 1);
+                for (int j = left; j < t; j++) {
+                    char z = word.charAt(j);
+                    map.put(z, map.getOrDefault(z, 0) + 1);
+                }
+            }
+        }
+
+        return res;
+    }
+
+    public static boolean isVowel(char c) {
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+    }
+}
+
+______________________________________________________
+
+Problem Statement
+You are given:
+
+A string word consisting of lowercase English letters.
+A non-negative integer k.
+You need to find the total number of substrings of word that:
+
+Contain all five vowels ('a', 'e', 'i', 'o', 'u') at least once.
+Have exactly k consonants (letters that are not vowels).
+
+Approach
+1. Sliding Window Technique
+The problem requires us to find substrings meeting certain conditions efficiently. Instead of checking all substrings (which would be too slow), we use the Sliding Window (Two Pointer) approach.
+
+2. Key Observations
+We maintain a window [left, right] where:
+The substring contains all five vowels at least once.
+The substring has exactly k consonants.
+Expanding the Window (right pointer):
+We traverse word character by character.
+If the character is a vowel, we store its frequency in a HashMap.
+If the character is a consonant, we increment a count variable.
+Shrinking the Window (left pointer):
+If the number of consonants exceeds k, we move left forward until we get exactly k consonants again.
+
+3. Valid Substring Calculation
+If map.size() == 5 (all vowels exist in the window) and count == k, we count substrings.
+We shrink from the left while keeping all vowels and k consonants intact.
+The number of valid substrings is added to res.
+
+
+Time Complexity: O(N) 
+Space Complexity: O(1) 
