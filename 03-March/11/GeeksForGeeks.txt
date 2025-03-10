@@ -1,0 +1,53 @@
+Ways to Reach the n'th Stair
+_______________________________________________________
+
+class Solution {
+    int countWays(int n) {
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+        
+        int a = 1;
+        int b = 2;
+        
+        for (int i = 3; i <= n; i++) {
+            int current = a + b;
+            a = b;
+            b = current;
+        }
+        
+        return b;
+    }
+}
+
+_______________________________________________________
+
+Problem Statement
+You have n stairs, and a person standing at the bottom wants to reach the top. The person can either take 1 step or 2 steps at a time. You need to determine the number of ways the person can reach the top.
+
+Key Observations
+If n = 1, there is only 1 way: (1)
+If n = 2, there are 2 ways: (1,1) and (2)
+For larger values of n, the person can reach the nth stair by:
+
+Taking a 1-step from the (n-1)th stair.
+Taking a 2-step from the (n-2)th stair.
+So, the number of ways to reach n is:
+
+ways(n)=ways(n−1)+ways(n−2)
+This is the Fibonacci sequence shifted by one position.
+
+Approach
+We need to compute ways(n), which follows the Fibonacci pattern:
+ways(n)=ways(n−1)+ways(n−2)
+
+Optimized Approach (Iterative DP)
+Base Cases:
+ways(1) = 1
+ways(2) = 2
+Use two variables (a and b) to store the last two values and iteratively compute ways(n).
+Loop from 3 to n, updating the values dynamically.
+Return the final result (b).
+
+Time and Space Complexity
+Time Complexity: O(n) → Iterates once through n.
+Space Complexity: O(1) → Uses only two variables (a and b), no extra storage.
