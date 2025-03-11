@@ -1,0 +1,46 @@
+1358. Number of Substrings Containing All Three Characters
+_______________________________________________________
+
+class Solution {
+    public int numberOfSubstrings(String s) {
+        int count = 0;
+        int left = 0;
+        int[] abc = new int[3];
+
+        for (int right = 0; right < s.length(); right++) {
+            abc[s.charAt(right) - 'a']++;
+
+            while (abc[0]>0 && abc[1]>0 && abc[2]>0) {
+                count += s.length() - right;
+                abc[s.charAt(left) - 'a']--;
+                left++;
+            }
+        }
+
+        return count;
+    }
+}
+______________________________________________________
+
+Problem Statement:
+You are given a string s consisting only of characters 'a', 'b', and 'c'.
+You need to return the number of substrings that contain at least one occurrence of all three characters.
+
+Approach:
+The key insight is using a sliding window with two pointers (left and right) to efficiently find all valid substrings:
+
+Maintain a sliding window and an array to count occurrences of 'a', 'b', and 'c'.
+
+Expand the window by moving the right pointer and incrementing the count of the character at that position.
+
+When the window contains at least one of each required character, we have a valid window.
+
+For each valid window from [left, right], all substrings that start at position left and end at or after position right will also be valid. There are len(s) - right such substrings.
+
+Contract the window from the left by incrementing the left pointer and decrementing the character count, until the window is no longer valid.
+
+Repeat this process until the right pointer reaches the end of the string.
+
+Complexity Analysis
+Time Complexity: O(n)
+Space Complexity: O(1)
