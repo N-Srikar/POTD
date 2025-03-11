@@ -1,0 +1,53 @@
+Min Cost Climbing Stairs
+_______________________________________________________
+
+Code:
+class Solution {
+    static int minCostClimbingStairs(int[] cost) {
+
+        int prev2 = cost[0]; 
+        int prev1 = cost[1]; 
+        
+        for (int i=2 ; i<cost.length ; i++) {
+            int current = Math.min(prev1,prev2) + cost[i];
+            prev2 = prev1;
+            prev1 = current;
+        }
+        
+        return Math.min(prev1, prev2);
+    }
+}
+
+______________________________________________________
+
+Problem Statement:
+You are given an array cost[] where cost[i] represents the cost to step on the i-th stair.
+You can either:
+
+Climb 1 step after paying the cost of cost[i]
+Climb 2 steps after paying the cost of cost[i]
+Your goal is to find the minimum cost to reach the top.
+
+You can start from index 0 or index 1.
+
+
+Approach:
+This is a Dynamic Programming (DP) problem, where we compute the minimum cost to reach each step.
+
+Key Observations
+We can either come from:
+i-1 (taking 1 step) → cost is dp[i-1] + cost[i]
+i-2 (taking 2 steps) → cost is dp[i-2] + cost[i]
+Our goal is to reach n, which is beyond the last step.
+
+Base cases:
+The minimum cost to reach step 0 is cost[0]
+The minimum cost to reach step 1 is cost[1]
+
+Optimized Space Approach (Using Two Variables):
+Instead of maintaining an entire DP array (O(n) space), we can use two variables (prev1, prev2) to store only the last two computed results.
+We iterate through the array and update prev1 and prev2 dynamically.
+
+Complexity Analysis
+Time Complexity: O(n)
+Space Complexity: O(1)
