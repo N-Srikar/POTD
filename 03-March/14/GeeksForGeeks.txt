@@ -1,0 +1,46 @@
+Coin Change (Count Ways)
+_______________________________________________________
+
+class Solution {
+    public int count(int coins[], int sum) {
+        // code here.
+        int[] dp = new int[sum + 1];
+        
+        dp[0] = 1;
+        
+        for (int coin : coins) {
+            for (int i=coin ; i<=sum ; i++) {
+                dp[i] += dp[i-coin];
+            }
+        }
+        
+        return dp[sum];
+    }
+}
+________________________________________________________
+
+Problem Statement:
+You are given an integer array coins[], where each element represents a different denomination of currency, and an integer sum representing a target amount.
+
+Your task is to determine the number of ways to make the given sum using any number of coins from coins[].
+
+You can reuse the same coin any number of times.
+The order of coins does not matter.
+
+Approach (Dynamic Programming - Unbounded Knapsack):
+Define dp[i]:
+dp[i] represents the number of ways to make sum i using the given coins.
+Base case: dp[0] = 1 (1 way to make sum 0 by choosing nothing).
+
+Iterate through each coin:
+For each coin, iterate through sum from coin to sum.
+
+Update dp[i] using the recurrence relation: dp[i]+=dp[i−coin]
+This ensures that each sum is formed using that coin at least once.
+
+Final Answer:
+dp[sum] gives the number of ways to form the target sum.
+
+Complexity:
+Time Complexity - O(n x sum)
+Space Complexity - O(sum+1)
