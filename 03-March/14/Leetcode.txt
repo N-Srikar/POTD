@@ -1,0 +1,61 @@
+2226. Maximum Candies Allocated to K Children
+_______________________________________________________
+
+class Solution {
+    public int maximumCandies(int[] candies, long k) {
+        int left = 1, right = 10_000_000;
+        int result = 0;
+
+        while (left <= right) {
+            int mid = left + (right-left)/2;
+            long count = 0;
+
+            for (int i : candies) {
+                count += i/mid;
+            }
+
+            if (count >= k) {
+                result = mid;
+                left = mid+1;
+            } 
+            else {
+                right = mid-1;
+            }
+        }
+
+        return result;
+    }
+}
+
+_______________________________________________________
+
+Problem Statement :
+You are given an array candies[], where each element represents a pile of candies. You need to distribute these candies among k children.
+
+Rules for Distribution:
+Each child should receive exactly the same number of candies.
+A pile can be split into multiple sub-piles, but piles cannot be merged.
+Some piles may remain unused if they cannot be divided appropriately.
+Your task is to maximize the number of candies each child gets while distributing them to exactly k children.
+
+
+Approach (Binary Search):
+Since we need to find the maximum number of candies per child, we use binary search on the possible values of candies per child.
+
+1. Define the search space:
+The minimum candies each child can get is 1.
+The maximum candies each child can get is the largest pile size (max element in candies[]).
+
+2. Apply Binary Search:
+Mid Value (mid): Represents a possible value for candies per child.
+Check feasibility: Calculate the total number of children that can receive mid candies from the available piles using: count+= candies[i]/mid
+This formula determines how many full groups of mid candies can be formed from each pile.
+
+Compare with k:
+If count >= k, it means we can give at least mid candies to k children, so we increase mid to check if a higher value is possible (left = mid + 1).
+Otherwise, reduce mid (right = mid - 1).
+Final Answer: The last valid mid stored in result gives the maximum candies per child.
+
+Complexity:
+Time Complexity : O(n x log m)
+Space Complexity : O(1)
