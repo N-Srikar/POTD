@@ -1,0 +1,74 @@
+3356. Zero Array Transformation II
+
+_______________________________________________________
+
+class Solution {
+    
+    public int minZeroArray(int[] nums, int[][] queries) {
+        int n = nums.length;
+        
+        if (!check(nums, queries, queries.length)) return -1;
+
+        int l = 0, r = queries.length;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (check(nums, queries, m)) {
+                r = m - 1;
+            } else {
+                l = m + 1;
+            }
+        }
+
+        return l;
+    }
+
+    private boolean check(int[] nums, int[][] queries, int m) {
+        int n = nums.length;
+        int[] arr = new int[n + 1];
+        
+        for (int i = 0; i < m; i++) {
+            int start = queries[i][0], end = queries[i][1], val = queries[i][2];
+            arr[start] += val;
+            if (end + 1 < n) arr[end + 1] -= val;
+        }
+
+        int cur = 0;
+        for (int i = 0; i < n; i++) {
+            cur += arr[i];
+            if (cur < nums[i]) return false;
+        }
+        return true;
+    }
+}
+
+______________________________________________________
+
+
+Problem Statement:
+The goal is to find the minimum number of queries needed to transform an array nums into a Zero Array (all elements become 0). Each query [li, ri, vali] allows you to decrement values within a range [li, ri] by at most vali.
+
+Approach:
+This problem is solved efficiently using:
+Binary Search: To find the minimum number of queries required.
+Difference Array: To efficiently apply decrement operations.
+
+Steps to Solve:
+Binary Search on k (number of queries)
+
+We perform binary search on k (range [0, queries.length]) to find the minimum k that makes nums a Zero Array.
+
+Check if first k queries can zero out the array (check function):
+Maintain a difference array (arr[]) and apply the first k queries efficiently.
+we are doing a reverse approach where we are having a difference array of all zeroes , 
+we apply all query and instead of decrementing , we are incrementing with the value given , 
+then
+If at any index, the value in difference array is less than nums value after applying the increments ,
+it means we cannot convert the num[i] into zero , so return false and try for next k queries
+else it means we can convert the nums array to all 0's, so return true
+
+
+Binary Search Iteration
+
+If check(k) is true, search for a smaller k (r = mid - 1).
+If check(k) is false, increase k (l = mid + 1).
+The minimum valid k is returned.
