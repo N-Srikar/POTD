@@ -1,0 +1,65 @@
+2560. House Robber IV
+______________________________________________________
+
+class Solution {
+    public int minCapability(int[] arr, int k) {
+        int n = arr.length;
+        int l = arr[0], r = arr[0];
+
+        for (int x : arr) {
+            l = Math.min(l, x);
+            r = Math.max(r, x);
+        }
+
+        while (l < r) { 
+            int m = l + (r-l)/2;
+            if (valid(arr, m, k)) r = m;
+            else l = m + 1;
+        }
+
+        return l;
+    }
+
+    public boolean valid(int[] arr, int m, int k) {
+        int count=0;
+        for (int i = 0; i < arr.length; ) {
+            if (arr[i] <= m) { 
+                count++; 
+                i += 2;
+            } 
+            else i++; 
+        }
+        if(count>=k) return true;
+        else return false;
+    }
+}
+______________________________________________________
+
+Problem Statement :
+You are given an array nums[] representing the amount of money stored in consecutive houses. The robber wants to steal money but cannot rob adjacent houses.
+
+The robber’s capability is defined as the maximum amount of money he steals from a single house in a chosen sequence.
+The robber must rob at least k houses.
+Your task is to minimize the robber’s capability while still ensuring he steals from at least k houses.
+
+
+Approach (Binary Search)
+We use Binary Search on the possible values of robber's capability to efficiently find the minimum possible capability.
+
+1. Determine the Search Range (l, r)
+The minimum possible capability is the smallest house value in nums[].
+The maximum possible capability is the largest house value in nums[].
+We perform binary search in this range [l, r].
+
+2. Binary Search for Minimum Capability
+For each capability value mid, check if it's possible to steal at least k houses:
+always steal from the current house if its value is ≤ capability, then skip the adjacent house.
+If we can steal at least k houses with this capability, try a lower capability (search in the left half).
+Otherwise, search in the right half.
+
+3.Stopping Condition:
+When l == r, we have found the minimum possible capability
+
+Complexity:
+Time Complexity: O(n x log m)
+Space Complexity: O(1)
