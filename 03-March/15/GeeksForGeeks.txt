@@ -1,0 +1,55 @@
+Coin Change (Minimum Coins)
+_______________________________________________________
+
+class Solution {
+
+    public int minCoins(int coins[], int sum) {
+        int[] dp = new int[sum + 1];
+        for (int i = 1; i <= sum; i++) {
+            dp[i] = Integer.MAX_VALUE;
+        }
+
+        dp[0] = 0;
+
+        for (int coin:coins) {
+            for (int i=coin ; i<=sum ; i++) {
+                if (dp[i-coin] != Integer.MAX_VALUE) {
+                    dp[i] = Math.min(dp[i] , dp[i-coin]+1);
+                }
+            }
+        }
+
+        return dp[sum] == Integer.MAX_VALUE ? -1 : dp[sum];
+    }
+}
+
+_______________________________________________________
+
+Problem Statement Explanation
+You are given an array coins[], where each element represents a coin denomination. You have an unlimited supply of each coin type, and you need to form a given sum using the minimum number of coins.
+
+Rules:
+You can use any coin multiple times.
+You need to determine the minimum number of coins required to form the given sum.
+If it is not possible to form the sum, return -1.
+
+
+Approach (Dynamic Programming - Bottom-Up):
+We use Dynamic Programming (DP) to solve this problem by maintaining an array dp[], where dp[i] represents the minimum number of coins needed to form sum i.
+
+1. Initialize the DP Array:
+dp[0] = 0 (To form sum 0, we need 0 coins).
+For all other sums, initialize dp[i] = Integer.MAX_VALUE (since we haven't calculated them yet).
+
+2. Iterate Over Each Coin:
+For each coin in coins[], update dp[i] for all sums from coin to sum: dp[i]=min( dp[i] , dp[i−coin]+1 )
+If dp[i - coin] is not Integer.MAX_VALUE, it means we can form i by adding one more coin to dp[i - coin].
+Take the minimum of the current dp[i] and the new value.
+
+3. Return Result:
+If dp[sum] is still Integer.MAX_VALUE, return -1 (since forming the sum is impossible).
+Otherwise, return dp[sum] as the minimum number of coins needed.
+
+Complexity
+Time Complexity: O(M x S)
+Space Complexity: O(S)
