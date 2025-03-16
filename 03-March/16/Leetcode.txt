@@ -1,0 +1,68 @@
+2594. Minimum Time to Repair Cars
+_______________________________________________________
+
+class Solution {
+    public long repairCars(int[] ranks, int cars) {
+        long left = 1;
+        long right= Integer.MAX_VALUE;
+        for(long i:ranks){
+            right=Math.min(right,i);
+        }
+        right = right*cars*cars;
+
+        while (left < right) {
+            long mid = (left + right) / 2;
+            if (check(ranks, cars, mid)) {
+                right = mid;
+            }
+            else {
+                left = mid + 1;
+            }
+        }
+
+        return left;
+    }
+
+    public boolean check(int[] ranks, int cars, long time) {
+        long total = 0;
+        for (int rank : ranks) {
+            total += Math.sqrt(time / rank);
+            if (total >= cars) return true;
+        }
+        return false;
+    }
+}
+_____________________________________________________
+
+Problem Statement :
+You are given an array ranks[], where each element represents the rank of a mechanic. A mechanic with rank r takes r * n² minutes to repair n cars.
+
+You are also given an integer cars, representing the total number of cars that need to be repaired.
+
+Objective:
+Find the minimum possible time required to repair all cars when all mechanics work simultaneously.
+
+
+Approach (Binary Search on Time):
+We use binary search on the possible time required to repair all cars.
+
+Steps:
+Define Search Space:
+The minimum possible time (left) is 1 minute.
+The maximum possible time (right) is determined by the slowest mechanic (highest r value) fixing all cars alone:
+max time=min rank×(cars ^2 )
+This ensures we are searching in a reasonable range.
+
+Binary Search:
+Set mid = (left + right) / 2, which represents a candidate time limit to repair all cars.
+Check if all cars can be repaired within mid minutes:
+Each mechanic can repair up to floor( mid/rank ) cars in mid time.
+
+Sum up the cars repaired by all mechanics.
+If this total is ≥ cars, then mid is a valid time → move right = mid.
+Else, increase time → move left = mid + 1.
+Return left, which gives the minimum time required.
+
+Complexity : 
+Time Complexity : O(N x log(max time)
+Space Complexity : O(1)
