@@ -1,0 +1,55 @@
+Subset Sum Problem
+_______________________________________________________
+
+class Solution {
+    static Boolean isSubsetSum(int arr[], int sum) {
+        int n = arr.length;
+        boolean[][] dp = new boolean[n + 1][sum + 1];
+        
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = true;
+        }
+        
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= sum; j++) {
+                dp[i][j] = dp[i - 1][j];
+                if (arr[i - 1] <= j) {
+                    dp[i][j] = dp[i][j] || dp[i - 1][j - arr[i - 1]];
+                }
+            }
+        }
+        
+        return dp[n][sum];
+    }
+}
+
+________________________________________________________
+
+Problem Statement :
+You are given an array of positive integers arr[] and a target sum. Your task is to determine whether there exists any subset of the array whose elements add up to exactly sum.
+
+Objective: Return true if such a subset exists, otherwise return false.
+
+
+Approach (Dynamic Programming - 0/1 Knapsack Style):
+We use Dynamic Programming (DP) to solve this problem efficiently.
+
+Steps:
+Define DP State:
+Let dp[i][j] be a boolean value representing whether it is possible to form a sum j using the first i elements of the array.
+
+Base Case:
+dp[i][0] = true for all i, since a sum of 0 can always be formed by taking no elements.
+
+Transition (Filling the DP Table):
+If we don’t pick the i-th element  :  dp[i][j]=dp[i−1][j]
+If we pick the i-th element (if arr[i-1] <= j)  :  dp[i][j]=dp[i][j]ordp[i−1][j−arr[i−1]]
+This ensures that we include arr[i-1] only when it does not exceed the required sum.
+
+Result:
+The answer is stored in dp[n][sum], where n is the length of the array.
+
+
+Complexity:
+Time Complexity : O(N x sum)
+Space Complexity : O(sum)
