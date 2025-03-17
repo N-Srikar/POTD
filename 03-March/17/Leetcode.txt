@@ -1,0 +1,42 @@
+2206. Divide Array Into Equal Pairs
+_______________________________________________________
+
+class Solution {
+    public boolean divideArray(int[] nums) {
+        int xor1 = 0;
+        int xor2 = 0;
+        for (int i : nums) {
+            xor1 ^= i;
+            xor2 ^= (i+1);
+        }
+        return xor1 == 0 && xor2==0;
+    }
+}
+_______________________________________________________
+
+Problem Statement:
+You are given an array nums of 2 * n integers. Your task is to check whether you can divide this array into n pairs, where each pair contains equal elements.
+
+Each element must belong to exactly one pair.
+Each pair must consist of two identical numbers.
+The function should return true if such a division is possible, otherwise return false.
+
+
+Approach:
+Using Frequency Counting (Optimal Approach)
+
+Observation:
+Since the array contains 2 * n elements, each number must appear an even number of times for them to be divided into equal pairs.
+
+Algorithm:
+Count the frequency of each number.
+If any number appears an odd number of times, return false.
+Otherwise, return true.
+
+Implementation (Using HashMap or Frequency Array):
+We can use a hash map (O(n)) or a frequency array (O(n), but faster for small numbers).
+
+
+Complexity:
+Time Complexity : O(N)
+Space Complexity : O(N)
