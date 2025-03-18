@@ -1,0 +1,81 @@
+Partition Equal Subset Sum
+_________________________________________________________
+
+class Solution {
+    static boolean equalPartition(int arr[]) {
+        int n = arr.length;
+        int sum = 0;
+        
+        for (int num : arr) {
+            sum += num;
+        }
+        
+        if (sum % 2 != 0) {
+            return false;
+        }
+        
+        int target = sum / 2;
+        
+        boolean[][] dp = new boolean[n + 1][target + 1];
+        
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = true;
+        }
+        
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= target; j++) {
+                dp[i][j] = dp[i-1][j];
+                
+                if (arr[i-1] <= j) {
+                    dp[i][j] = dp[i][j] || dp[i-1][j - arr[i-1]];
+                }
+            }
+        }
+        
+        return dp[n][target];
+    }
+}
+
+_______________________________________________________
+
+
+Problem Statement:
+You are given an array arr[] of integers. Your task is to check whether you can partition the array into two subsets with equal sums.
+
+If the sum of all elements is odd, we cannot partition it into two equal subsets, so return false.
+If the sum is even, the problem reduces to finding a subset with sum = (total sum) / 2.
+
+
+Approach:
+In the 2D DP approach, we maintain a table dp[i][j] where i represents the first i elements, and j represents whether a subset sum of j is achievable using the first i elements.
+
+Steps:
+Sum Calculation: First, calculate the sum of the array. If the sum is odd, we return false immediately because it's impossible to split the sum into two equal parts.
+
+Subset Sum with DP: 
+The goal is to check whether we can achieve a subset sum of S/2, where S is the total sum of the array. This is done by filling up the DP table in such a way that dp[i][j] will be true if it's possible to achieve a sum j using the first i elements.
+
+DP Table Explanation:
+dp[i][j] is true if a sum of j can be formed using the first i elements of the array.
+Initially, dp[0][0] = true because the sum of 0 is always achievable (by selecting no elements).
+
+For every element arr[i]:
+Either we don't include it, so dp[i][j] will be the same as dp[i-1][j].
+Or we include it, so we check if dp[i-1][j-arr[i]] is true (which means if we could achieve sum j-arr[i] with the first i-1 elements, then including arr[i] will make sum j achievable).
+
+Explanation:
+Base Case Initialization:
+dp[0][0] = true: It's always possible to achieve a sum of 0 with an empty subset.
+dp[i][0] = true for all i: Sum of 0 is achievable for any number of elements by selecting none.
+
+DP Table Filling:
+For each element in the array (arr[i-1]), we check whether we can achieve a sum j either by including or excluding the element:
+If we exclude it, dp[i][j] remains the same as dp[i-1][j].
+If we include it, we check if dp[i-1][j - arr[i-1]] is true.
+
+Final Check:
+At the end, we check dp[n][target] to see if it's true, meaning it's possible to partition the array into two subsets with equal sum.
+
+Complexity:
+Time Complexity: O(n * target)
+Space Complexity: O(n * target)
