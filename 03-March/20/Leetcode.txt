@@ -1,0 +1,73 @@
+3108. Minimum Cost Walk in Weighted Graph
+_________________________________________________________
+
+class Solution {
+    private int findRoot(int[] parent, int node) {
+        if (parent[node] != node) {
+            parent[node] = findRoot(parent, parent[node]);
+        }
+        return parent[node];
+    }
+
+    public int[] minimumCost(int n, int[][] edges, int[][] query) {
+        int[] parent = new int[n];
+        int[] minPathCost = new int[n];
+        Arrays.fill(minPathCost, -1);
+
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+
+        for (int[] edge : edges) {
+            int source = edge[0], target = edge[1], weight = edge[2];
+            int sourceRoot = findRoot(parent, source);
+            int targetRoot = findRoot(parent, target);
+
+            minPathCost[targetRoot] &= weight;
+
+            if (sourceRoot != targetRoot) {
+                minPathCost[targetRoot] &= minPathCost[sourceRoot];
+                parent[sourceRoot] = targetRoot;
+            }
+        }
+
+        int[] result = new int[query.length];
+        for (int i = 0; i < query.length; i++) {
+            int start = query[i][0], end = query[i][1];
+            if (start == end) {
+                result[i] = 0;
+            } else if (findRoot(parent, start) != findRoot(parent, end)) {
+                result[i] = -1;
+            } else {
+                result[i] = minPathCost[findRoot(parent, start)];
+            }
+        }
+        return result;
+    }
+}
+
+______________________________________________________
+
+
+Intuition
+The problem asks us to find the minimum cost walk between nodes for multiple queries, where cost is defined as the bitwise AND of all edge weights in the walk. The key insight is that for any connected component, the minimum cost between any two nodes will be the bitwise AND of all edges that might be included in any possible walk.
+
+Approach
+We use a modified Union-Find data structure that not only tracks connectivity between nodes but also maintains the minimum possible bitwise AND value for each connected component.
+Initialize each node as its own component with an AND value of -1 (all bits set to 1 in binary).
+
+Process each edge by:
+Finding the root nodes of the components containing the edge's endpoints
+Updating the target component's AND value with the edge weight
+If the endpoints are in different components, merge them and combine their AND values
+
+For each query (s, t):
+If s and t are the same node, return 0
+If s and t are not in the same component, return -1
+Otherwise, return the AND value of their component
+The beauty of this approach is that as we build the graph, we simultaneously calculate the minimum possible AND value for any potential walk between nodes in the same component.
+
+
+Complexity
+Time complexity: O(N + E + Q)
+Space complexity: O(N)
