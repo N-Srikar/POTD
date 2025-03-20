@@ -1,0 +1,37 @@
+Stock Buy and Sell – Max 2 Transactions Allowed
+_______________________________________________________
+
+class Solution {
+    public static int maxProfit(int[] prices) {
+        int firstBuy = Integer.MIN_VALUE, firstSell = 0;
+        int secondBuy = Integer.MIN_VALUE, secondSell = 0;
+        
+        for (int price : prices) {
+            firstBuy = Math.max(firstBuy, -price);
+            firstSell = Math.max(firstSell, firstBuy + price);
+            secondBuy = Math.max(secondBuy, firstSell - price);
+            secondSell = Math.max(secondSell, secondBuy + price);
+        }
+        
+        return secondSell;
+    }
+}
+
+_______________________________________________________
+
+Problem Statement
+A trader is allowed to make at most 2 transactions in a day, where a transaction consists of buying and then selling a stock. The second transaction can only begin after the first one is completed. The goal is to determine the maximum profit that can be earned.
+
+Approach
+Use a dynamic programming approach with two states:
+firstBuy: Minimum price to buy the first stock.
+firstSell: Maximum profit after selling the first stock.
+secondBuy: Effective price after buying the second stock.
+secondSell: Maximum profit after selling the second stock.
+
+Iterate through the prices and update these states optimally.
+The final answer will be stored in secondSell, representing the maximum possible profit with at most two transactions.
+
+Complexity Analysis
+Time Complexity: O(n)
+Space Complexity: O(1)
