@@ -1,0 +1,49 @@
+3191. Minimum Operations to Make Binary Array Elements Equal to One I
+________________________________________________________
+
+class Solution {
+    public int minOperations(int[] nums) {
+        int count = 0;
+        int n = nums.length;
+
+        for (int i=0 ; i<n-2 ; i++) {
+            if (nums[i] == 0) {
+                nums[i] ^= 1;
+                nums[i + 1] ^= 1;
+                nums[i + 2] ^= 1;
+                count++;
+            }
+        }
+
+        return (nums[n-2] == 1 && nums[n-1] == 1) ? count : -1;
+    }
+}
+
+_______________________________________________________
+
+Problem Statement:
+You are given a binary array consisting of only 0s and 1s. You can perform an operation any number of times where you:
+
+Choose any three consecutive elements.
+Flip all three (change 0 → 1 and 1 → 0).
+Your goal is to make all elements 1 using the minimum number of operations. If it's not possible, return -1.
+
+
+Approach:
+Iterate through the array:
+Traverse from left to right.
+If nums[i] is 0, flip the next three elements (nums[i], nums[i+1], and nums[i+2]).
+Increase the operation count.
+
+Check if all elements are 1:
+After processing, if the last two elements are 0, return -1 (since they cannot be flipped alone).
+Otherwise, return the operation count.
+
+Why this greedy approach works?
+We must flip as early as possible to minimize operations.
+Flipping earlier allows propagation of 1s through the array efficiently.
+
+
+Complexity:
+Time Complexity - O(N)
+Space Complexity - O(1)
