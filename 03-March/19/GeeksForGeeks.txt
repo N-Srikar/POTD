@@ -1,0 +1,56 @@
+Stock Buy and Sell – Max K Transactions Allowed
+_______________________________________________________
+
+class Solution {
+    static int maxProfit(int k, int[] prices) {
+        int n = prices.length;
+        if (n == 0 || k == 0) return 0;
+
+        // If k is very large, solve it using a simple greedy approach
+        if (2 * k > n) {
+            int profit = 0;
+            for (int i = 1; i < n; i++) {
+                if (prices[i] > prices[i - 1]) {
+                    profit += prices[i] - prices[i - 1];
+                }
+            }
+            return profit;
+        }
+
+        // DP table
+        int[][] dp = new int[k + 1][n];
+
+        for (int t = 1; t <= k; t++) {
+            int maxDiff = -prices[0];  // max profit from previous transaction minus current buy price
+            for (int d = 1; d < n; d++) {
+                dp[t][d] = Math.max(dp[t][d - 1], prices[d] + maxDiff);
+                maxDiff = Math.max(maxDiff, dp[t - 1][d] - prices[d]);
+            }
+        }
+
+        return dp[k][n - 1];
+    }
+}
+_______________________________________________________
+
+Understanding the Problem
+We need to find the maximum profit that can be obtained by making at most k transactions in a given prices[] array.
+
+A transaction consists of buying and then selling a stock.
+We can only hold one stock at a time, meaning we must sell before buying again.
+The number of transactions must not exceed k.
+
+
+Approach: Dynamic Programming (DP)
+We use a DP table where:
+dp[t][d] represents the maximum profit achievable using at most t transactions up to day d.
+
+Steps to Solve
+Initialize a DP table dp[k+1][n] where n is the number of days.
+Base case: dp[0][d] = 0 (no transactions means zero profit).
+
+Transition relation:
+We can either skip the day (dp[t][d] = dp[t][d-1]).
+Or we sell on day d and maximize profit by choosing a previous buy day: dp[t][d]=max(dp[t][d−1],prices[d]+maxDiff)
+where ,
+maxDiff = max(maxDiff, dp[t-1][m] - prices[m]) tracks the best previous profit.
