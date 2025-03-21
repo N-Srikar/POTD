@@ -1,0 +1,83 @@
+2115. Find All Possible Recipes from Given Supplies
+_______________________________________________________
+
+class Solution {
+    public List<String> findAllRecipes(String[] recipes, List<List<String>> ingredients, String[] supplies) {
+        Set<String> seen = new HashSet<>();
+        for (String sup : supplies) {
+            seen.add(sup);
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 0; i < recipes.length; ++i) {
+            q.offer(i);
+        }
+        List<String> ans = new ArrayList<>();
+        int prevSize = seen.size() - 1;
+        while (seen.size() > prevSize) {
+            prevSize = seen.size();
+            mid:
+            for (int sz = q.size(); sz > 0; --sz) {
+                int i = q.poll();
+                for (String ing : ingredients.get(i)) {
+                    if (!seen.contains(ing)) {
+                        q.offer(i);
+                        continue mid;
+                    }
+                }
+                seen.add(recipes[i]);
+                ans.add(recipes[i]);
+            }
+        }
+        return ans;
+    }
+}
+_________________________________________________________
+
+Problem Statement :
+You have information about n different recipes. You are given a string array recipes and a 2D string array ingredients. The ith recipe has the name recipes[i], and you can create it if you have all the needed ingredients from ingredients[i]. A recipe can also be an ingredient for other recipes, i.e., ingredients[i] may contain a string that is in recipes.
+
+You are also given a string array supplies containing all the ingredients that you initially have, and you have an infinite supply of all of them.
+
+Return a list of all the recipes that you can create. You may return the answer in any order.
+
+Note that two recipes may contain each other in their ingredients.
+
+
+
+Approach:
+The approach used combines Breadth-First Search (BFS) with dependency resolution to identify which recipes can be made based on the available supplies and other recipes. 
+
+Step-by-Step Explanation:
+Initialization of the seen Set:
+The seen set stores all the ingredients that are available either from the initial supplies or from recipes that have been made already.
+Initially, all the items in supplies are added to this seen set because they are directly available to be used in recipes.
+
+Queue Initialization:
+A queue q is used to store the indices of recipes that need to be processed. Initially, all recipes are added to the queue.
+This queue helps in processing recipes one by one to check if they can be made.
+
+Result List:
+The list ans stores the names of the recipes that can be made.
+Main Processing Loop:
+
+The loop continues until no more recipes can be made in a new round of processing. This is controlled by comparing the size of the seen set (prevSize variable) in consecutive rounds.
+prevSize tracks the size of the seen set before each iteration, and if the size doesn't change, it means no new recipes can be made, so the loop terminates.
+
+Iterating Over Recipes in the Queue:
+For each recipe in the queue, we check if all its ingredients are available in the seen set. If any ingredient is missing, that recipe cannot be made yet, and it is re-added to the queue for later processing.
+
+Checking Ingredients of a Recipe:
+For each recipe, its ingredients are checked against the seen set. If all ingredients are found in the seen set, the recipe can be made. Otherwise, the recipe is re-added to the queue to be processed again later.
+
+Adding Recipe to seen and ans:
+If all ingredients of the recipe are available, the recipe itself is added to the seen set (because it can now be used as an ingredient for other recipes).
+The recipe is also added to the result list ans, indicating it can be made.
+
+Ending Condition:
+The process continues until no new recipes can be made (i.e., the seen set no longer grows between iterations). This condition is checked by comparing the size of the seen set before and after processing each round.
+
+
+Complexity:
+Time Complexity : O(N*M)
+Space Complexity : O(N+k)
+

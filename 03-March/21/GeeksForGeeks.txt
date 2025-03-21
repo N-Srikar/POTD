@@ -54,3 +54,7 @@ Steps:
 Initialize a DP array to store the maximum loot up to each house.
 Iteratively compute the maximum loot for each house from index 2 to n-1 using the recurrence relation.
 The result will be in dp[n-1] (the last element of the DP array).
+
+Complexity:
+Time Complexity : O(N)
+Space Complexity : O(N)
