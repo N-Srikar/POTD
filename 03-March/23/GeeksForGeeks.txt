@@ -1,0 +1,69 @@
+Total Decoding Messages
+_______________________________________________________
+
+class Solution {
+    public int countWays(String digits) {
+        // code here
+        int n = digits.length();
+        if (n == 0 || digits.charAt(0) == '0') return 0;
+
+        int[] dp = new int[n + 1];
+        dp[0] = 1; 
+        dp[1] = 1;
+
+        for (int i=2 ; i<=n ; i++) {
+            int oneDigit = digits.charAt(i-1) - '0';
+            int twoDigit = Integer.parseInt(digits.substring(i-2, i));
+
+            if (oneDigit > 0) {
+                dp[i] += dp[i - 1]; 
+            }
+
+            if (twoDigit >= 10 && twoDigit <= 26) {
+                dp[i] += dp[i - 2];
+            }
+        }
+
+        return dp[n];
+    }
+}
+______________________________________________________
+
+
+Problem Statement:
+A message containing letters A-Z is being encoded to numbers using the following mapping:
+
+'A' -> 1
+'B' -> 2
+...
+'Z' -> 26
+
+You are given a string digits. You have to determine the total number of ways that message can be decoded.
+
+
+
+Approach:
+Base Cases:
+If digits is empty or starts with '0', return 0 since '0' cannot be mapped to any letter.
+If the string length is 1, return 1 if it's non-zero.
+
+DP Definition:
+Let dp[i] represent the number of ways to decode the substring digits[0...i-1].
+The transition is based on whether we can consider:
+The last single digit (digits[i-1]).
+The last two digits (digits[i-2]digits[i-1]) if they form a valid number (between 10 and 26).
+
+Transition Formula:
+If digits[i-1] ≠ '0', we can decode it as a single character:
+dp[i]+=dp[i−1]
+
+If digits[i-2]digits[i-1] forms a valid number (10 to 26), we can decode it as a two-character code:
+dp[i]+=dp[i−2]
+
+Final Answer:
+dp[n] will contain the total ways to decode the entire string.
+
+
+Complexity :
+Time Complexity : O(N)
+Space Complexity : O(N)
