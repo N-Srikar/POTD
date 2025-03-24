@@ -1,0 +1,47 @@
+Matrix Chain Multiplication
+_______________________________________________________
+
+class Solution {
+    static int matrixMultiplication(int arr[]) {
+        int n = arr.length;
+        int[][] dp = new int[n][n];
+
+        for (int len = 2; len < n; len++) { 
+            for (int i = 1; i < n - len + 1; i++) {
+                int j = i + len - 1;
+                dp[i][j] = Integer.MAX_VALUE;
+                for (int k = i; k < j; k++) {
+                    int cost = dp[i][k] + dp[k+1][j] + arr[i-1] * arr[k] * arr[j];
+                    dp[i][j] = Math.min(dp[i][j], cost);
+                }
+            }
+        }
+        return dp[1][n-1]; 
+    }
+}
+_____________________________________________________
+
+Problem Statement:
+Given an array arr[] which represents the dimensions of a sequence of matrices where the ith matrix has the dimensions (arr[i-1] x arr[i]) for i>=1, find the most efficient way to multiply these matrices together. The efficient way is the one that involves the least number of multiplications.
+
+
+Approach:
+Dynamic Programming
+Define DP State:
+Let dp[i][j] represent the minimum number of scalar multiplications needed to multiply matrices from index i to j.
+
+Base Case:
+If i == j, there's only one matrix, so dp[i][j] = 0.
+
+Recursive Transition:
+We try all possible partitions k between i and j and compute:
+dp[i][j]= min(dp[i][k]+dp[k+1][j]+arr[i−1]×arr[k]×arr[j])
+The cost of multiplying two partitions is determined by the matrix dimensions.
+
+Iterate Over Lengths:
+Use bottom-up DP where we first solve smaller subproblems and build up to larger ones.
+
+
+Complexity:
+Time Complexity : O(n^3)
+Space Complexity : O(n^2)
