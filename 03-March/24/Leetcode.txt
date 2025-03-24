@@ -1,0 +1,45 @@
+3169. Count Days Without Meetings
+________________________________________________________
+
+class Solution {
+    public int countDays(int days, int[][] meetings) {
+        Arrays.sort(meetings, (a, b) -> a[0] - b[0]);
+        int count = meetings[0][0] - 1;
+        int n = meetings.length;
+        for (int i = 1; i < n; i++) {
+            if (meetings[i][0] <= meetings[i - 1][1]) {
+                if (meetings[i][1] < meetings[i - 1][1]) {
+                    meetings[i][1] = meetings[i - 1][1];
+                }
+            } else {
+                int dy = meetings[i][0] - meetings[i - 1][1];
+                count += dy - 1;
+            }
+        }
+        count += days - meetings[n - 1][1];
+        return count;
+    }
+}
+_______________________________________________________
+
+
+Problem Statement :
+You are given a positive integer days representing the total number of days an employee is available for work (starting from day 1). You are also given a 2D array meetings of size n where, meetings[i] = [start_i, end_i] represents the starting and ending days of meeting i (inclusive).
+
+Return the count of days when the employee is available for work but no meetings are scheduled.
+
+Note: The meetings may overlap.
+
+
+
+
+Approach:
+Sort the meetings array based on the starting days of the meetings.
+Iterate through the sorted meetings array to calculate the count of available days.
+Handle the overlapping meetings by adjusting the ending day of the current meeting if needed. 
+The count of available days is calculated by considering the gaps between consecutive meetings and the boundaries of the available days.
+
+
+Complexity:
+Time complexity: O(nlogn)
+Space complexity: O(1)
