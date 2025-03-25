@@ -1,0 +1,99 @@
+Boolean Parenthesization
+_______________________________________________________
+
+class Solution {
+    static int countWays(String s) {
+        int len = s.length();
+        int n = (len + 1) / 2; // Number of symbols (T/F)
+        char[] symbols = new char[n];
+        char[] operators = new char[len - n];
+        
+        int sIndex = 0, oIndex = 0;
+        for (int i = 0; i < len; i++) {
+            if (i % 2 == 0) {
+                symbols[sIndex++] = s.charAt(i);
+            } else {
+                operators[oIndex++] = s.charAt(i);
+            }
+        }
+        
+        int[][] tDP = new int[n][n];
+        int[][] fDP = new int[n][n];
+        
+        // Base case: single symbol
+        for (int i = 0; i < n; i++) {
+            if (symbols[i] == 'T') {
+                tDP[i][i] = 1;
+                fDP[i][i] = 0;
+            } else {
+                tDP[i][i] = 0;
+                fDP[i][i] = 1;
+            }
+        }
+        
+        // Fill DP tables for subexpressions of length 2 to n
+        for (int l = 2; l <= n; l++) { // l is the length of the subexpression
+            for (int i = 0; i <= n - l; i++) {
+                int j = i + l - 1;
+                tDP[i][j] = 0;
+                fDP[i][j] = 0;
+                
+                for (int k = i; k < j; k++) { // Split at operator k
+                    char op = operators[k];
+                    int leftT = tDP[i][k];
+                    int leftF = fDP[i][k];
+                    int rightT = tDP[k+1][j];
+                    int rightF = fDP[k+1][j];
+                    
+                    switch (op) {
+                        case '&':
+                            tDP[i][j] += leftT * rightT;
+                            fDP[i][j] += leftT * rightF + leftF * rightT + leftF * rightF;
+                            break;
+                        case '|':
+                            tDP[i][j] += leftT * rightT + leftT * rightF + leftF * rightT;
+                            fDP[i][j] += leftF * rightF;
+                            break;
+                        case '^':
+                            tDP[i][j] += leftT * rightF + leftF * rightT;
+                            fDP[i][j] += leftT * rightT + leftF * rightF;
+                            break;
+                    }
+                }
+            }
+        }
+        
+        return tDP[0][n-1];
+    }
+}
+________________________________________________________
+
+
+Problem Statemt:
+You are given a boolean expression s containing
+    'T' ---> true
+    'F' ---> false 
+and following operators between symbols
+   &   ---> boolean AND
+    |   ---> boolean OR
+   ^   ---> boolean XOR
+Count the number of ways we can parenthesize the expression so that the value of expression evaluates to true.
+
+Note: The answer is guaranteed to fit within a 32-bit integer.
+
+
+
+Approach:
+Parse the Input: Split the input string into separate arrays for symbols (T/F) and operators (&, |, ^).
+
+Dynamic Programming Setup: Use two 2D arrays, tDP and fDP, where tDP[i][j] represents the number of ways to evaluate the subexpression from symbol i to j to true, and fDP[i][j] for false.
+
+Base Case: For a single symbol, initialize tDP and fDP based on whether the symbol is 'T' or 'F'.
+
+Fill DP Tables: For each possible subexpression length, compute the number of ways to evaluate to true and false by considering all possible splits and applying the corresponding operator rules.
+
+
+
+Complexity:
+Time Complexity : O(n^3)
+Space Complexity : O(n^2)
