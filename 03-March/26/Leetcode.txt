@@ -1,0 +1,66 @@
+2033. Minimum Operations to Make a Uni-Value Grid
+________________________________________________________
+
+class Solution {
+    public int minOperations(int[][] grid, int x) {
+        List<Integer> values = new ArrayList<>();
+        
+        for (int[] row : grid) {
+            for (int val : row) {
+                values.add(val);
+            }
+        }
+
+        Collections.sort(values);
+
+        for (int val : values) {
+            if (Math.abs(val - values.get(0)) % x != 0) {
+                return -1;
+            }
+        }
+
+        int median = values.get(values.size() / 2);
+        int operations = 0;
+
+        for (int val : values) {
+            operations += Math.abs(val - median) / x;
+        }
+
+        return operations;
+    }
+}
+_______________________________________________________
+
+Problem Statement :
+You are given a 2D integer grid of size m x n and an integer x. In one operation, you can add x to or subtract x from any element in the grid.
+A uni-value grid is a grid where all the elements of it are equal.
+Return the minimum number of operations to make the grid uni-value. If it is not possible, return -1.
+
+
+Intuition
+The key insights for solving this problem are:
+We need to find a target value that minimizes the total number of operations.
+The target value should be the median of the sorted grid values.
+We must check if all elements can be transformed to this target value using operations of adding or subtracting x.
+
+
+
+Approach:
+Flatten and Sort the Grid :
+Convert the 2D grid into a 1D sorted array of values
+This allows us to easily find the median and check transformability
+
+Check Transformability :
+Check if every element can be transformed to the first element
+This is done by verifying that the absolute difference between each element and the first element is divisible by x
+If any element cannot be transformed, return -1
+
+Find Median and Calculate Operations :
+Use the median as the target value to minimize total operations
+Calculate total operations by summing the number of x operations needed to transform each element to the median
+
+
+
+Complexity :
+Time complexity: O(m * n * log(m * n))
+Space complexity: O(m * n)
