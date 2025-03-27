@@ -1,0 +1,83 @@
+2780. Minimum Index of a Valid Split
+_______________________________________________________
+
+class Solution {
+    public int minimumIndex(List<Integer> nums) {
+        int n = nums.size();
+        Map<Integer, Integer> freq = new HashMap<>();
+
+        // Count frequency of each element
+        for (int num : nums) {
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        }
+
+        int dom = -1, count = 0;
+
+        // Find the dominant element
+        for (Map.Entry<Integer, Integer> entry : freq.entrySet()) {
+            if (entry.getValue() > n / 2) {
+                dom = entry.getKey();
+                count = entry.getValue();
+                break;
+            }
+        }
+
+        // If no dominant element exists, return -1
+        if (dom == -1) return -1;
+
+        int leftCount = 0;
+
+        // Check for minimum index
+        for (int i = 0; i < n - 1; i++) {
+            if (nums.get(i) == dom) leftCount++;
+
+            int leftSize = i + 1;
+            int rightSize = n - leftSize;
+            int rightCount = count - leftCount;
+
+            // Ensure both halves have a majority
+            if (leftCount * 2 > leftSize && rightCount * 2 > rightSize) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+}
+
+______________________________________________________
+
+
+Problem Statement :
+An element x of an integer array arr of length m is dominant if more than half the elements of arr have a value of x.
+
+You are given a 0-indexed integer array nums of length n with one dominant element.
+
+You can split nums at an index i into two arrays nums[0, ..., i] and nums[i + 1, ..., n - 1], but the split is only valid if:
+
+0 <= i < n - 1
+nums[0, ..., i], and nums[i + 1, ..., n - 1] have the same dominant element.
+Here, nums[i, ..., j] denotes the subarray of nums starting at index i and ending at index j, both ends being inclusive. Particularly, if j < i then nums[i, ..., j] denotes an empty subarray.
+
+Return the minimum index of a valid split. If no valid split exists, return -1.
+
+
+
+
+Approach :
+Find the dominant element
+Count the frequency of each number.
+Identify the element that occurs more than n / 2 times.
+
+Traverse and check splits
+Maintain a left count of the dominant element while iterating.
+Compute the remaining count in the right partition.
+If the dominant element remains dominant in both halves, return the index.
+
+If no valid split is found, return -1.
+
+
+
+Complexity :
+Time Complexity : O(N)
+Space Complexity : O(N)
