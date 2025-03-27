@@ -1,0 +1,51 @@
+Minimum Platforms
+_______________________________________________________
+
+class Solution {
+    static int findPlatform(int arr[], int dep[]) {
+        Arrays.sort(arr);
+        Arrays.sort(dep);
+
+        int platforms = 0, maxPlatforms = 0;
+        int i = 0, j = 0, n = arr.length;
+
+        while (i < n && j < n) {
+            if (arr[i] <= dep[j]) {
+                platforms++;
+                maxPlatforms = Math.max(maxPlatforms, platforms);
+                i++;
+            } else {
+                platforms--;
+                j++;
+            }
+        }
+        return maxPlatforms;
+    }
+}
+____________________________________________________
+
+Problem Statement :
+You are given the arrival times arr[] and departure times dep[] of all trains that arrive at a railway station on the same day. Your task is to determine the minimum number of platforms required at the station to ensure that no train is kept waiting.
+
+At any given time, the same platform cannot be used for both the arrival of one train and the departure of another. Therefore, when two trains arrive at the same time, or when one arrives before another departs, additional platforms are required to accommodate both trains.
+
+
+
+Approach :
+Sort the arrival and departure times: Sorting helps in tracking the order in which trains arrive and depart.
+
+Use Two Pointers: 
+One pointer (i) will iterate through the arr[] array (train arrivals),
+and another pointer (j) will iterate through the dep[] array (train departures).
+
+Track Platform Usage:
+If a train arrives before the current train departs, increase the platform count.
+If a train departs, decrease the platform count.
+
+Maintain a maximum count: Track the maximum platforms required at any point in time
+
+
+
+Complexity :
+Time Complexity : O(NlogN)
+Space Complexity : O(1)
