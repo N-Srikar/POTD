@@ -1,0 +1,54 @@
+Activity Selection
+_______________________________________________________
+
+class Solution {
+    public int activitySelection(int[] start, int[] finish) {
+        int n = start.length;
+        // Create an array to store pairs of start and finish times.
+        int[][] activities = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            activities[i][0] = start[i];
+            activities[i][1] = finish[i];
+        }
+        
+        // Sort activities based on their finish times.
+        Arrays.sort(activities, (a, b) -> a[1] - b[1]);
+        
+        // The first activity always gets selected.
+        int count = 1;
+        int lastFinish = activities[0][1];
+        
+        // Iterate over the remaining activities.
+        for (int i = 1; i < n; i++) {
+            // If the current activity starts after or when the last selected one finishes, select it.
+            if (activities[i][0] > lastFinish) {
+                count++;
+                lastFinish = activities[i][1];
+            }
+        }
+        
+        return count;
+    }
+}
+_________________________________________________________
+
+
+Problem Statement :
+You are given a set of activities, each with a start time and a finish time, represented by the arrays start[] and finish[], respectively. A single person can perform only one activity at a time, meaning no two activities can overlap. Your task is to determine the maximum number of activities that a person can complete in a day.
+
+
+
+
+Approach :
+Below is one way to solve the problem using a greedy approach. The idea is to:
+Pair each start and finish time together.
+
+Sort the activities by their finish time.
+
+Select the first activity, then pick each subsequent activity whose start time is greater than to the finish time of the last selected activity.
+
+
+
+Complexity :
+Time Complexity : O(n logn)
+Space Complexity : O(n)
