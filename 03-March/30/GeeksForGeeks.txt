@@ -1,0 +1,55 @@
+Gas Station
+________________________________________________________
+
+class Solution {
+    public int startStation(int[] gas, int[] cost) {
+        int totalGas = 0, totalCost = 0, currentGas = 0, startIndex = 0;
+        int n = gas.length;
+
+        for (int i = 0; i < n; i++) {
+            totalGas += gas[i];
+            totalCost += cost[i];
+            currentGas += gas[i] - cost[i];
+
+            // If we run out of gas, reset start index and current gas
+            if (currentGas < 0) {
+                startIndex = i + 1;
+                currentGas = 0;
+            }
+        }
+
+        // If total gas is less than total cost, it's impossible to complete the circuit
+        return (totalGas < totalCost) ? -1 : startIndex;
+    }
+}
+______________________________________________________
+
+Problem Statement :
+There are some gas stations along a circular route. You are given two integer arrays gas[] denoted as the amount of gas present at each station and cost[] denoted as the cost of travelling to the next station. You have a car with an unlimited gas tank. You begin the journey with an empty tank from one of the gas stations. Return the index of the starting gas station if it's possible to travel around the circuit without running out of gas at any station in a clockwise direction. If there is no such starting station exists, return -1.
+Note: If a solution exists, it is guaranteed to be unique.
+
+
+
+
+Approach :
+To solve this problem optimally, we use a Greedy approach instead of brute force.
+
+Key Observations
+If the total gas available is less than the total cost to complete the circuit, it is impossible to complete the journey.
+∑gas<∑cost⇒return −1
+If a valid solution exists, there is only one unique starting station.
+While traversing, if at any point the current gas goes negative, the journey must start from the next station.
+
+Greedy Strategy
+Compute total gas and total cost. If total gas < total cost, return -1 immediately.
+
+Iterate through the stations:
+Maintain currentGas, which keeps track of fuel balance while traversing.
+If at any point currentGas < 0, reset currentGas = 0 and update the starting station to the next index.
+Continue until the end.
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(1)
