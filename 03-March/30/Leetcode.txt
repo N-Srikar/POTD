@@ -1,0 +1,61 @@
+763. Partition Labels
+________________________________________________________
+
+class Solution {
+    public List<Integer> partitionLabels(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+
+        for(int i = 0; i < s.length(); i++){
+            char ch = s.charAt(i);
+            map.put(ch, i);
+        }
+
+        List<Integer> res = new ArrayList<>();
+        int prev = -1;
+        int max = 0;
+        
+        for(int i = 0; i < s.length(); i++){
+            char ch = s.charAt(i);
+            max = Math.max(max, map.get(ch));
+            if(max == i){
+                res.add(max - prev);
+                prev = max;
+            }
+        }
+        return res;
+    }
+}
+_______________________________________________________
+
+
+Problem Statement :
+We need to divide a given string into maximum partitions such that each character appears in only one partition.
+Return a list of partition sizes.
+
+
+
+Approach :
+We solve this using a Greedy strategy with the help of a HashMap.
+
+1. Store Last Occurrence of Each Character
+We iterate through the string and store the last occurrence index of each character in a HashMap.
+This helps us track how far a character influences the partition.
+Traverse the String to Create Partitions
+
+2. We maintain two variables:
+max → Keeps track of the furthest index any character in the current partition impacts.
+prev → Stores the previous partition's last index.
+
+3. As we iterate:
+Update max to the last occurrence of the current character.
+If i == max, it means we complete a partition at this index.
+Store its size as max - prev, then update prev = max.
+
+4. Return the Partition Sizes
+Store each partition size in a List<Integer> and return it.
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
