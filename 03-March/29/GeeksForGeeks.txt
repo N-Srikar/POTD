@@ -1,0 +1,92 @@
+Job Sequencing Problem
+_______________________________________________________
+
+class Solution {
+    public ArrayList<Integer> jobSequencing(int[] deadline, int[] profit) {
+        int n = deadline.length;
+        Integer[] indices = new Integer[n];
+
+        // Step 1: Store job indices and sort based on profit in descending order
+        for (int i = 0; i < n; i++) {
+            indices[i] = i;
+        }
+        Arrays.sort(indices, (a, b) -> profit[b] - profit[a]); // Sorting indices by profit
+
+        // Step 2: Find max deadline to create a scheduling slot array
+        int maxDeadline = 0;
+        for (int d : deadline) {
+            maxDeadline = Math.max(maxDeadline, d);
+        }
+
+        // Step 3: Create a slot array
+        boolean[] slot = new boolean[maxDeadline + 1];
+        int jobCount = 0, totalProfit = 0;
+
+        // Step 4: Schedule jobs
+        for (int i : indices) {
+            for (int j = deadline[i]; j > 0; j--) { // Find latest available slot
+                if (!slot[j]) { 
+                    slot[j] = true; // Mark slot as filled
+                    jobCount++;
+                    totalProfit += profit[i];
+                    break;
+                }
+            }
+        }
+
+        // Step 5: Return result
+        ArrayList<Integer> result = new ArrayList<>();
+        result.add(jobCount);
+        result.add(totalProfit);
+        return result;
+    }
+}
+
+________________________________________________________
+
+
+Problem Statement :
+You are given two arrays: deadline[], and profit[], which represent a set of jobs, where each job is associated with a deadline, and a profit. Each job takes 1 unit of time to complete, and only one job can be scheduled at a time. You will earn the profit associated with a job only if it is completed by its deadline.
+
+Your task is to find:
+
+The maximum number of jobs that can be completed within their deadlines.
+The total maximum profit earned by completing those jobs.
+
+
+
+Approach:
+The goal is to maximize the number of jobs completed within their deadlines while also maximizing profit. To achieve this, we use a Greedy approach with sorting and a scheduling strategy.
+
+Steps Involved
+1. Sorting Jobs by Profit (Descending Order)
+Since we want to maximize profit, we should prioritize jobs with higher profit first.
+Instead of creating a separate job class, we use an array of indices (Integer[] indices) and sort it based on profit[] in descending order.
+
+2. Finding Maximum Deadline
+We determine the maximum deadline in the deadline[] array.
+This helps us define the latest slot that can be used for scheduling.
+
+3. Using a Slot Array for Scheduling
+We create a boolean array slot[] of size maxDeadline + 1, where:
+slot[j] = true means the time slot j is occupied.
+slot[j] = false means the time slot j is available.
+
+4. Iterating Over Sorted Jobs
+For each job (picked in decreasing order of profit):
+We try to schedule it at the latest available time slot before its deadline.
+If the slot is available, we schedule the job, mark the slot as occupied, increase the job count, and add its profit to the total.
+
+5. Returning the Result
+We store the total number of scheduled jobs and the total profit earned in an ArrayList and return it.
+
+
+Why Greedy Works Here?
+Sorting jobs by profit first ensures that we always attempt to schedule the most profitable jobs first.
+Assigning jobs to the latest possible slot before their deadline maximizes the number of jobs we can fit.
+
+
+
+Complexity :
+Time Complexity : O(nlogn)
+Space Complexity : O(n)
