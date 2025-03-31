@@ -1,0 +1,66 @@
+2551. Put Marbles in Bags
+_______________________________________________________
+
+class Solution {
+    public long putMarbles(int[] weights, int k) {
+        int n = weights.length;
+        int[] pairs = new int[n - 1];
+        for (int i = 1; i < n; i++) {
+            pairs[i - 1] = weights[i] + weights[i - 1];
+        }
+        Arrays.sort(pairs);
+        long minScore = 0;
+        long maxScore = 0;
+        for (int i = 0; i < k - 1; i++) {
+            minScore += pairs[i];
+            maxScore += pairs[n - i - 2];
+        }
+        return maxScore - minScore;
+    }
+}
+_______________________________________________________
+
+Problem Statement :
+We have an array weights[] representing the weights of marbles and need to divide them into k contiguous subarrays (bags).
+Each bag’s cost is computed as: cost = weights[first] + weights[last]
+for that bag.
+
+Our goal is to compute the difference between the maximum and minimum scores that can be achieved when optimally distributing marbles into k bags.
+
+
+
+Approach :
+Step 1: Understanding the Contribution to Score
+Instead of focusing on individual bag partitions, we analyze how partitions contribute to the total score:
+Every partition introduces a cut between two elements.
+The total cost of partitioning depends on the sum of first and last elements of each segment.
+
+Step 2: Storing Pair Sums
+The key observation:
+Every partition introduces a boundary, and only these boundary pairs matter.
+We compute the sum of adjacent elements (weights[i] + weights[i-1]) and store them in an array pairs[].
+
+Step 3: Sorting the Pair Sums
+We sort pairs[] so that:
+Smallest sums appear first → Used for minimum score
+Largest sums appear last → Used for maximum score
+
+Step 4: Calculating Min and Max Scores
+Since we must form k partitions, we need (k-1) partitions since k bags require k-1 cuts.
+
+Minimum Score Calculation
+To get the minimum partitioning:
+We take the smallest k-1 pairs from the sorted array.
+
+Maximum Score Calculation
+To get the maximum partitioning:
+We take the largest k-1 pairs from the sorted array.
+
+Step 5: Return the Difference
+Finally, the difference between maxScore and minScore is returned.
+
+
+
+Complexity :
+Time Complexity : O(n logn)
+Space Complexity : O(n)
