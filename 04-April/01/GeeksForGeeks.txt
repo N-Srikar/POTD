@@ -1,0 +1,88 @@
+DFS of Graph
+_______________________________________________________
+
+class Solution {
+    public ArrayList<Integer> dfs(ArrayList<ArrayList<Integer>> adj) {
+        // Initialize the visited array to keep track of the vertices that have been visited.
+        boolean[] visited = new boolean[adj.size()];
+
+        // Create an empty stack to store the vertices that need to be processed.
+        Stack<Integer> stack = new Stack<>();
+
+        // Add the starting vertex (i.e., 0) to the stack.
+        stack.push(0);
+
+        // Initialize the result list.
+        ArrayList<Integer> result = new ArrayList<>();
+
+        while (!stack.isEmpty()) {
+            // Get the top vertex from the stack.
+            int v = stack.peek();
+
+            // If the vertex has not been visited, mark it as visited and add it to the result list.
+            if (!visited[v]) {
+                visited[v] = true;
+                result.add(v);
+            }
+
+            // Get all the neighbors of the current vertex.
+            ArrayList<Integer> neighbors = adj.get(v);
+            boolean allVisited = true;
+
+            // Add the neighbors to the stack, but only if they have not been visited yet.
+            for (int i = 0; i < neighbors.size(); i++) {
+                int neighbor = neighbors.get(i);
+                if (!visited[neighbor]) {
+                    stack.push(neighbor);
+                    allVisited = false; // We found a neighbor that hasn't been visited
+                    break; // No need to continue checking the rest of the neighbors
+                }
+            }
+
+            // If all neighbors have been visited, pop the current vertex from the stack.
+            if (allVisited) {
+                stack.pop();
+            }
+        }
+
+        // Return the result list containing the DFS traversal of the graph.
+        return result;
+    }
+}
+
+______________________________________________________
+
+Problem Statement :
+Given a connected undirected graph represented by a 2-d adjacency list adj[][], where each adj[i] represents the list of vertices connected to vertex i. Perform a Depth First Search (DFS) traversal starting from vertex 0, visiting vertices from left to right as per the given adjacency list, and return a list containing the DFS traversal of the graph.
+
+
+
+Approach :
+Initialize Data Structures
+A boolean array visited[] is created to keep track of the visited vertices.
+A stack stack is used to manage the order of traversal.
+An ArrayList result is used to store the DFS traversal order.
+
+Start DFS from Vertex 0
+Push the starting vertex (0) onto the stack.
+
+Process Vertices using Stack
+While the stack is not empty, do the following:
+Peek the top vertex of the stack (but do not remove it yet).
+If the vertex is not visited, mark it as visited and add it to result.
+
+Explore Neighbors
+Get all neighboring vertices of the current vertex from the adjacency list.
+Try to find the first unvisited neighbor and push it onto the stack.
+If an unvisited neighbor is found, break the loop (so we explore depth-first).
+
+Backtrack if No Unvisited Neighbors
+If all neighbors of the current vertex are already visited, pop the vertex from the stack (backtracking).
+
+Continue Until Stack is Empty
+
+
+
+Complexity :
+Time Complexity : O(V+E)
+Space Complexity : O(V)
