@@ -1,0 +1,49 @@
+2874. Maximum Value of an Ordered Triplet II
+_______________________________________________________
+
+class Solution {
+    public long maximumTripletValue(int[] A) {
+        long res = 0, maxa = 0, maxab = 0;
+        for (int a : A) {
+            res = Math.max(res, 1L * maxab * a);
+            maxab = Math.max(maxab, maxa - a);
+            maxa = Math.max(maxa, a);
+        }
+        return res;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement :
+You are given a 0-indexed integer array nums.
+Return the maximum value over all triplets of indices (i, j, k) such that i < j < k. If all such triplets have a negative value, return 0.
+The value of a triplet of indices (i, j, k) is equal to (nums[i] - nums[j]) * nums[k].
+
+
+
+
+Approach (One-Pass Iteration)
+We traverse the array once and maintain three variables:
+highest 	:   Stores the maximum value of nums[i] encountered so far.
+highest_diff	:     Stores the maximum value of nums[i] - nums[j] encountered so far.
+answer	:     Stores the maximum triplet value computed so far.
+
+Step-by-Step Execution
+For each num (which acts as nums[k] in the current iteration):
+Update answer = max(answer, highest_diff * num), 
+since the best (nums[i] - nums[j]) found so far is multiplied by nums[k].
+
+Update highest_diff = max(highest_diff, highest - num), 
+because we need to track the best (nums[i] - nums[j]) for future nums[k].
+
+Update highest = max(highest, num), 
+since we want to track the maximum nums[i] value for upcoming elements.
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(1)
