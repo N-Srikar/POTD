@@ -1,0 +1,74 @@
+Rotten Oranges
+_______________________________________________________
+
+class Solution {
+    public int orangesRotting(int[][] mat) {
+        int n = mat.length, m = mat[0].length, fresh = 0, time = 0;
+        Queue<int[]> q = new LinkedList<>();
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == 2) q.add(new int[]{i, j});
+                if (mat[i][j] == 1) fresh++;
+            }
+        }
+
+        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        
+        while (!q.isEmpty() && fresh > 0) {
+            int size = q.size();
+            while (size-- > 0) {
+                int[] cur = q.poll();
+                for (int[] d : dirs) {
+                    int x = cur[0] + d[0], y = cur[1] + d[1];
+                    if (x >= 0 && x < n && y >= 0 && y < m && mat[x][y] == 1) {
+                        mat[x][y] = 2;
+                        q.add(new int[]{x, y});
+                        fresh--;
+                    }
+                }
+            }
+            time++;
+        }
+        
+        return fresh == 0 ? time : -1;
+    }
+}
+
+_______________________________________________________
+
+
+
+Problem Statement :
+Given a matrix mat[][] of dimension n * m where each cell in the matrix can have values 0, 1 or 2 which has the following meaning:
+0 : Empty cell
+1 : Cell have fresh oranges
+2 : Cell have rotten oranges
+
+We have to determine what is the earliest time after which all the oranges are rotten. A rotten orange at index (i, j) can rot other fresh orange at indexes (i-1, j), (i+1, j), (i, j-1), (i, j+1) (up, down, left and right) in a unit time.
+
+Note: Your task is to return the minimum time to rot all the fresh oranges. If not possible returns -1.
+
+
+
+
+Approach :
+Initialize Queue and Count Fresh Oranges
+Use a queue (Queue<int[]> q) to store all initially rotten oranges (i, j).
+Count the number of fresh oranges (fresh).
+
+Perform BFS to Spread the Rot
+Use BFS to process the rotten oranges level by level.
+At each step, spread the rot to adjacent fresh oranges and mark them as rotten.
+Reduce the fresh count for each orange that gets rotten.
+Increase time after processing all rotten oranges of the current level.
+
+Check if All Oranges are Rotten
+If fresh becomes 0, return time as the answer.
+If after BFS, some fresh oranges remain (fresh > 0), return -1.
+
+
+
+Complexity : 
+Time Complexity : O(n x m)
+Space Complexity : O(n x m)
