@@ -1,0 +1,34 @@
+2579. Count Total Number of Colored Cells
+_______________________________________________________
+
+class Solution {
+    public long coloredCells(int n) {
+        return 1 + 4 * ( (long)n * (n-1) / 2 );
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement :
+There exists an infinitely large two-dimensional grid of uncolored unit cells. You are given a positive integer n, indicating that you must do the following routine for n minutes:
+
+At the first minute, color any arbitrary unit cell blue.
+Every minute thereafter, color blue every uncolored cell that touches a blue cell.
+Below is a pictorial representation of the state of the grid after minutes 1, 2, and 3.
+
+
+Approach :
+just found a mathematical relation
+The pattern of added cells follows an arithmetic sequence: 4, 8, 12, 16, ...
+This sequence can be represented as 4 * (1, 2, 3, 4, ...)
+For minute n, the number of added cells is 4 * (n-1)
+The total number of added cells is the sum of this sequence: 4 * (1 + 2 + ... + (n-1))
+This sum is calculated by the formula: 4 * ((n-1) * n / 2)
+
+Therefore, the total number of cells at minute n is: 1 + 4 * (n * (n-1) / 2)
+
+
+Complexity :
+Time complexity : O(1)
+Space complexity : O(1)
