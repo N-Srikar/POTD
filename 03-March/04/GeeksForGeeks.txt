@@ -1,0 +1,52 @@
+Longest Increasing Subsequence
+
+_______________________________________________________
+
+class Solution {
+    static int lis(int arr[]) {
+        int n = arr.length;
+        int dp[] = new int[n];
+        Arrays.fill(dp, 1);
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (arr[j] < arr[i]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+
+        int maxLen = 1;
+        for (int len : dp) {
+            maxLen = Math.max(maxLen, len);
+        }
+
+        return maxLen;
+    }
+}
+_______________________________________________________
+
+
+
+
+
+Problem Statement :
+Given an array arr[] of non-negative integers, the task is to find the length of the Longest Strictly Increasing Subsequence (LIS).
+
+A subsequence is strictly increasing if each element in the subsequence is strictly less than the next element.
+
+
+
+Approach :
+(Dynamic Programming):
+Initialize a DP array dp of the same size as the input array and fill it with 1s.
+(Each element is at least part of a subsequence of length 1 — itself.)
+For each element at index i, check all previous elements at indices j < i.
+If arr[j] < arr[i], it means arr[i] can extend the increasing subsequence ending at arr[j].
+Update dp[i] = max(dp[i], dp[j] + 1) for every such j.
+After filling the dp array, the answer will be the maximum value in the dp array.
+
+
+Complexity :
+Time Complexity : O(n²) 
+Space Complexity : O(n)
