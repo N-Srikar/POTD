@@ -1,0 +1,47 @@
+1780. Check if Number is a Sum of Powers of Three
+________________________________________________________
+
+class Solution {
+    public boolean checkPowersOfThree(int n) {
+        return solve(0, n , 0);
+    }
+    public boolean solve(int temp, int n , int p){
+        if(temp==n) return true;
+        if(temp>n || p==16) return false;
+        if(solve(temp+(int)Math.pow(3,p),n,p+1)) return true;
+        if(solve(temp,n,p+1)) return true;
+        return false;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given an integer n, return true if it is possible to represent n as the sum of distinct powers of three. Otherwise, return false.
+An integer y is a power of three if there exists an integer x such that y == 3x.
+
+
+
+Approach :
+Use a recursive function solve(temp, n, p) where:
+temp: the current sum of selected powers of 3.
+n: the target number.
+p: the current power (i.e., considering 3^p).
+
+Base Conditions:
+If temp == n: return true (valid sum found).
+If temp > n or p == 16: return false (invalid path or limit reached).
+
+At each step, make two recursive calls:
+Include 3^p in the sum: solve(temp + 3^p, n, p + 1).
+Exclude 3^p and move to the next: solve(temp, n, p + 1).
+If either of the recursive calls returns true, return true.
+The limit p == 16 is used to cap the recursion depth (since 3^15 > 10^7 which is enough for constraint bounds).
+
+
+
+Complexity :
+Time Complexity : O(2^k) 
+Space Complexity : O(k)
