@@ -1,0 +1,59 @@
+Longest String Chain
+_______________________________________________________
+
+class Solution {
+    public int longestStringChain(String words[]) {
+        // code here
+        Arrays.sort(words, (a,b) -> a.length() - b.length());
+        Map<String,Integer> map = new HashMap<>();
+        int maxlen = 1;
+        
+        for (String word : words) {
+            map.put(word, 1);
+            for (int i = 0; i < word.length(); i++) {
+                String predecessor = word.substring(0, i) + word.substring(i + 1);
+                if (map.containsKey(predecessor)) {
+                    map.put(word, Math.max(map.get(word), map.get(predecessor) + 1));
+                }
+            }
+            maxlen = Math.max(maxlen, map.get(word));
+        }
+        
+        return maxlen;
+    }
+}
+_______________________________________________________
+
+
+
+
+Problem Statement:
+You are given an array of words where each word consists of lowercase English letters.
+wordA is a predecessor of wordB if and only if we can insert exactly one letter anywhere in wordA without changing the order of the other characters to make it equal to wordB. For example, "abc" is a predecessor of "abac", while "cba" is not a predecessor of "bcad".
+
+A word chain is a sequence of words [word1, word2, ..., wordk] with k >= 1, where word1 is a predecessor of word2, word2 is a predecessor of word3, and so on. A single word is trivially a word chain with k = 1.
+
+Return the length of the longest possible word chain with words chosen from the given list of words in any order.
+
+
+
+Approach: 
+Sort the list of words in increasing order of their lengths.
+Initialize a map to store the longest chain length ending with each word.
+Initialize a variable to track the maximum chain length found.
+
+For each word in the sorted list:
+Assume the chain length for this word is at least 1.
+Generate all possible predecessor words by removing one character at every position.
+
+For each predecessor, if it exists in the map:
+Update the chain length of the current word based on the predecessor's chain length.
+Store the maximum chain length for the current word in the map.
+Update the overall maximum chain length if the current word’s chain is longer.
+
+Return the overall maximum chain length as the result.
+
+
+Complexity :
+Time Complexity : O(n^2)
+Space Complexity : O(n)
