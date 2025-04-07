@@ -1,0 +1,61 @@
+416. Partition Equal Subset Sum
+_______________________________________________________
+
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum=0;
+        for(int i:nums) sum+=i;
+        if(sum%2!=0) return false;
+        int target = sum/2;
+        
+        Set<Integer> set = new HashSet();
+        set.add(0);
+        
+        for (int num: nums) {
+            Set<Integer> tempSet = new HashSet<Integer>(set);
+            for (Integer subInt : tempSet) {
+                if (subInt + num == target) return true;
+                if (subInt + num < target) set.add(subInt + num);
+            } 
+        }
+        
+        return false;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement :
+Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
+
+
+
+Approach:
+Calculate Total Sum:
+Add all elements of the array.
+If the total sum is odd, return false — it cannot be divided equally.
+
+Target Sum:
+Divide the total sum by 2. This is the target subset sum we are trying to achieve.
+
+Use a HashSet to Track Possible Subset Sums:
+Start with a set containing 0, representing the sum of the empty subset.
+
+For each number in the array:
+Copy the current set of subset sums.
+
+For each sum in the copied set:
+If sum + num == target, return true.
+If sum + num < target, add sum + num to the set.
+
+Return False If No Valid Subset Sum Found:
+If loop completes without finding target, return false.
+
+
+
+
+Complexity :
+Time Complexity : O(n x target) 
+Space Complexity : O(target)
+ 
