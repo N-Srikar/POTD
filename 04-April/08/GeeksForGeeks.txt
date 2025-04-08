@@ -1,0 +1,64 @@
+Bridge edge in a graph
+_______________________________________________________
+
+class Solution {
+    public boolean isBridge(int V, int[][] edges, int c, int d) {
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) adj.add(new ArrayList<>());
+        
+        // Build graph
+        for (int[] edge : edges) {
+            int u = edge[0], v = edge[1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+        
+        boolean[] visited = new boolean[V];
+        
+        // Perform DFS from node c excluding edge (c, d)
+        dfs(c, adj, visited, c, d);
+        
+        // If d is not visited, edge (c,d) is a bridge
+        return !visited[d];
+    }
+    
+    public void dfs(int node, List<List<Integer>> adj, boolean[] visited, int c, int d) {
+        visited[node] = true;
+        for (int neighbor : adj.get(node)) {
+            if ((node == c && neighbor == d) || (node == d && neighbor == c)) continue; // Skip the edge
+            if (!visited[neighbor]) dfs(neighbor, adj, visited, c, d);
+        }
+    }
+}
+_______________________________________________________
+
+
+
+
+
+Problem Statement :
+Given an undirected graph with V vertices numbered from 0 to V-1 and E edges, represented by 2d array edges[][], where edges[i]=[u,v] represents the edge between the vertices u and v. Determine whether a specific edge between two vertices (c, d) is a bridge.
+
+Note:
+An edge is called a bridge if removing it increases the number of connected components of the graph.
+if there’s only one path between c and d (which is the edge itself), then that edge is a bridge.
+
+
+
+
+Approach :
+Build the Graph using an adjacency list.
+Count the number of connected components before removing the edge (c, d).
+Remove the edge (c, d) from the graph.
+Count the number of connected components again after removing the edge.
+If the number of components increases, the edge is a bridge.
+
+But for efficiency, we can simplify:
+Do a DFS traversal from vertex c, excluding the edge (c, d), and check whether d is reachable.
+If d is not reachable from c after removing (c, d), then it's a bridge.
+
+
+
+Complexity 
+Time Complexity : O(v + e)
+Space Complexity : O(v + e)
