@@ -1,0 +1,59 @@
+Minimum cost to connect all houses in a city
+________________________________________________________
+
+class Solution {
+    public int minCost(int[][] houses) {
+        int n = houses.length;
+        boolean[] visited = new boolean[n];
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+
+        pq.add(new int[]{0, 0});
+        int totalCost = 0;
+
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int cost = curr[0];
+            int idx = curr[1];
+
+            if (visited[idx]) continue;
+
+            visited[idx] = true;
+            totalCost += cost;
+
+            for (int i = 0; i < n; i++) {
+                if (!visited[i]) {
+                    int dist = Math.abs(houses[i][0] - houses[idx][0]) + Math.abs(houses[i][1] - houses[idx][1]);
+                    pq.add(new int[]{dist, i});
+                }
+            }
+        }
+
+        return totalCost;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement :
+Given a 2D array houses[][], consisting of n 2D coordinates {x, y} where each coordinate represents the location of each house, the task is to find the minimum cost to connect all the houses of the city.
+
+The cost of connecting two houses is the Manhattan Distance between the two points (xi, yi) and (xj, yj) i.e., |xi – xj| + |yi – yj|, where |p| denotes the absolute value of p.
+
+
+
+
+Approach :
+Start from any house.
+Use a PriorityQueue (min-heap) to always pick the edge (connection to a new house) with the smallest cost.
+Keep track of visited houses.
+For every unvisited house, calculate the Manhattan distance from the current house and add it to the priority queue.
+Continue until all houses are connected.
+
+
+
+
+
+Complexity :
+Time Complexity : O(n^2 logn)
+Space Complexity : O(n)
