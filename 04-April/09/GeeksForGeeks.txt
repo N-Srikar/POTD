@@ -1,0 +1,98 @@
+Articulation Point - II
+_______________________________________________________
+
+class Solution {
+    static int time;
+    static ArrayList<Integer> articulationPoints(int V, int[][] edges) {
+        ArrayList<Integer>[] adj = new ArrayList[V];
+        for (int i = 0; i < V; i++) adj[i] = new ArrayList<>();
+        for (int[] edge : edges) {
+            adj[edge[0]].add(edge[1]);
+            adj[edge[1]].add(edge[0]);
+        }
+
+        int[] disc = new int[V];
+        int[] low = new int[V];
+        boolean[] visited = new boolean[V];
+        boolean[] isAP = new boolean[V];
+        time = 1;
+
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                dfs(i, -1, disc, low, visited, isAP, adj);
+            }
+        }
+
+        ArrayList<Integer> res = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            if (isAP[i]) res.add(i);
+        }
+
+        return res.size() == 0 ? new ArrayList<>(List.of(-1)) : res;
+    }
+
+    static void dfs(int u, int parent, int[] disc, int[] low, boolean[] visited, boolean[] isAP, ArrayList<Integer>[] adj) {
+        visited[u] = true;
+        disc[u] = low[u] = time++;
+        int children = 0;
+
+        for (int v : adj[u]) {
+            if (!visited[v]) {
+                children++;
+                dfs(v, u, disc, low, visited, isAP, adj);
+                low[u] = Math.min(low[u], low[v]);
+
+                if (parent != -1 && low[v] >= disc[u]) {
+                    isAP[u] = true;
+                }
+            } else if (v != parent) {
+                low[u] = Math.min(low[u], disc[v]);
+            }
+        }
+
+        if (parent == -1 && children > 1) {
+            isAP[u] = true;
+        }
+    }
+}
+
+_______________________________________________________
+
+
+Problem Statement :
+You are given an undirected graph with V vertices and E edges. The graph is represented as a 2D array edges[][], where each element edges[i] = [u, v] indicates an undirected edge between vertices u and v.
+Your task is to return all the articulation points (or cut vertices) in the graph.
+An articulation point is a vertex whose removal, along with all its connected edges, increases the number of connected components in the graph.
+
+Note: The graph may be disconnected, i.e., it may consist of more than one connected component.
+If no such point exists, return {-1}.
+
+
+
+Approach :
+Build the adjacency list from the edge list.
+
+Initialize arrays:
+disc[] → discovery times
+low[] → lowest reachable discovery time
+visited[] → to track visited nodes
+isAP[] → to mark articulation points
+
+Perform DFS traversal:
+Set disc[u] and low[u] on visit
+
+For each neighbor v:
+If not visited, recursively DFS on v
+Update low[u] = min(low[u], low[v])
+Apply articulation point conditions
+If v is already visited and not parent of u, update low[u] for back edge
+
+After DFS, collect nodes marked as articulation points in isAP[].
+
+
+
+Complexity : 
+Time Complexity : O(v + e)
+Space Complexity : O(v + e)
+
+
