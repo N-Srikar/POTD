@@ -1,0 +1,74 @@
+Dijkstra Algorithm
+_______________________________________________________
+
+class Solution {
+    public int[] dijkstra(int V, int[][] edges, int src) {
+        List<List<int[]>> adj = new ArrayList<>();
+        
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+        
+        for (int[] edge : edges) {
+            int u = edge[0], v = edge[1], w = edge[2];
+            adj.get(u).add(new int[]{v, w});
+            adj.get(v).add(new int[]{u, w}); 
+        }
+        
+        int[] dist = new int[V];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+        
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        pq.add(new int[]{0, src}); 
+        
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int d = curr[0], u = curr[1];
+            
+            for (int[] neighbor : adj.get(u)) {
+                int v = neighbor[0], w = neighbor[1];
+                if (d + w < dist[v]) {
+                    dist[v] = d + w;
+                    pq.add(new int[]{dist[v], v});
+                }
+            }
+        }
+        
+        return dist;
+    }
+}
+
+_______________________________________________________
+
+
+
+
+Problem Statement :
+Given an undirected, weighted graph with V vertices numbered from 0 to V-1 and E edges, represented by 2d array edges[][], where edges[i]=[u, v, w] represents the edge between the nodes u and v having w edge weight.
+You have to find the shortest distance of all the vertices from the source vertex src, and return an array of integers where the ith element denotes the shortest distance between ith node and source vertex src.
+
+Note: The Graph is connected and doesn't contain any negative weight edge.
+
+
+
+
+Approach :
+Graph Representation:
+Use an adjacency list to represent the graph. Each entry will store a list of pairs (neighbor, weight).
+
+Distance Array:
+Initialize a distance array dist[] of size V with Integer.MAX_VALUE and set dist[src] = 0.
+
+Priority Queue:
+Use a min-heap (PriorityQueue<int[]>) where each element is a pair {distance, vertex}.
+
+Relax Edges:
+For each vertex, relax its edges if a shorter path is found.
+
+
+
+
+Complexity :
+Time Complexity : O(V + E)
+Space Complexity : O(V + E)
