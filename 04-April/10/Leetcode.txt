@@ -1,0 +1,86 @@
+2999. Count the Number of Powerful Integers
+________________________________________________________
+
+class Solution {
+    public long numberOfPowerfulInt(long start, long finish, int limit, String s) {
+        long suffix = Long.valueOf(s);
+        long increment = 10L;
+        for (int i = 1; i < s.length(); i++) {
+            increment *= 10L;
+        }
+        return countPowerfulIntegers(finish, suffix, increment, limit) - countPowerfulIntegers(start - 1, suffix, increment, limit);
+    }
+
+    private long countPowerfulIntegers(long upperBound, long suffix, long increment, int limit) {
+        long count = upperBound % increment < suffix ? 0 : 1;
+        upperBound /= increment;
+        long digitMultiplier = 1;
+        while (upperBound > 0L) {
+            long digit = upperBound % 10;
+            upperBound /= 10;
+            if (digit > limit) {
+                count = (limit + 1) * digitMultiplier;
+            } 
+            else {
+                count += digit * digitMultiplier;
+            }
+            digitMultiplier *= (limit + 1);
+        }
+        return count;
+    }
+}
+_____________________________________________________
+
+
+
+Problem Statement :
+You are given three integers start, finish, and limit. You are also given a 0-indexed string s representing a positive integer.
+
+A positive integer x is called powerful if it ends with s (in other words, s is a suffix of x) and each digit in x is at most limit.
+
+Return the total number of powerful integers in the range [start..finish].
+
+A string x is a suffix of a string y if and only if x is a substring of y that starts from some index (including 0) in y and extends to the index y.length - 1. For example, 25 is a suffix of 5125 whereas 512 is not.
+
+
+
+
+
+
+
+Intuition :
+To solve the problem of counting powerful integers within a specified range, we need to understand the properties of these integers. A powerful integer is defined as one that ends with a specific suffix and has each of its digits less than or equal to a given limit. The challenge lies in efficiently counting these integers without generating each one explicitly, especially given the potentially large range (up to 10^15).The key insight is to break down the problem into manageable parts by leveraging the mathematical properties of numbers. We can count how many powerful integers exist up to a certain number by analyzing the digits of that number and determining how many valid combinations can be formed based on the suffix and the limit.
+
+
+
+
+
+Approach :
+Suffix Handling: 
+Convert the suffix string into a long integer. This suffix will be used to determine the valid endings of the powerful integers.
+
+Increment Calculation: 
+Calculate the increment as 10 raised to the power of the length of the suffix. This increment will help in shifting the prefix of the powerful integers to the left by the number of digits in the suffix.
+
+Counting Function: 
+Implement a helper function countPowerfulIntegers that counts how many powerful integers exist up to a given upper bound:
+
+A) Check if the upper bound modulo the increment is less than the suffix. If it is, initialize the count to 0; otherwise, initialize it to 1 (indicating that the suffix itself is a valid powerful integer).
+
+B) Reduce the upper bound by dividing it by the increment to remove the suffix from consideration.
+
+C) Process each digit of the upper bound:
+i) If a digit exceeds the limit, count all combinations for that digit place.
+ii) If the digit is valid, add the valid combinations for that digit.
+
+D) Update the multiplier for the next digit place accordingly.
+Final Calculation: In the main method, calculate the total number of powerful integers in the range [start,finish] by subtracting the count of powerful integers up to start−1 from those up to finish.
+
+
+
+
+
+
+Complexity :
+Time Complexity : O(logn)
+Space Complexity : O(1)
