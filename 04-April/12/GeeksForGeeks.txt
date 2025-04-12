@@ -1,0 +1,47 @@
+Flood fill Algorithm
+_________________________________________________________
+
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        int originalColor = image[sr][sc];
+        if (originalColor != newColor) {
+            dfs(image, sr, sc, originalColor, newColor);
+        }
+        return image;
+    }
+
+    private void dfs(int[][] image, int r, int c, int originalColor, int newColor) {
+        if (r < 0 || c < 0 || r >= image.length || c >= image[0].length || image[r][c] != originalColor) {
+            return;
+        }
+
+        image[r][c] = newColor;
+
+        dfs(image, r + 1, c, originalColor, newColor); 
+        dfs(image, r - 1, c, originalColor, newColor); 
+        dfs(image, r, c + 1, originalColor, newColor); 
+        dfs(image, r, c - 1, originalColor, newColor); 
+    }
+}
+
+_________________________________________________________
+
+
+Problem Statement :
+You are given a 2D grid image[][] of size n*m, where each image[i][j] represents the color of a pixel in the image. Also provided a coordinate(sr, sc) representing the starting pixel (row and column) and a new color value newColor.
+
+Your task is to perform a flood fill starting from the pixel (sr, sc), changing its color to newColor and the color of all the connected pixels that have the same original color. Two pixels are considered connected if they are adjacent horizontally or vertically (not diagonally) and have the same original color.
+
+
+
+
+Approach :
+Get the original color of the starting pixel image[sr][sc].
+If the original color is already equal to newColor, there's nothing to change. Return the image.
+Use DFS to fill all connected pixels having the same original color with the newColor.
+
+
+
+Complexity :
+Time Complexity : O(n * m)
+Space Complexity : O(n * m)
