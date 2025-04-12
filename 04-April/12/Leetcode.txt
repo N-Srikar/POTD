@@ -1,0 +1,128 @@
+3272. Find the Count of Good Integers
+_______________________________________________________
+
+class Solution {
+    long res = 0;
+    Set<String> visited = new HashSet<>();
+
+    long vectorToNumber(int[] digits) {
+        long num = 0;
+        for (int d : digits) num = num * 10 + d;
+        return num;
+    }
+
+    long fact(int n) {
+        long res = 1;
+        for (int i = 2; i <= n; i++) res *= i;
+        return res;
+    }
+
+    long totalPermutations(Map<Integer, Integer> freq, int total) {
+        long res = fact(total);
+        for (int count : freq.values()) res /= fact(count);
+        return res;
+    }
+
+    long permsWithZero(Map<Integer, Integer> freq, int total) {
+        if (!freq.containsKey(0) || freq.get(0) == 0) return 0;
+        freq.put(0, freq.get(0) - 1);
+        long res = fact(total - 1);
+        for (int count : freq.values()) res /= fact(count);
+        return res;
+    }
+
+    void genPal(int[] palin, int left, int right, int divisor, int total) {
+        if (left > right) {
+            long val = vectorToNumber(palin);
+            if (val % divisor == 0) {
+                Map<Integer, Integer> freq = new HashMap<>();
+                for (int d : palin) freq.put(d, freq.getOrDefault(d, 0) + 1);
+                String key = freq.toString();
+                if (!visited.contains(key)) {
+                    res += totalPermutations(freq, total) - permsWithZero(new HashMap<>(freq), total);
+                    visited.add(key);
+                }
+            }
+            return;
+        }
+
+        for (int d = (left == 0 ? 1 : 0); d <= 9; d++) {
+            palin[left] = palin[right] = d;
+            genPal(palin, left + 1, right - 1, divisor, total);
+        }
+    }
+
+    public long countGoodIntegers(int total, int divisor) {
+        res = 0;
+        visited.clear();
+        genPal(new int[total], 0, total - 1, divisor, total);
+        return res;
+    }
+}
+_________________________________________________________
+
+
+
+Problem Statement :
+You are given two positive integers n and k.
+
+An integer x is called k-palindromic if:
+x is a palindrome.
+x is divisible by k.
+An integer is called good if its digits can be rearranged to form a k-palindromic integer. For example, for k = 2, 2020 can be rearranged to form the k-palindromic integer 2002, whereas 1010 cannot be rearranged to form a k-palindromic integer.
+
+Return the count of good integers containing n digits.
+
+Note that any integer must not have leading zeros, neither before nor after rearrangement. For example, 1010 cannot be rearranged to form 101.
+
+
+
+
+
+
+
+Approach :
+1. Count Good Integers/Parent Function
+We generate all n-digit palindromes from the countGoodIntegers function by calling/using the genPal function.
+
+2. Generate Palindromes
+This function is a backtracking function and it fills digit symmetrically towards the left and right inorder to build a palindrome.
+We keep looping from digits 0 to 9 here and get all the possible valid palindromes.
+It skips leading zeroes.
+Once a valid palindrome is formed then it converts the palindrome from a vector to a number using the vectorToNumber function.
+It then checks whether the number is divisible by k.
+After generating a valid palindrome (Step 3) which is divisible by k, Step 4 calculates all possible digit rearrangements, Step 5 subtracts those arrangements that would result in an invalid number (i.e., starting with zero), and Step 6 supports these calculations by efficiently computing factorials required for the permutation formulas.
+If it is not present in the digit map then we count how many permutations of valid numbers can be formed from that digit set.
+
+3. Convert Vector to Number
+This is a simple function where we keep building the number from the left to right.
+For Example : nums = [1, 3, 4]
+So res = 0 initally and
+res = res∗10 + nums[i], is the general formula
+At i = 0, res = 0∗10+1 → 1
+At i = 1, res = 1∗10+3 → 13
+At i = 2, res = 13∗10+4 → 134
+
+4. Count Permutations
+We count valid permutations in the genPal function by subtracting the count of permutations that start with 0 using the permsWithZero function.
+This helps us get the valid permutations only by using :
+Valid Permutations=Total Permutations−Permutations with Leading 0's
+
+5. Permutations with Zero
+It handles invalid permutations with leading 0's and reduces the frequency of 0 by 1.
+Subtracts all such invalid permutations from the total to get valid permutations only
+
+6. Factorial Function
+It helps in counting the number of possible permutations.
+
+7. Visited Array
+It's used to mark the numbers/digits that we've built in the past in order to avoid having duplicate good numbers.
+
+
+
+
+
+
+Complexity :
+Time Complexity : O(n × 10^⌊n/2⌋)
+Space Complexity : O(n × 10^⌊n/2⌋)
