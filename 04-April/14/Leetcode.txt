@@ -1,0 +1,59 @@
+1534. Count Good Triplets
+_______________________________________________________
+
+class Solution {
+    public int countGoodTriplets(int[] arr, int a, int b, int c) {
+        int count = 0;
+        int size = arr.length;
+
+        for (int i=0 ; i<size ; i++) {
+            for (int j=i+1 ; j<size ; j++) {
+                if (Math.abs(arr[i] - arr[j]) <= a) {
+                    for (int k=j+1 ; k<size ; k++) {
+                        if (Math.abs(arr[j] - arr[k]) <= b &&
+                            Math.abs(arr[i] - arr[k]) <= c) {
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+}
+_______________________________________________________
+
+
+Problem Statement :
+Given an array of integers arr, and three integers a, b and c. You need to find the number of good triplets.
+
+A triplet (arr[i], arr[j], arr[k]) is good if the following conditions are true:
+0 <= i < j < k < arr.length
+|arr[i] - arr[j]| <= a
+|arr[j] - arr[k]| <= b
+|arr[i] - arr[k]| <= c
+Where |x| denotes the absolute value of x.
+
+Return the number of good triplets.
+
+
+
+
+
+Approach :
+Loop through each index i
+For every i, try each j > i
+For each j, try every k > j
+Check if:
+|arr[i] - arr[j]| <= a
+|arr[j] - arr[k]| <= b
+|arr[i] - arr[k]| <= c
+If all conditions pass ,  count it
+
+
+
+
+Complexity :
+Time Complexity : O(n^3)
+Space Complexity : O(1)
