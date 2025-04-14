@@ -1,0 +1,64 @@
+2570. Merge Two 2D Arrays by Summing Values
+________________________________________________________
+
+class Solution {
+    public int[][] mergeArrays(int[][] nums1, int[][] nums2) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int[] i:nums1){
+            map.put(i[0],i[1]);
+        }
+        for(int[] i:nums2){
+            map.put(i[0],map.getOrDefault(i[0],0)+i[1]);
+        }
+        int [][] res = new int[map.size()][2];
+        int i=0;
+        for(Map.Entry<Integer,Integer> e:map.entrySet()){
+            res[i][0]=e.getKey();
+            res[i][1]=e.getValue();
+            i++;
+        }
+        Arrays.sort(res,(a,b)->(a[0]-b[0]));
+        return res;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement :
+You are given two 2D integer arrays nums1 and nums2.
+
+nums1[i] = [idi, vali] indicate that the number with the id idi has a value equal to vali.
+nums2[i] = [idi, vali] indicate that the number with the id idi has a value equal to vali.
+Each array contains unique ids and is sorted in ascending order by id.
+
+Merge the two arrays into one array that is sorted in ascending order by id, respecting the following conditions:
+
+Only ids that appear in at least one of the two arrays should be included in the resulting array.
+Each id should be included only once and its value should be the sum of the values of this id in the two arrays. If the id does not exist in one of the two arrays, then assume its value in that array to be 0.
+Return the resulting array. The returned array must be sorted in ascending order by id.
+
+
+
+
+
+Approach :
+Use a HashMap to merge values based on the id (the first element in each inner array).
+
+Traverse nums1:
+Store id as key and value as value.
+
+Traverse nums2:
+If id already exists, add the value to the current one.
+Otherwise, just insert it into the map.
+
+After merging, create a result 2D array from the map.
+
+Sort the resulting array by id to satisfy the requirement (sorted by id in ascending order).
+
+
+
+Complexity :
+Time Complexity : O(n + m + k log k)
+Space Complexity : O(k)
