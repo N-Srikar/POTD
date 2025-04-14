@@ -1,0 +1,64 @@
+Longest Bounded-Difference Subarray
+_______________________________________________________
+
+class Solution {
+    public ArrayList<Integer> longestSubarray(int[] arr, int x) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        int start = 0, maxLen = 0, bestStart = 0;
+
+        for (int end = 0; end < arr.length; end++) {
+            map.put(arr[end], map.getOrDefault(arr[end], 0) + 1);
+
+            while (map.lastKey() - map.firstKey() > x) {
+                map.put(arr[start], map.get(arr[start]) - 1);
+                if (map.get(arr[start]) == 0) {
+                    map.remove(arr[start]);
+                }
+                start++;
+            }
+
+            if (end - start + 1 > maxLen) {
+                maxLen = end - start + 1;
+                bestStart = start;
+            }
+        }
+
+        ArrayList<Integer> res = new ArrayList<>();
+        for (int i = bestStart; i < bestStart + maxLen; i++) {
+            res.add(arr[i]);
+        }
+
+        return res;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement :
+Given an array of positive integers arr[] and a non-negative integer x, the task is to find the longest sub-array where the absolute difference between any two elements is not greater than x.
+If multiple such subarrays exist, return the one that starts at the smallest index.
+
+
+
+Approach :
+Use two pointers: start and end to represent the current window.
+
+Use a TreeMap<Integer, Integer> to:
+Get the current min (map.firstKey()) and max (map.lastKey()).
+Store frequencies to manage removal efficiently.
+
+Slide the end pointer:
+Add arr[end] to the map.
+If max - min > x, shrink the window from the left (start++).
+
+Track the maximum length subarray and its starting index.
+
+At the end, return the subarray from bestStart to bestStart + maxLen.
+
+
+
+
+Complexity :
+Time Complexity : O(n logn)
+Space Complexity : O(k)
