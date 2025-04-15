@@ -1,0 +1,90 @@
+Bellman-Ford
+__________________________________________________________
+
+class Solution {
+    public int[] bellmanFord(int V, int[][] edges, int src) {
+        int[] dist = new int[V];
+        
+        // Step 1: Initialize distances
+        for (int i = 0; i < V; i++) {
+            dist[i] = Integer.MAX_VALUE;
+        }
+        dist[src] = 0;
+
+        // Step 2: Relax all edges V-1 times
+        for (int i = 0; i < V - 1; i++) {
+            for (int[] edge : edges) {
+                int u = edge[0];
+                int v = edge[1];
+                int w = edge[2];
+                
+                if (dist[u] != Integer.MAX_VALUE && dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                }
+            }
+        }
+
+        // Step 3: Check for negative weight cycles
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+            if (dist[u] != Integer.MAX_VALUE && dist[u] + w < dist[v]) {
+                return new int[]{-1};  // Negative cycle detected
+            }
+        }
+
+        // Step 4: Replace unreachable distances with 108
+        for (int i = 0; i < V; i++) {
+            if (dist[i] == Integer.MAX_VALUE) {
+                dist[i] = 108;
+            }
+        }
+
+        return dist;
+    }
+}
+
+__________________________________________________________
+
+
+
+
+Problem Statement :
+Given an weighted graph with V vertices numbered from 0 to V-1 and E edges, represented by a 2d array edges[][], where edges[i] = [u, v, w] represents a direct edge from node u to v having w edge weight. You are also given a source vertex src.
+
+Your task is to compute the shortest distances from the source to all other vertices. If a vertex is unreachable from the source, its distance should be marked as 108. Additionally, if the graph contains a negative weight cycle, return [-1] to indicate that shortest paths cannot be reliably computed.
+
+
+
+
+Approach : Bellman - Ford algorithm 
+Step 1: Initialize Distance Array
+Create an array dist[] of size V (number of vertices).
+Set all distances to ∞ (or Integer.MAX_VALUE in Java), except the source vertex src, which is set to 0.
+
+Step 2: Relax All Edges (V - 1) Times
+For V - 1 iterations:
+For each edge (u, v, w):
+If dist[u] + w < dist[v], then update dist[v] = dist[u] + w
+This step ensures the shortest distance from source to every vertex using at most V - 1 edges.
+
+Step 3: Check for Negative Weight Cycles
+Loop through all edges again:
+If we can still relax any edge (u, v, w), i.e., dist[u] + w < dist[v], it means there is a negative weight cycle.
+In such a case, return [-1] to indicate shortest paths are unreliable.
+
+Step 4: Handle Unreachable Vertices
+After relaxation, some vertices may still have dist[i] == Integer.MAX_VALUE, meaning they are unreachable.
+Set such distances to 108 as per the problem's requirement.
+
+Step 5: Return the Distance Array
+Return the final dist[] array.
+
+
+
+
+
+Complexity :
+Time Complexity : O(V * E)
+Space Complexity : O(V)
