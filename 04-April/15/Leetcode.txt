@@ -1,0 +1,106 @@
+2179. Count Good Triplets in an Array
+_______________________________________________________
+
+class Solution {
+    public long goodTriplets(int[] nums1, int[] nums2) {
+        int n=nums1.length;
+        int []pos = new int[n];
+        
+        FenwickTree ft = new FenwickTree(n+1);
+        
+        for(int i=0;i<n;i++)
+            pos[nums2[i]]=i;
+        
+        long []left=new long[n];
+        long []right = new long[n];
+        
+        for(int i=0;i<n;i++){
+            int idx = pos[nums1[i]];
+            left[i] = ft.sum(idx-1);
+            ft.update(idx,1);
+        }
+        
+        ft=new FenwickTree(n+1);
+        
+        for(int i=n-1;i>=0;i--){
+            int idx = pos[nums1[i]];
+            right[i]= ft.sum(n+1)-ft.sum(idx);
+            ft.update(idx,1);
+        }
+        
+        long ans=0;
+        
+        for (int i=0;i<n;i++)
+            ans+= left[i]*right[i];
+        
+        return ans;
+    }
+}
+
+class FenwickTree {
+    int[] bit;
+    int n;
+    
+    FenwickTree(int n) {
+        this.n = n;
+        this.bit = new int[n + 2];
+    }
+    
+    public void update(int i, int val) {
+        i++;
+        while (i < bit.length) {
+            bit[i] += val;
+            i += (i & (-i));
+        }
+    }
+    
+    public int sum(int i) {
+        int sum = 0;
+        i++;
+        while (i > 0) {
+            sum += bit[i];
+            i -= (i & (-i));
+        }
+        return sum;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement :
+You are given two 0-indexed arrays nums1 and nums2 of length n, both of which are permutations of [0, 1, ..., n - 1].
+
+A good triplet is a set of 3 distinct values which are present in increasing order by position both in nums1 and nums2. In other words, if we consider pos1v as the index of the value v in nums1 and pos2v as the index of the value v in nums2, then a good triplet will be a set (x, y, z) where 0 <= x, y, z <= n - 1, such that pos1x < pos1y < pos1z and pos2x < pos2y < pos2z.
+
+Return the total number of good triplets.
+
+
+
+
+
+
+
+Approach :
+Map positions from nums2 to indexes using an array pos, where pos[value] = index in nums2.
+
+Loop through nums1 and for each index i, calculate:
+left[i]: how many values before i are also before in nums2
+right[i]: how many values after i are also after in nums2
+
+The number of valid triplets where element at index i is the middle element is:
+left[i] * right[i]
+
+Use Fenwick Tree to efficiently compute how many elements have occurred before (for left counts) and how many will occur after (for right counts).
+
+Sum over all i to get total number of good triplets.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(n)
+
