@@ -1,0 +1,55 @@
+Maximum XOR of two numbers in an array
+_______________________________________________________
+
+class Solution {
+    public int maxXor(int[] arr) {
+        int maxXor = 0, mask = 0;
+        
+        for (int i = 31; i >= 0; i--) {
+            mask |= (1 << i);
+            Set<Integer> prefixes = new HashSet<>();
+            
+            for (int num : arr) {
+                prefixes.add(num & mask);
+            }
+            
+            int candidate = maxXor | (1 << i);
+            
+            for (int prefix : prefixes) {
+                if (prefixes.contains(prefix ^ candidate)) {
+                    maxXor = candidate;
+                    break;
+                }
+            }
+        }
+        
+        return maxXor;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement :
+Given an array arr[] of non-negative integers of size n. Find the maximum possible XOR between two numbers present in the array.
+
+
+
+
+Approach :
+Loop from the highest bit (31) to 0.
+Use a mask to keep the prefix of each number up to the current bit.
+Store all prefixes in a HashSet.
+
+For each prefix, check if there’s another prefix in the set such that:
+prefix1 ^ prefix2 = candidate_max_xor
+which implies: prefix2 = candidate_max_xor ^ prefix1
+
+If such a pair exists, keep the bit set; else reset it.
+
+
+
+
+Complexity :
+Time Complexity : O(N) 
+Space Complexity : O(N)
