@@ -1,0 +1,52 @@
+781. Rabbits in Forest
+________________________________________________________
+
+class Solution {
+    public int numRabbits(int[] answers) {
+        Arrays.sort(answers);
+        int res = 0, count = 0;
+
+        for (int i = 0; i < answers.length; i++) {
+            if (answers[i] == 0) {
+                res++;  
+            } 
+            else if (i == 0 || answers[i] != answers[i - 1] || count == 0) {
+                res += answers[i] + 1;  
+                count = answers[i];
+            } 
+            else {
+                count--;  
+            }
+        }
+        return res;
+    }
+}
+________________________________________________________
+
+
+Problem Statement :
+There is a forest with an unknown number of rabbits. We asked n rabbits "How many rabbits have the same color as you?" and collected the answers in an integer array answers where answers[i] is the answer of the ith rabbit.
+
+Given the array answers, return the minimum number of rabbits that could be in the forest.
+
+
+
+Approach :
+Sort the answers to easily group the same values.
+
+For each value:
+If the value is 0, that rabbit is unique  add 1 to the result.
+
+If this is the start of a new group:
+Add k + 1 to the result (new group of that color).
+Track how many more of that type we can accept.
+
+If we’re still inside a valid group:
+Just fill the group by decreasing the count.
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(1)
+
