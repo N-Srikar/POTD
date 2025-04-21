@@ -1,0 +1,39 @@
+Missing in Array
+________________________________________________________
+
+class Solution {
+    int missingNum(int arr[]) {
+        int n = arr.length + 1;
+        int totalSum = n * (n + 1) / 2;
+        int arraySum = 0;
+        for (int num : arr) {
+            arraySum += num;
+        }
+        return totalSum - arraySum;
+    }
+}
+
+________________________________________________________
+
+
+
+Problem Statement :
+You are given an array arr[] of size n - 1 that contains distinct integers in the range from 1 to n (inclusive). This array represents a permutation of the integers from 1 to n with one element missing. Your task is to identify and return the missing element.
+
+
+
+
+Approach :
+To solve this problem efficiently, you can use the sum formula for the first n natural numbers:
+
+The sum of first n natural numbers is:
+sum = n * (n + 1) / 2
+
+Since one number is missing from the array, the missing number is simply the expected sum minus the actual sum of the array elements.
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(n)
