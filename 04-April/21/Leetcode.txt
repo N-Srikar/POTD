@@ -1,0 +1,72 @@
+2338. Count the Number of Ideal Arrays
+_______________________________________________________
+
+class Solution {
+    int MOD = 1000000007;
+    int[][] cnt = new int[10001][14];
+    int[][] comb = new int[10001][14];
+
+    public Solution() {
+        for (int s = 0; s < 10001; s++) {
+            for (int r = 0; r <= Math.min(s, 13); r++) {
+                comb[s][r] = (r == 0 || r == s) ? 1 : (comb[s - 1][r - 1] + comb[s - 1][r]) % MOD;
+            }
+        }
+
+        for (int div = 1; div < 10001; div++) {
+            cnt[div][0]++;
+            for (int i = div * 2; i < 10001; i += div) {
+                for (int bars = 0; bars < 13; bars++) {
+                    if (cnt[div][bars] > 0)
+                        cnt[i][bars + 1] += cnt[div][bars];
+                }
+            }
+        }
+    }
+
+    public int idealArrays(int n, int maxValue) {
+        int res = 0;
+        for (int i = 1; i <= maxValue; i++) {
+            for (int bars = 0; bars < Math.min(14, n); bars++) {
+                res = (int)((res + 1L * cnt[i][bars] * comb[n - 1][bars]) % MOD);
+            }
+        }
+        return res;
+    }
+}
+_______________________________________________________
+
+
+Problem Statement :
+You are given two integers n and maxValue, which are used to describe an ideal array.
+
+A 0-indexed integer array arr of length n is considered ideal if the following conditions hold:
+
+Every arr[i] is a value from 1 to maxValue, for 0 <= i < n.
+Every arr[i] is divisible by arr[i - 1], for 0 < i < n.
+Return the number of distinct ideal arrays of length n. Since the answer may be very large, return it modulo 10^9 + 7.
+
+
+
+
+
+Approach :
+We use precomputation and dynamic programming with the following steps:
+
+Precompute Binomial Coefficients (nCr):
+Use Pascal’s Triangle to fill a comb table up to 10000, since we can have arrays of length up to 10⁴.
+comb[n][r] gives us the number of ways to choose r bars to divide n stars — this is the stars and bars combinatorial technique.
+
+Use Modified Sieve to Count Sequences:
+cnt[i][j] represents how many sequences of length j + 1 can end at value i.
+We iterate over every number div from 1 to 10000 and use its multiples to build sequences of increasing length.
+
+Final Computation:
+For each i from 1 to maxValue, we go over all valid bar counts (sequence lengths), and multiply the number of ways to build a sequence ending in i with the number of ways to place those values in a sequence of length n. Sum everything up under modulo.
+
+
+
+
+Complexity : 
+Time Complexity : O(n⋅logn + n⋅k)
+Space Complexity : O(n⋅k)
