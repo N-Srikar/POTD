@@ -1,39 +1,25 @@
-Missing in Array
-________________________________________________________
+Unique Number I
+_______________________________________________________
 
 class Solution {
-    int missingNum(int arr[]) {
-        int n = arr.length + 1;
-        int totalSum = n * (n + 1) / 2;
-        int arraySum = 0;
+    public int findUnique(int[] arr) {
+        int result = 0;
         for (int num : arr) {
-            arraySum += num;
+            result ^= num;
         }
-        return totalSum - arraySum;
+        return result;
     }
 }
 
-________________________________________________________
-
-
+_______________________________________________________
 
 Problem Statement :
-You are given an array arr[] of size n - 1 that contains distinct integers in the range from 1 to n (inclusive). This array represents a permutation of the integers from 1 to n with one element missing. Your task is to identify and return the missing element.
-
-
-
+Given a unsorted array arr[] of positive integers having all the numbers occurring exactly twice, except for one number which will occur only once. Find the number occurring only once.
 
 Approach :
-To solve this problem efficiently, you can use the sum formula for the first n natural numbers:
-
-The sum of first n natural numbers is:
-sum = n * (n + 1) / 2
-
-Since one number is missing from the array, the missing number is simply the expected sum minus the actual sum of the array elements.
+if all elements occur twice except one, XORing all elements will cancel out the duplicates and leave the unique number.
 
 
-
-
-Complexity :
+Complexity : 
 Time Complexity : O(n)
-Space Complexity : O(n)
+Space Complexity : O(1)
