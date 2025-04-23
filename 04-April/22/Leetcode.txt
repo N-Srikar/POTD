@@ -1,0 +1,59 @@
+1399. Count Largest Group
+_________________________________________________________
+
+class Solution {
+    public int countLargestGroup(int n) {
+        Map<Integer, Integer> mpp = new HashMap<>();
+        int maxi = 0, count = 0;
+
+        for (int i = 1; i <= n; i++) {
+            int x = digsum(i);
+            mpp.put(x, mpp.getOrDefault(x, 0) + 1);
+            maxi = Math.max(maxi, mpp.get(x));
+        }
+
+        for (int val : mpp.values()) if (val == maxi) count++;
+        return count;
+    }
+
+    public int digsum(int n) {
+        int sum = 0;
+        while (n > 0) {
+            sum += n % 10;
+            n /= 10;
+        }
+        return sum;
+    }
+}
+_________________________________________________________
+
+
+
+Problem Statement :
+You are given an integer n.
+Each number from 1 to n is grouped according to the sum of its digits.
+Return the number of groups that have the largest size.
+
+
+
+
+Approach :
+Initialize a HashMap mpp to store frequency of each digit-sum group.
+Key: digit sum of a number
+Value: count of how many numbers have that digit sum.
+
+Loop from 1 to n:
+For each number i, compute the digit sum using digsum(i).
+Update its frequency in the map.
+Track the maximum group size (maxi) as we update frequencies.
+
+Iterate over the map's values to count how many groups have size equal to maxi.
+
+Return that count.
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(1)
