@@ -1,0 +1,56 @@
+Unique Number II
+_________________________________________________________
+
+class Solution {
+    public int[] singleNum(int[] arr) {
+        int xor = 0;
+        for (int num : arr) {
+            xor ^= num;
+        }
+
+        int setBit = xor & -xor;
+
+        int num1 = 0, num2 = 0;
+        for (int num : arr) {
+            if ((num & setBit) == 0) {
+                num1 ^= num;
+            } 
+            else {
+                num2 ^= num;
+            }
+        }
+
+        int[] res = new int[]{num1, num2};
+        Arrays.sort(res);
+        return res;
+    }
+}
+_________________________________________________________
+
+
+Problem Statement :
+Given an array arr[] containing 2*n + 2 positive numbers, out of which 2*n numbers exist in pairs whereas only two number occur exactly once and are distinct. Find the other two numbers. Return the answer in increasing order.
+
+
+
+Approach :
+XOR all the elements in the array. Let the result be xor. Since all numbers except two appear twice, XOR will cancel out the duplicates
+
+Find any set bit (say the rightmost set bit) in xor. This bit will be different in num1 and num2 because they are distinct:
+
+Divide numbers into two groups based on that set bit:
+One group with that bit set.
+One group with that bit not set.
+
+XOR numbers within each group:
+One group will give num1
+The other group will give num2
+
+Return the two numbers in increasing order.
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(1)

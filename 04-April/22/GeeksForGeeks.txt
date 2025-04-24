@@ -1,56 +1,25 @@
-Unique Number II
-_________________________________________________________
+Unique Number I
+_______________________________________________________
 
 class Solution {
-    public int[] singleNum(int[] arr) {
-        int xor = 0;
+    public int findUnique(int[] arr) {
+        int result = 0;
         for (int num : arr) {
-            xor ^= num;
+            result ^= num;
         }
-
-        int setBit = xor & -xor;
-
-        int num1 = 0, num2 = 0;
-        for (int num : arr) {
-            if ((num & setBit) == 0) {
-                num1 ^= num;
-            } 
-            else {
-                num2 ^= num;
-            }
-        }
-
-        int[] res = new int[]{num1, num2};
-        Arrays.sort(res);
-        return res;
+        return result;
     }
 }
-_________________________________________________________
 
+_______________________________________________________
 
 Problem Statement :
-Given an array arr[] containing 2*n + 2 positive numbers, out of which 2*n numbers exist in pairs whereas only two number occur exactly once and are distinct. Find the other two numbers. Return the answer in increasing order.
-
-
+Given a unsorted array arr[] of positive integers having all the numbers occurring exactly twice, except for one number which will occur only once. Find the number occurring only once.
 
 Approach :
-XOR all the elements in the array. Let the result be xor. Since all numbers except two appear twice, XOR will cancel out the duplicates
-
-Find any set bit (say the rightmost set bit) in xor. This bit will be different in num1 and num2 because they are distinct:
-
-Divide numbers into two groups based on that set bit:
-One group with that bit set.
-One group with that bit not set.
-
-XOR numbers within each group:
-One group will give num1
-The other group will give num2
-
-Return the two numbers in increasing order.
+if all elements occur twice except one, XORing all elements will cancel out the duplicates and leave the unique number.
 
 
-
-
-Complexity :
+Complexity : 
 Time Complexity : O(n)
 Space Complexity : O(1)
