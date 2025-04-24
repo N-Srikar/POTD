@@ -1,0 +1,64 @@
+2799. Count Complete Subarrays in an Array
+________________________________________________________
+
+class Solution {
+    public int countCompleteSubarrays(int[] A) {
+        Set<Integer> s = new HashSet<>();
+        for (int a : A)
+            s.add(a);
+        int n = A.length, k = s.size(), res = 0, i = 0;
+        Map<Integer, Integer> count = new HashMap<>();
+
+        for (int j = 0; j < n; ++j) {
+            if (count.getOrDefault(A[j], 0) == 0)
+                k--;
+            count.put(A[j], count.getOrDefault(A[j], 0) + 1);
+            while (k == 0) {
+                count.put(A[i], count.get(A[i]) - 1);
+                if (count.get(A[i]) == 0)
+                    k++;
+                i++;
+            }
+            res += i;
+        }
+        return res;
+    }
+}
+________________________________________________________
+
+
+
+Problem Statement :
+You are given an array nums consisting of positive integers.
+
+We call a subarray of an array complete if the following condition is satisfied:
+
+The number of distinct elements in the subarray is equal to the number of distinct elements in the whole array.
+Return the number of complete subarrays.
+
+A subarray is a contiguous non-empty part of an array.
+
+
+
+
+Approach :
+Input array A has k different values.
+
+For each subarray ending at index j,
+we count the frequency of values in A[i], A[i+1]...A[j]
+Then we slide the pointer i,
+to find the minimum index i,
+that the subarray don't have k different values.
+which means the subarray starting at 0,1,..,i-1,
+have k different values.
+
+That is i subarray in total,
+so we update res += i.
+
+Finally we return result res.
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
