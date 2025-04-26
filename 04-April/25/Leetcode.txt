@@ -1,0 +1,64 @@
+2845. Count of Interesting Subarrays
+_______________________________________________________
+
+class Solution 
+{
+    public long countInterestingSubarrays(List<Integer> nums, int modulo, int k) 
+    {
+        long result = 0;
+        int prefix = 0;
+        Map<Integer, Long> map = new HashMap<>();
+        map.put(0, 1L);
+
+        for (int num : nums) 
+        {
+            if (num % modulo == k) 
+            {
+                prefix++;
+            }
+
+            int mod = prefix % modulo;
+            int target = (mod - k + modulo) % modulo;
+
+            result += map.getOrDefault(target, 0L);
+            map.put(mod, map.getOrDefault(mod, 0L) + 1);
+        }
+        return result;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement :
+You are given a 0-indexed integer array nums, an integer modulo, and an integer k.
+Your task is to find the count of subarrays that are interesting.
+
+A subarray nums[l..r] is interesting if the following condition holds:
+Let cnt be the number of indices i in the range [l, r] such that nums[i] % modulo == k. Then, cnt % modulo == k.
+
+Return an integer denoting the count of interesting subarrays.
+
+Note: A subarray is a contiguous non-empty sequence of elements within an array.
+
+
+
+Approach :
+Step 1 : Initialize
+prefix count prefix = 0
+map to store frequency of prefix % modulo.
+Start with 0: 1 to handle base cases.
+
+Step 2 : Iterate through each element in the array
+If nums[i] % modulo == k, increment prefix.
+Calculate mod = prefix % modulo.
+Calculate target = (mod - k + modulo) % modulo — this is the prefix state we need to form a valid subarray.
+Add the frequency of target in the map to the result.
+Update the map with the current mod count.
+
+Step 3 : Return the accumulated result.
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(modulo)
