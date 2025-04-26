@@ -1,0 +1,60 @@
+Majority Element
+_______________________________________________________
+
+class Solution {
+    static int majorityElement(int arr[]) {
+        int candidate = -1;
+        int count = 0;
+
+        // Phase 1: Find the candidate
+        for (int num : arr) {
+            if (count == 0) {
+                candidate = num;
+            }
+            count += (num == candidate) ? 1 : -1;
+        }
+
+        // Phase 2: Verify the candidate
+        count = 0;
+        for (int num : arr) {
+            if (num == candidate) {
+                count++;
+            }
+        }
+
+        // If the candidate count is greater than n/2, return it
+        if (count > arr.length / 2) {
+            return candidate;
+        }
+        
+        return -1; // No majority element
+    }
+}
+
+_______________________________________________________
+
+
+Problem Statement :
+Given an array arr[]. Find the majority element in the array. If no majority element exists, return -1.
+
+Note: A majority element in an array is an element that appears strictly more than arr.size()/2 times in the array.
+
+
+
+
+Approach :
+Phase 1 (Finding the Candidate):
+Iterate over the array. If the current count is 0, set the current number as the candidate.
+For each number, increase the count if it's the same as the candidate, otherwise decrease the count.
+
+Phase 2 (Verifying the Candidate):
+After identifying the candidate, traverse the array again to count how many times the candidate appears.
+If the count of the candidate is greater than arr.length / 2, return the candidate as the majority element.
+
+If no majority element is found, return -1.
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
