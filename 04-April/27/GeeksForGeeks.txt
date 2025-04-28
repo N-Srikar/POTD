@@ -1,0 +1,97 @@
+Multiply two strings
+_______________________________________________________
+
+class Solution {
+    public String multiplyStrings(String s1, String s2) {
+        // Handle negative signs
+        boolean isNegative = false;
+        if (s1.charAt(0) == '-') {
+            isNegative = !isNegative;
+            s1 = s1.substring(1);
+        }
+        if (s2.charAt(0) == '-') {
+            isNegative = !isNegative;
+            s2 = s2.substring(1);
+        }
+        
+        // Remove leading zeros
+        s1 = removeLeadingZeros(s1);
+        s2 = removeLeadingZeros(s2);
+        
+        // If either number is zero
+        if (s1.equals("0") || s2.equals("0")) {
+            return "0";
+        }
+        
+        int n = s1.length();
+        int m = s2.length();
+        int[] result = new int[n + m];
+        
+        // Multiply each digit
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = m - 1; j >= 0; j--) {
+                int mul = (s1.charAt(i) - '0') * (s2.charAt(j) - '0');
+                int sum = mul + result[i + j + 1];
+                
+                result[i + j + 1] = sum % 10;
+                result[i + j] += sum / 10;
+            }
+        }
+        
+        // Build the result string
+        StringBuilder sb = new StringBuilder();
+        for (int num : result) {
+            if (sb.length() == 0 && num == 0) continue; // skip leading zeros
+            sb.append(num);
+        }
+        
+        if (isNegative) {
+            sb.insert(0, '-');
+        }
+        
+        return sb.toString();
+    }
+    
+    private String removeLeadingZeros(String str) {
+        int i = 0;
+        while (i < str.length() && str.charAt(i) == '0') {
+            i++;
+        }
+        return i == str.length() ? "0" : str.substring(i);
+    }
+}
+_______________________________________________________
+
+
+Problem Statement :
+Given two numbers as strings s1 and s2. Calculate their Product.
+Note: The numbers can be negative and You are not allowed to use any built-in function or convert the strings to integers. There can be zeros in the begining of the numbers. You don't need to specify '+' sign in the begining of positive numbers.
+
+
+
+Approach :
+Handle negative signs from both strings and track the final sign of the result.
+
+Remove leading zeros from both strings.
+
+Edge case check: if either string becomes "0", return "0".
+
+Initialize a result array of size n + m to store intermediate multiplication results.
+
+Multiply digits from right to left (as in manual multiplication):
+Multiply digits of s1[i] * s2[j]
+Add the product to the correct index in the result array.
+Handle carry and store the remainder.
+
+Skip leading zeros in the result array when building the final string.
+
+Add negative sign if required.
+
+Return the final result as a string.
+
+
+
+
+Complexity :
+Time Complexity : O(n*m)
+Space Complexity : O(n*m)
