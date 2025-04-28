@@ -1,0 +1,45 @@
+3392. Count Subarrays of Length Three With a Condition
+________________________________________________________
+
+class Solution {
+    public int countSubarrays(int[] nums) {
+        int count = 0;
+        for (int i = 1; i < nums.length - 1; ++i) {
+            if (( nums[i]%2 == 0 ) && ( nums[i]/2 == nums[i-1]+nums[i+1] )) {
+                count++;
+            }
+        }
+        return count;
+    }
+}
+________________________________________________________
+
+
+
+Problem Statement :
+Given an integer array nums, return the number of subarrays of length 3 such that the sum of the first and third numbers equals exactly half of the second number.
+
+
+
+Approach : 
+Step 1: Initialize Variables
+count: To store the number of valid subarrays (initially 0).
+n: The length of the array nums.
+
+Step 2: Iterate Over Middle Indices
+For each index i from 1 to n-2 (ensuring i-1 and i+1 are within bounds):
+Consider the triplet [nums[i-1], nums[i], nums[i+1]].
+Check if:
+nums[i] is even (i.e., nums[i] % 2 == 0), since nums[i] / 2 must be an integer.
+nums[i-1] + nums[i+1] == nums[i] / 2, the condition for a valid subarray.
+If both conditions are true, increment count.
+
+Step 3: Return the Result
+After the loop, return count as the total number of valid subarrays.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
