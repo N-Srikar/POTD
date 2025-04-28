@@ -1,0 +1,61 @@
+Maximum sum of Non-adjacent nodes
+_______________________________________________________
+
+class Solution {
+    public int getMaxSum(Node root) {
+        HashMap<Node, int[]> memo = new HashMap<>();
+        int[] res = helper(root, memo);
+        return Math.max(res[0], res[1]);
+    }
+
+    private int[] helper(Node node, HashMap<Node, int[]> memo) {
+        if (node == null) return new int[]{0, 0};  // {exclude, include}
+
+        if (memo.containsKey(node)) return memo.get(node);
+
+        int[] left = helper(node.left, memo);
+        int[] right = helper(node.right, memo);
+
+        int include = node.data + left[0] + right[0];  // Can't include children
+        int exclude = Math.max(left[0], left[1]) + Math.max(right[0], right[1]);
+
+        int[] result = new int[]{exclude, include};
+        memo.put(node, result);
+
+        return result;
+    }
+}
+_______________________________________________________
+
+
+
+
+Problem Statement : 
+Given a binary tree with a value associated with each node. Your task is to select a subset of nodes such that the sum of their values is maximized, with the condition that no two selected nodes are directly connected that is, if a node is included in the subset, neither its parent nor its children can be included.
+
+
+
+Approach : 
+Define a helper function that returns an int[2] array:
+res[0]: max sum excluding the current node.
+res[1]: max sum including the current node.
+
+Use post-order traversal (left → right → root) to process children before the current node.
+
+For each node:
+Recursively get left and right results: left[], right[].
+Compute:
+include = node.data + left[0] + right[0]
+exclude = max(left[0], left[1]) + max(right[0], right[1])
+
+Store the result in a HashMap<Node, int[]> to memoize and avoid recomputation.
+
+Return the result from the root:
+max(result[0], result[1]) — the maximum of including or excluding the root.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
