@@ -1,0 +1,44 @@
+2302. Count Subarrays With Score Less Than K
+________________________________________________________
+
+class Solution {
+    public long countSubarrays(int[] nums, long k) {
+        long sum = 0, res = 0;
+        for (int i=0 , j=0 ; i<nums.length ; ++i) {
+            sum += nums[i];
+            while (sum * (i-j+1) >= k)
+                sum -= nums[j++];
+            res += i-j+1;
+        }
+        return res;
+    }
+}
+________________________________________________________
+
+
+
+Problem Statement : 
+The score of an array is defined as the product of its sum and its length.
+
+For example, the score of [1, 2, 3, 4, 5] is (1 + 2 + 3 + 4 + 5) * 5 = 75.
+Given a positive integer array nums and an integer k, return the number of non-empty subarrays of nums whose score is strictly less than k.
+
+A subarray is a contiguous sequence of elements within an array.
+
+
+
+
+
+Approach : 
+We use a sliding window technique, tracking the sum of the subarray in the window.
+
+The score of the subarray in the window is sum * (i - j + 1). We move the left side of the window, decreasing sum, if that score is equal or greater than k.
+
+Note that element i forms i - j + 1 valid subarrays. This is because subarrays [j + 1, i], [j + 2, i] ... [i, i] are valid if subarray [j, i] is valid.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
