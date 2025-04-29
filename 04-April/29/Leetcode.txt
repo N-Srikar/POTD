@@ -1,0 +1,59 @@
+2962. Count Subarrays Where Max Element Appears at Least K Times
+___________________________________________________________
+
+import java.util.*;
+
+class Solution {
+    public long countSubarrays(int[] nums, int k) {
+        long maxNum = Long.MIN_VALUE;
+        for (int num : nums) {
+            maxNum = Math.max(maxNum, num);
+        }
+        
+        int i = 0, j = 0 , count = 0;
+        long res=0;
+        while (j < nums.length) {
+            if (nums[j] == maxNum) {
+                count++;
+            }
+            while (count >= k) {
+                if (nums[i] == maxNum) {
+                    count--;
+                }
+                i++;
+                res += nums.length - j;
+            }
+            j++;
+        }
+        return res;
+    }
+}
+___________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given an integer array nums and a positive integer k.
+Return the number of subarrays where the maximum element of nums appears at least k times in that subarray.
+A subarray is a contiguous sequence of elements within an array.
+
+
+
+
+Approach :
+Find the global maximum in the array.
+
+Use two pointers (i and j):
+As j moves right, count how many times maxNum has appeared so far (count).
+When count >= k, shift the i pointer right until the window becomes invalid (i.e., count < k).
+For each valid state, add (nums.length - j) to the result.
+Why? Because all subarrays starting from i to any point ≤ j and ending at j are valid.
+
+return result at the end.
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
