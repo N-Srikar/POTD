@@ -1,0 +1,68 @@
+Find length of Loop
+_______________________________________________________
+
+class Solution {
+    // Function to find the length of a loop in the linked list.
+    public int countNodesinLoop(Node head) {
+        Node slow = head;
+        Node fast = head;
+
+        // Step 1: Detect loop using Floyd’s algorithm
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            // Loop detected
+            if (slow == fast) {
+                return countLoopLength(slow);
+            }
+        }
+
+        return 0; // No loop
+    }
+
+    // Step 2: Count number of nodes in the loop
+    private int countLoopLength(Node meetingPoint) {
+        Node temp = meetingPoint;
+        int count = 1;
+        while (temp.next != meetingPoint) {
+            count++;
+            temp = temp.next;
+        }
+        return count;
+    }
+}
+
+_______________________________________________________
+
+
+Problem Statement : 
+Given the head of a linked list, determine whether the list contains a loop. If a loop is present, return the number of nodes in the loop, otherwise return 0.
+
+Note: 'c' is the position of the node which is the next pointer of the last node of the linkedlist. If c is 0, then there is no loop.
+
+
+
+Approach :
+Initialize two pointers: slow and fast, both pointing to the head.
+
+Move the pointers:
+slow moves one step.
+fast moves two steps.
+
+Detect loop:
+If slow meets fast, a loop exists.
+If fast or fast.next is null, there's no loop → return 0.
+
+Count loop length:
+From the meeting point, keep one pointer fixed.
+Move the other pointer until it meets the fixed pointer again, counting steps.
+
+return the length.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
