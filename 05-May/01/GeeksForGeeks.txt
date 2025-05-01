@@ -1,0 +1,42 @@
+Pascal Triangle
+_______________________________________________________
+
+class Solution {
+
+    ArrayList<Integer> nthRowOfPascalTriangle(int n) {
+        ArrayList<Integer> row = new ArrayList<>();
+        long val = 1;
+        row.add(1); // First element is always 1
+
+        for (int i = 1; i < n; i++) {
+            val = val * (n - i);
+            val = val / i;
+            row.add((int)(val % 1000000007));
+        }
+
+        return row;
+    }
+}
+
+_______________________________________________________
+
+
+
+Problem Statement :
+Given a positive integer n, return the nth row of pascal's triangle.
+Pascal's triangle is a triangular array of the binomial coefficients formed by summing up the elements of previous row.
+
+
+
+Approach :
+Initialize an empty list to store the row.
+Start with the first element as 1.
+Use the iterative formula to generate the next elements.
+Add each computed element to the list.
+Return the list.
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
