@@ -1,0 +1,112 @@
+838. Push Dominoes
+________________________________________________________
+
+class Solution {
+    public String pushDominoes(String dominoes) {
+        char[] arr=new char[dominoes.length()+2];
+        arr[0]='L';
+        arr[arr.length-1]='R';
+        for(int i=1;i<arr.length-1;i++){
+            arr[i]=dominoes.charAt(i-1);
+        }
+        
+        int i=0;
+        int j=1;
+        
+        while(j!=arr.length){
+            while(arr[j]=='.') j++;
+            
+            if(arr[i]=='L' && arr[j]=='L'){
+                while(i!=j){
+                    arr[i]='L';
+                    i++;
+                }
+                j++;
+            }
+            else if(arr[i]=='L' && arr[j]=='R'){
+                 i=j;
+                 j++;
+            }
+            else if(arr[i]=='R' && arr[j]=='R'){
+                while(i!=j){
+                    arr[i]='R';
+                    i++;
+                }
+                j++;
+            }
+            else if(arr[i]=='R' && arr[j]=='L'){
+                 int temp1=i+1;
+                 int temp2=j-1;
+                 while(temp1<temp2){
+                     arr[temp1]='R';
+                     arr[temp2]='L';
+                     temp1++;
+                     temp2--;
+                 }
+                i=j;
+                j++;
+            }
+        }
+        
+        StringBuilder sb=new StringBuilder("");
+        for(i=1;i<arr.length-1;i++){
+            sb.append(arr[i]);
+        }
+
+        return sb.toString();
+    }
+}
+________________________________________________________
+
+
+Problem Statement : 
+There are n dominoes in a line, and we place each domino vertically upright. In the beginning, we simultaneously push some of the dominoes either to the left or to the right.
+
+After each second, each domino that is falling to the left pushes the adjacent domino on the left. Similarly, the dominoes falling to the right push their adjacent dominoes standing on the right.
+
+When a vertical domino has dominoes falling on it from both sides, it stays still due to the balance of the forces.
+
+For the purposes of this question, we will consider that a falling domino expends no additional force to a falling or already fallen domino.
+
+You are given a string dominoes representing the initial state where:
+
+dominoes[i] = 'L', if the ith domino has been pushed to the left,
+dominoes[i] = 'R', if the ith domino has been pushed to the right, and
+dominoes[i] = '.', if the ith domino has not been pushed.
+Return a string representing the final state.
+
+
+
+
+
+
+Approach : 
+Add endpoints (L at start and R at end):
+The original string is copied into a new char[] array with two extra slots.
+arr[0] = 'L', arr[n+1] = 'R', where n is the length of the original dominoes string.
+This is done to handle edge cases cleanly (like dominos starting with . or ending with .).
+
+Copy Input String:
+From index 1 to n, fill arr with the input dominoes.
+
+Two-Pointer Scan:
+Use two pointers i and j.
+i points to the last non-dot character, and j searches for the next non-dot character.
+
+Process Between i and j:
+If arr[i] == 'L' and arr[j] == 'L': All dominos in between fall to the left.
+If arr[i] == 'R' and arr[j] == 'R': All dominos in between fall to the right.
+If arr[i] == 'R' and arr[j] == 'L': The dominos in between fall toward each other until they meet or balance.
+If arr[i] == 'L' and arr[j] == 'R': Dominos between stay upright (no force acts on them).
+
+Build the Result:
+Skip the extra L and R endpoints when building the final result.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
