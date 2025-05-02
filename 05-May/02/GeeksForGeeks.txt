@@ -1,0 +1,59 @@
+Bitonic Point
+________________________________________________________
+
+class Solution {
+    public int findMaximum(int[] arr) {
+        int low = 0;
+        int high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            // Handle boundaries carefully
+            if ((mid == 0 || arr[mid] > arr[mid - 1]) &&
+                (mid == arr.length - 1 || arr[mid] > arr[mid + 1])) {
+                return arr[mid];
+            } else if (mid < arr.length - 1 && arr[mid] < arr[mid + 1]) {
+                // Increasing part
+                low = mid + 1;
+            } else {
+                // Decreasing part
+                high = mid - 1;
+            }
+        }
+
+        return -1; // Should never reach here due to problem constraints
+    }
+}
+
+________________________________________________________
+
+
+
+Problem Statement : 
+Given an array of integers arr[] that is first strictly increasing and then maybe strictly decreasing, find the bitonic point, that is the maximum element in the array.
+Bitonic Point is a point before which elements are strictly increasing and after which elements are strictly decreasing.
+
+Note: It is guaranteed that the array contains exactly one bitonic point.
+
+
+
+Approach : 
+Initialize low = 0, high = n - 1.
+
+While low <= high:
+Compute mid = low + (high - low) / 2.
+Check conditions to decide if mid is the bitonic point or move low/high.
+
+For an element at index mid:
+If arr[mid] > arr[mid - 1] and arr[mid] > arr[mid + 1], it is the bitonic point.
+If arr[mid] > arr[mid - 1] and arr[mid] < arr[mid + 1], we are in the increasing part, so move right.
+If arr[mid] < arr[mid - 1] and arr[mid] > arr[mid + 1], we are in the decreasing part, so move left.
+
+Return the bitonic point.
+
+
+
+Complexity : 
+Time Complexity : O(log n)
+Space Complexity : O(1)
