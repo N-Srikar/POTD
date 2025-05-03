@@ -1,0 +1,72 @@
+Prime List
+_______________________________________________________
+
+class Solution {
+    private static final int MAX = 100000;
+    private static boolean[] isPrime = new boolean[MAX + 1];
+
+    static {
+        // Precompute primes using Sieve of Eratosthenes
+        for (int i = 0; i <= MAX; i++) isPrime[i] = true;
+        isPrime[0] = isPrime[1] = false;
+        for (int i = 2; i * i <= MAX; i++) {
+            if (isPrime[i]) {
+                for (int j = i * i; j <= MAX; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+    }
+
+    private int nearestPrime(int num) {
+        if (isPrime[num]) return num;
+
+        int low = num - 1;
+        int high = num + 1;
+        while (low >= 2 || high <= MAX) {
+            if (low >= 2 && isPrime[low]) return low;
+            if (high <= MAX && isPrime[high]) return high;
+            low--;
+            high++;
+        }
+        return 2; // fallback
+    }
+
+    Node primeList(Node head) {
+        Node current = head;
+        while (current != null) {
+            current.data = nearestPrime(current.data);
+            current = current.next;
+        }
+        return head;
+    }
+}
+
+_______________________________________________________
+
+
+Problem Statement : 
+You are given the head of a linked list. You have to replace all the values of the nodes with the nearest prime number. If more than one prime number exists at an equal distance, choose the smallest one. Return the head of the modified linked list.
+
+
+
+Approach : 
+Traverse the linked list to access each node’s value.
+
+Check if the value is already a prime:
+If yes, move to the next node.
+If not, find the nearest prime (by searching in both directions).
+
+Replace the node’s value with the nearest prime found.
+
+Return the updated head.
+
+To optimize prime checks:
+Use the Sieve of Eratosthenes to precompute all primes up to a maximum number (say 100,000).
+Store the primes in a set for O(1) lookup.
+
+
+
+Complexity :
+Time Complexity : O(N log log N + n * sqrt(M))
+Space Complexity : O(N)
