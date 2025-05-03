@@ -1,0 +1,64 @@
+1007. Minimum Domino Rotations For Equal Row
+________________________________________________________
+
+class Solution {
+    public int minDominoRotations(int[] A, int[] B) {
+        int[] countA = new int[7], countB = new int[7], same = new int[7];
+        int n = A.length;
+        for (int i = 0; i < n; ++i) {
+            countA[A[i]]++;
+            countB[B[i]]++;
+            if (A[i] == B[i])
+                same[A[i]]++;
+        }
+        for (int i  = 1; i < 7; ++i){
+            if (countA[i] + countB[i] - same[i] == n){
+                return n - Math.max(countA[i], countB[i]);
+            }
+        }
+        return -1;
+    }
+}
+________________________________________________________
+
+
+
+Problem Statement :
+In a row of dominoes, tops[i] and bottoms[i] represent the top and bottom halves of the ith domino. (A domino is a tile with two numbers from 1 to 6 - one on each half of the tile.)
+
+We may rotate the ith domino, so that tops[i] and bottoms[i] swap values.
+
+Return the minimum number of rotations so that all the values in tops are the same, or all the values in bottoms are the same.
+
+If it cannot be done, return -1.
+
+
+
+
+
+Approach :
+Initialize:
+Create three arrays: countA, countB, and same, each of size 7 to track occurrences of numbers 1-6 in arrays A, B, and both A[i] == B[i].
+
+Count Occurrences:
+Loop through the arrays A and B:
+Increment countA[A[i]], countB[B[i]].
+If A[i] == B[i], increment same[A[i]].
+
+Check Valid Numbers:
+For each number i (1 to 6), check if the condition countA[i] + countB[i] - same[i] == n holds. This means there are enough occurrences of i to potentially make the entire row equal to i.
+
+Calculate Rotations:
+If the condition is met for some number i, calculate rotations needed as n - max(countA[i], countB[i]).
+
+Return Result:
+If a valid number is found, return the number of rotations.
+If no valid number exists, return -1.
+ 
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
