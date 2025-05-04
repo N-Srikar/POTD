@@ -1,0 +1,83 @@
+Smallest distinct window
+_______________________________________________________
+
+class Solution {
+    public int findSubString(String str) {
+        // Edge case: if the string is empty
+        if (str == null || str.length() == 0) return 0;
+
+        // Step 1: Find all distinct characters in the string
+        HashMap<Character, Integer> distinctCharsMap = new HashMap<>();
+        for (int i = 0; i < str.length(); i++) {
+            distinctCharsMap.put(str.charAt(i), 1); // Using 1 as value (it just signifies the distinct chars)
+        }
+
+        int requiredDistinctCount = distinctCharsMap.size(); // The number of distinct characters
+        
+        // Step 2: Sliding window approach
+        HashMap<Character, Integer> windowCharsMap = new HashMap<>();
+        int left = 0;  // left pointer
+        int minLength = Integer.MAX_VALUE;
+        int formed = 0; // To track how many distinct characters are currently in the window
+        
+        for (int right = 0; right < str.length(); right++) {
+            // Expand the window by including the character at 'right'
+            char currentChar = str.charAt(right);
+            windowCharsMap.put(currentChar, windowCharsMap.getOrDefault(currentChar, 0) + 1);
+            
+            // If the count of current character matches the count in distinct characters map, it's part of a valid window
+            if (windowCharsMap.get(currentChar) == 1) {
+                formed++;
+            }
+            
+            // If the current window contains all distinct characters, try to shrink the window
+            while (left <= right && formed == requiredDistinctCount) {
+                char leftChar = str.charAt(left);
+                
+                // Update the result if the current window is smaller
+                minLength = Math.min(minLength, right - left + 1);
+                
+                // Shrink the window from the left
+                windowCharsMap.put(leftChar, windowCharsMap.get(leftChar) - 1);
+                if (windowCharsMap.get(leftChar) == 0) {
+                    formed--;
+                }
+                left++;
+            }
+        }
+        
+        return minLength == Integer.MAX_VALUE ? 0 : minLength; // If no valid window was found
+    }
+}
+
+_______________________________________________________
+
+
+
+Problem Statement : 
+Given a string str, your task is to find the length of the smallest window that contains all the characters of the given string at least once.
+
+
+
+
+Approach : 
+Identify Distinct Characters:
+Find all the distinct characters in the string using a set or a frequency map.
+
+Use Sliding Window:
+Start with both left and right pointers at the beginning of the string.
+Expand the right pointer and add characters to the frequency map.
+Once all distinct characters are present in the window, try shrinking the window by moving the left pointer to the right while maintaining the condition of having all distinct characters.
+
+Update the Minimum Window Length:
+Keep track of the minimum length of a window that contains all the distinct characters.
+
+Return the Result:
+Once you've explored all possible windows, return the length of the smallest window.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(k)
