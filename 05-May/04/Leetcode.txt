@@ -1,0 +1,60 @@
+1128. Number of Equivalent Domino Pairs
+________________________________________________________
+
+
+class Solution {
+    public int numEquivDominoPairs(int[][] dominoes) {
+        // Map to store the normalized representation of dominoes
+        HashMap<String, Integer> map = new HashMap<>();
+        int count = 0;
+        
+        // Iterate through each domino
+        for (int[] domino : dominoes) {
+            // Normalize the domino by sorting the values
+            int a = domino[0], b = domino[1];
+            String key = (a < b) ? a + "," + b : b + "," + a;
+            
+            // If the normalized domino has been seen before, add to the count
+            if (map.containsKey(key)) {
+                count += map.get(key);
+            }
+            
+            // Increment the count for this domino in the map
+            map.put(key, map.getOrDefault(key, 0) + 1);
+        }
+        
+        return count;
+    }
+}
+
+________________________________________________________
+
+
+
+Problem Statement :
+Given a list of dominoes, dominoes[i] = [a, b] is equivalent to dominoes[j] = [c, d] if and only if either (a == c and b == d), or (a == d and b == c) - that is, one domino can be rotated to be equal to another domino.
+
+Return the number of pairs (i, j) for which 0 <= i < j < dominoes.length, and dominoes[i] is equivalent to dominoes[j].
+
+
+
+
+Approach : 
+Initialize an empty hashmap to store normalized domino representations and their counts.
+
+Iterate through the list of dominoes :
+For each domino, normalize it (ensure the smaller number is first).
+Check if this normalized domino has been seen before using the hashmap.
+If it has, add the current count of this domino to the result 
+(since the count represents how many previous dominoes are equivalent to the current one).
+
+Update the hashmap with the normalized domino, incrementing its count.
+
+After processing all dominoes, return the accumulated count of equivalent pairs.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
