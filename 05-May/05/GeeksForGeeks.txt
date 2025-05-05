@@ -1,0 +1,55 @@
+Search in an almost Sorted Array
+________________________________________________________
+
+class Solution {
+    public int findTarget(int[] arr, int target) {
+        int low = 0, high = arr.length - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (arr[mid] == target) return mid;
+
+            if (mid - 1 >= low && arr[mid - 1] == target) return mid - 1;
+
+            if (mid + 1 <= high && arr[mid + 1] == target) return mid + 1;
+
+            if (target < arr[mid]) {
+                high = mid - 2;
+            } else {
+                low = mid + 2;
+            }
+        }
+
+        return -1;
+    }
+}
+________________________________________________________
+
+
+Problem Statement :
+Given a sorted integer array arr[] consisting of distinct elements, where some elements of the array are moved to either of the adjacent positions, i.e. arr[i] may be present at arr[i-1] or arr[i+1].
+Given an integer target.  You have to return the index ( 0-based ) of the target in the array. If target is not present return -1.
+
+
+
+Approach : 
+Initialize low = 0, high = arr.length - 1.
+
+Perform a modified binary search:
+Calculate mid = (low + high) / 2.
+
+Check if arr[mid] == target → return mid.
+Check arr[mid - 1] (if mid - 1 >= low) → return mid - 1 if equal.
+Check arr[mid + 1] (if mid + 1 <= high) → return mid + 1 if equal.
+
+If target < arr[mid], then move search to low = low, high = mid - 2.
+If target > arr[mid], then move search to low = mid + 2, high = high.
+
+If not found, return -1
+
+
+
+Complexity : 
+Time Complexity : O(log n)
+Space Complexity : O(1)
