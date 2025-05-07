@@ -1,0 +1,66 @@
+3341. Find Minimum Time to Reach Last Room I
+_________________________________________________________
+
+import java.util.*;
+
+class Solution {
+    public int minTimeToReach(int[][] moveTime) {
+        int m = moveTime.length, n = moveTime[0].length;
+        int[][] dist = new int[m][n];
+        
+        for (int[] row : dist) Arrays.fill(row, Integer.MAX_VALUE);
+        dist[0][0] = 0;
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(
+            (a,b)->Integer.compare(a[0],b[0])
+        );
+        pq.offer(new int[]{0, 0, 0});
+
+        int[] dr = {-1, 0, 1, 0}, dc = {0, 1, 0, -1};
+
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int time = curr[0], r = curr[1], c = curr[2];
+
+            if (r == m - 1 && c == n - 1) return time;
+
+            for (int i = 0; i < 4; i++) {
+                int nr = r + dr[i], nc = c + dc[i];
+                if (nr >= 0 && nc >= 0 && nr < m && nc < n) {
+                    int newTime = Math.max(time, moveTime[nr][nc]) + 1;
+                    if (newTime < dist[nr][nc]) {
+                        dist[nr][nc] = newTime;
+                        pq.offer(new int[]{newTime, nr, nc});
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+}
+_________________________________________________________
+
+
+Problem Statement : 
+There is a dungeon with n x m rooms arranged as a grid.
+
+You are given a 2D array moveTime of size n x m, where moveTime[i][j] represents the minimum time in seconds when you can start moving to that room. You start from the room (0, 0) at time t = 0 and can move to an adjacent room. Moving between adjacent rooms takes exactly one second.
+
+Return the minimum time to reach the room (n - 1, m - 1).
+
+Two rooms are adjacent if they share a common wall, either horizontally or vertically.
+
+
+
+Approach : 
+Use Dijkstra's algorithm with a min-heap (priority queue).
+Each cell has a minimum required arrival time moveTime[i][j], so we wait there until curr_time ≥ moveTime[i][j].
+On moving to a neighbor, update its time as max(curr_time, moveTime[nrow][ncol]) + 1.
+Track the shortest time to each cell with a 2D distance array.
+Return once the bottom-right corner is reached.
+
+
+
+Complexity : 
+Time Complexity : O(m⋅n⋅log(m⋅n))
+Space Complexity : O(m⋅n)
