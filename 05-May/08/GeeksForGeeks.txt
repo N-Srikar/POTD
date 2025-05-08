@@ -1,0 +1,58 @@
+Missing element of AP
+_______________________________________________________
+
+class Solution {
+    public int findMissing(int[] arr) {
+        int n = arr.length;
+        // 1) Find the smallest absolute gap between neighbors
+        int absd = Integer.MAX_VALUE;
+        for (int i = 1; i < n; i++) {
+            absd = Math.min(absd, Math.abs(arr[i] - arr[i - 1]));
+        }
+        // 2) Restore the sign: positive if increasing, negative if decreasing
+        int d = (arr[n - 1] > arr[0]) ? absd : -absd;
+        // 3) Scan for the “big” jump
+        for (int i = 1; i < n; i++) {
+            if (arr[i] - arr[i - 1] != d) {
+                return arr[i - 1] + d;
+            }
+        }
+        // 4) No gap found → sequence is complete, so next element is last + d
+        return arr[n - 1] + d;
+    }
+}
+
+_______________________________________________________
+
+
+
+Problem Statement :
+Given a sorted array arr[] that represents an Arithmetic Progression (AP) with exactly one missing element, find the missing number.
+
+Note: An element will always exist that, upon inserting into a sequence forms Arithmetic progression. If the given sequence already forms a valid complete AP, return the (n+1)-th element that would come next in the sequence.
+
+
+
+
+Approach :
+Compute absolute minimum gap:
+Traverse the array once, computing abs(arr[i] – arr[i–1]) for each adjacent pair.
+Keep track of the smallest of these absolute differences (absd).
+
+Determine the signed common difference d:
+If the sequence is increasing (i.e. arr[n−1] > arr[0]), then d = +absd.
+Otherwise (a strictly decreasing AP), d = –absd.
+
+Scan for the missing element:
+Traverse again from i = 1 to n−1.
+Whenever you see arr[i] – arr[i–1] != d, the missing term is arr[i–1] + d. Return it immediately.
+
+Handle the “no gap” case:
+If the second scan completes without finding any irregular jump, the given array already forms a complete AP.
+The “missing” element is simply the next term: arr[n−1] + d.
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(1)
