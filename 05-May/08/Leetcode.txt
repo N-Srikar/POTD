@@ -1,0 +1,91 @@
+3342. Find Minimum Time to Reach Last Room II
+_______________________________________________________
+
+import java.util.*;
+
+class Solution {
+    public int minTimeToReach(int[][] moveTime) {
+        int n = moveTime.length, m = moveTime[0].length;
+        boolean[][] vis = new boolean[n][m];
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[0]-b[0]);
+        pq.offer(new int[]{0, 0, 0, 0}); // {time, moves, row, col}
+        vis[0][0] = true;
+        int[][] dirs = {{0,1}, {1,0}, {-1,0}, {0,-1}};
+
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int t = curr[0], moves = curr[1], r = curr[2], c = curr[3];
+            if (r == n - 1 && c == m - 1) return t;
+
+            for (int[] d : dirs) {
+                int nr = r + d[0], nc = c + d[1];
+                if (nr >= 0 && nc >= 0 && nr < n && nc < m && !vis[nr][nc]) {
+                    vis[nr][nc] = true;
+                    int wait = Math.max(t, moveTime[nr][nc]);
+                    int travel = (moves % 2 == 0) ? 1 : 2;
+                    pq.offer(new int[]{wait + travel, moves + 1, nr, nc});
+                }
+            }
+        }
+        return -1;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement :
+There is a dungeon with n x m rooms arranged as a grid.
+
+You are given a 2D array moveTime of size n x m, where moveTime[i][j] represents the minimum time in seconds when you can start moving to that room. You start from the room (0, 0) at time t = 0 and can move to an adjacent room. Moving between adjacent rooms takes one second for one move and two seconds for the next, alternating between the two.
+
+Return the minimum time to reach the room (n - 1, m - 1).
+
+Two rooms are adjacent if they share a common wall, either horizontally or vertically.
+
+
+
+
+
+
+Appraoch :
+1. Model the problem as a shortest path in a grid
+Each cell is a node.
+Moving to adjacent cells incurs a cost (1 or 2 seconds), alternating every move.
+
+2. Use Dijkstra's algorithm with a priority queue (min-heap)
+Prioritize nodes with the lowest time to reach.
+Each state pushed into the heap contains:
+current_time
+number_of_moves taken so far (to determine whether move costs 1 or 2)
+row and column of the current cell.
+
+3. Initialize starting state
+Start from cell (0, 0) with time = 0, moves = 0.
+
+4. Track visited cells
+Use a vis[n][m] array to mark cells as visited after pushing into the priority queue.
+This avoids revisiting the same cell unnecessarily.
+
+5. Process cells using the priority queue
+Pop the cell with the smallest current time.
+If it's the destination (n-1, m-1), return the current time.
+
+6. Explore 4 adjacent neighbors (up, down, left, right)
+Skip if out of bounds or already visited.
+Wait if required time to enter the neighbor hasn't been reached:
+wait_time = max(current_time, moveTime[neighbor])
+Determine travel time based on parity of moves:
+If moves are even ⇒ travel time = 1
+If moves are odd ⇒ travel time = 2
+Push the new state into the priority queue.
+
+7. If the queue is exhausted without reaching the destination, return -1.
+
+
+
+
+
+Complexity : 
+Time Complexity : O( (n x m) x log(n x m) ) 
+Space Complexity :  O(n x m)	
