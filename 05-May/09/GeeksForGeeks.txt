@@ -1,0 +1,78 @@
+Largest number in K swaps
+________________________________________________________
+
+class Solution {
+    String max = "";
+
+    public String findMaximumNum(String s, int k) {
+        max = s;
+        solve(s.toCharArray(), k, 0);
+        return max;
+    }
+
+    private void solve(char[] arr, int k, int index) {
+        if (k == 0 || index == arr.length) return;
+
+        char maxDigit = arr[index];
+        for (int i = index + 1; i < arr.length; i++) {
+            if (arr[i] > maxDigit) {
+                maxDigit = arr[i];
+            }
+        }
+
+        if (maxDigit != arr[index]) {
+            for (int i = arr.length - 1; i > index; i--) {
+                if (arr[i] == maxDigit) {
+                    swap(arr, i, index);
+                    String current = new String(arr);
+                    if (current.compareTo(max) > 0) {
+                        max = current;
+                    }
+                    solve(arr, k - 1, index + 1);
+                    swap(arr, i, index); // backtrack
+                }
+            }
+        } else {
+            solve(arr, k, index + 1);
+        }
+    }
+
+    private void swap(char[] arr, int i, int j) {
+        char temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given a number k and string s of digits denoting a positive integer, build the largest number possible by performing swap operations on the digits of s at most k times.
+
+
+
+
+Approach :
+We use backtracking (DFS) to try all possible swaps up to k times, but prune paths early when they don't lead to a better result.
+
+Steps:
+Maintain a global variable max to store the lexicographically greatest number found so far.
+
+Start from the current index and look for a maximum digit to the right of the current digit.
+
+For each occurrence of the max digit to the right:
+Swap with the current digit.
+Recurse with one less swap allowed.
+Backtrack (undo the swap).
+
+If no better digit is found to swap, move to the next index.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n^k)
+Space Complexity : O(n)
