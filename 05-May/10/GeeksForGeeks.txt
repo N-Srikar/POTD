@@ -1,0 +1,74 @@
+Longest Subarray with Majority Greater than K
+________________________________________________________
+
+class Solution {
+    static int longestSubarray(int[] arr, int k) {
+        int n = arr.length;
+        int[] prefixSum = new int[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            prefixSum[i] = prefixSum[i - 1] + (arr[i - 1] > k ? 1 : -1);
+        }
+
+        Map<Integer, Integer> map = new HashMap<>();
+        int maxLength = 0;
+
+        for (int i = 0; i <= n; i++) {
+            int currSum = prefixSum[i];
+
+            if (currSum > 0) {
+                maxLength = Math.max(maxLength, i);
+            }
+
+            if (map.containsKey(currSum - 1)) {
+                maxLength = Math.max(maxLength, i - map.get(currSum - 1));
+            }
+
+            map.putIfAbsent(currSum, i);
+        }
+
+        return maxLength;
+    }
+}
+________________________________________________________
+
+
+
+
+
+Problem Statement :
+Given an array arr[] and an integer k, the task is to find the length of longest subarray in which the count of elements greater than k is more than the count of elements less than or equal to k.
+
+
+
+
+
+Approach : 
+Transform the input array:
+For each element arr[i], treat it as:
++1 if arr[i] > k
+-1 if arr[i] ≤ k
+
+Compute prefix sums:
+Build a prefixSum[] array where:
+prefixSum[0] = 0
+prefixSum[i] = prefixSum[i - 1] + (+1 or -1 based on arr[i-1])
+This array represents the cumulative difference between counts of >k and ≤k.
+
+Track earliest occurrence of prefix sum values:
+Use a HashMap (firstOccurrence) to store the first index at which each prefix sum value appears.
+
+Check for valid subarrays:
+For each index i from 0 to n:
+If prefixSum[i] > 0, it means the subarray [0, i-1] has more >k than ≤k, so update the answer.
+If prefixSum[i] - 1 was seen before at some index j, then the subarray [j, i-1] is valid (has more >k), and we update the maximum length.
+
+Return the maximum valid subarray length found.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
