@@ -1,0 +1,58 @@
+K-th Largest Sum Contiguous Subarray
+_________________________________________________________
+
+class Solution {
+    public static int kthLargest(int[] arr, int k) {
+        int n = arr.length;
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+        for (int i = 0; i < n; i++) {
+            int sum = 0;
+            for (int j = i; j < n; j++) {
+                sum += arr[j];
+                if (minHeap.size() < k) {
+                    minHeap.add(sum);
+                } else if (sum > minHeap.peek()) {
+                    minHeap.poll();
+                    minHeap.add(sum);
+                }
+            }
+        }
+        return minHeap.peek();
+    }
+}
+
+_________________________________________________________
+
+
+
+Problem Statement : 
+Given an array arr[] of size n, find the sum of the K-th largest sum among all contiguous subarrays. In other words, identify the K-th largest sum from all possible subarrays and return it.
+
+
+
+
+Approach : 
+Initialize a Min-Heap: 
+This will store the K largest subarray sums efficiently.
+
+Iterate through the array:
+Start from each index i and calculate subarray sums.
+
+Calculate subarray sums dynamically:
+Maintain a running sum while expanding the subarray from i to j.
+
+Store sums in the Min-Heap:
+If the heap size is less than K, simply add the sum.
+If the heap already contains K elements and the new sum is larger than the smallest in the heap (peek()), remove the smallest and insert the new sum.
+
+Retrieve the K-th largest sum:
+The root of the heap (peek()) will be the K-th largest sum after processing all subarrays.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n^2 * log k)
+Space Complexity : O(k)
