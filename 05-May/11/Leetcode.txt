@@ -1,0 +1,45 @@
+1550. Three Consecutive Odds
+_______________________________________________________
+
+class Solution {
+    public boolean threeConsecutiveOdds(int[] arr) {
+        int count = 0;
+        for (int i=0 ; i<arr.length ; i++) {  
+            if (arr[i] % 2 != 0) {  
+                count++; 
+                if (count == 3) {  
+                    return true;
+                }
+            } 
+            else {
+                count = 0;
+            }
+        }
+        return false;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement : 
+Given an integer array arr, return true if there are three consecutive odd numbers in the array. Otherwise, return false.
+
+
+
+
+Approach : 
+Initialize a counter count to 0.
+Iterate through each element in the array.
+For each element, check if it is odd:
+If it is odd, increment the count.
+If count becomes 3, return true since we have found three consecutive odd numbers.
+If it is even, reset the count to 0.
+If the loop completes without finding three consecutive odd numbers, return false.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
