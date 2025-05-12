@@ -1,0 +1,106 @@
+Meeting Rooms III
+__________________________________________________________
+
+class Solution {
+    public int mostBooked(int n, int[][] meetings) {
+        // Sort meetings by start time
+        Arrays.sort(meetings, (a, b) -> Integer.compare(a[0], b[0]));
+
+        // Available rooms (min-heap of room numbers)
+        PriorityQueue<Integer> availableRooms = new PriorityQueue<>();
+        for (int i = 0; i < n; i++) {
+            availableRooms.offer(i);
+        }
+
+        // Busy rooms (min-heap of [endTime, roomNumber])
+        PriorityQueue<long[]> busyRooms = new PriorityQueue<>((a, b) -> 
+            a[0] == b[0] ? Long.compare(a[1], b[1]) : Long.compare(a[0], b[0])
+        );
+
+        // Count of meetings per room
+        int[] meetingCount = new int[n];
+
+        for (int[] meeting : meetings) {
+            int start = meeting[0];
+            int end = meeting[1];
+            int duration = end - start;
+
+            // Free up rooms that have become available
+            while (!busyRooms.isEmpty() && busyRooms.peek()[0] <= start) {
+                availableRooms.offer((int) busyRooms.poll()[1]);
+            }
+
+            if (!availableRooms.isEmpty()) {
+                int room = availableRooms.poll();
+                meetingCount[room]++;
+                busyRooms.offer(new long[]{start + duration, room});
+            } else {
+                // Delay meeting until the earliest room is free
+                long[] earliest = busyRooms.poll();
+                long newEnd = earliest[0] + duration;
+                int room = (int) earliest[1];
+                meetingCount[room]++;
+                busyRooms.offer(new long[]{newEnd, room});
+            }
+        }
+
+        // Find the room with the most meetings
+        int maxCount = 0;
+        int resultRoom = 0;
+        for (int i = 0; i < n; i++) {
+            if (meetingCount[i] > maxCount) {
+                maxCount = meetingCount[i];
+                resultRoom = i;
+            }
+        }
+
+        return resultRoom;
+    }
+}
+___________________________________________________________
+
+
+
+
+
+Problem Statement :
+You are given an integer n representing the number of rooms numbered from 0 to n - 1. Additionally, you are given a 2D integer array meetings[][] where meetings[i] = [starti, endi] indicates that a meeting is scheduled during the half-closed time interval [starti, endi). All starti values are unique.
+
+Meeting Allocation Rules:
+1. When a meeting starts, assign it to the available room with the smallest number.
+2. If no rooms are free, delay the meeting until the earliest room becomes available. The delayed meeting retains its original duration.
+3. When a room becomes free, assign it to the delayed meeting with the earliest original start time.
+
+Determine the room number that hosts the most meetings. If multiple rooms have the same highest number of meetings, return the smallest room number among them.
+
+
+
+
+
+
+Approach : 
+1. Sort Meetings by Start Time
+Since all starti are unique, we sort the meetings by their start times to process them in order.
+
+2. Use Two Priority Queues:
+availableRooms: Min-heap storing available room numbers.
+busyRooms: Min-heap storing pairs of (endTime, roomNumber), sorted by end time — so we always release the earliest available room first.
+
+3. Simulate Meeting Assignments
+For each meeting:
+Before processing, free up any rooms where the meeting has ended (endTime ≤ currentStart).
+If there are available rooms, assign the meeting to the smallest-numbered room.
+If no room is available, delay the meeting until the earliest available room is free. Recalculate its start and end times.
+
+Track the number of meetings handled by each room.
+
+4. Return the Room with Most Meetings
+If multiple rooms have the same maximum count, return the smallest room number.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(m log m + m log n)
+Space Complexity : O(n + m)
