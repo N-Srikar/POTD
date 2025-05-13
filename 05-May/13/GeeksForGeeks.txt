@@ -1,0 +1,58 @@
+nCr
+___________________________________________________________
+
+class Solution {
+    public int nCr(int n, int r) {
+        if (r > n) return 0;
+
+        int[] C = new int[r + 1];
+        C[0] = 1; // nC0 = 1
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = Math.min(i, r); j > 0; j--) {
+                C[j] = C[j] + C[j - 1];
+            }
+        }
+
+        return C[r];
+    }
+}
+___________________________________________________________
+
+
+
+
+
+Problem Statement :
+Given two integer values n and r, the task is to find the value of Binomial Coefficient nCr
+
+A binomial coefficient nCr can be defined as the coefficient of xr in the expansion of (1 + x)n that gives the number of ways to choose r objects from a set of n objects without considering the order.
+The binomial coefficient nCr is calculated as : C(n,r) = n! / r! * (n-r) !
+
+Note: If r is greater than n, return 0.
+It is guaranteed that the value of nCr will fit within a 32-bit integer.
+
+
+
+
+
+Approach : 
+Edge Case Check:
+If r > n, return 0.
+If r == 0 or r == n, return 1.
+
+Optimization using Pascal’s Triangle (Dynamic Programming):
+Use a 1D array C[] of size r+1 to store current row of Pascal's Triangle.
+Initialize C[0] = 1 (since nC0 is always 1).
+Loop i from 1 to n:
+Loop j from min(i, r) down to 1:
+Update C[j] = C[j] + C[j-1]
+
+Return C[r] as the result.
+
+
+
+
+Complexity : 
+Time Complexity : O(n * r)
+Space Complexity : O(r)
