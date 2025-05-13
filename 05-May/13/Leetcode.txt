@@ -1,0 +1,71 @@
+3335. Total Characters in String After Transformations I
+__________________________________________________________
+
+class Solution {
+    static final int MOD = 1_000_000_007;
+
+    public int lengthAfterTransformations(String s, int t) {
+        long[] cnt = new long[26];
+
+        for (char c : s.toCharArray()) {
+            cnt[c - 'a']++;
+        }
+
+        for (int step = 0; step < t; step++) {
+            long[] nextCnt = new long[26];
+            for (int i = 0; i < 26; i++) {
+                if (i == 25) { // 'z'
+                    nextCnt[0] = (nextCnt[0] + cnt[i]) % MOD; // 'a'
+                    nextCnt[1] = (nextCnt[1] + cnt[i]) % MOD; // 'b'
+                } else {
+                    nextCnt[i + 1] = (nextCnt[i + 1] + cnt[i]) % MOD;
+                }
+            }
+            cnt = nextCnt;
+        }
+
+        long total = 0;
+        for (long val : cnt) {
+            total = (total + val) % MOD;
+        }
+
+        return (int) total;
+    }
+}
+
+__________________________________________________________
+
+
+
+Problem Statement :
+You are given a string s and an integer t, representing the number of transformations to perform. In one transformation, every character in s is replaced according to the following rules:
+
+If the character is 'z', replace it with the string "ab".
+Otherwise, replace it with the next character in the alphabet. For example, 'a' is replaced with 'b', 'b' is replaced with 'c', and so on.
+Return the length of the resulting string after exactly t transformations.
+
+Since the answer may be very large, return it modulo 109 + 7.
+
+
+
+
+
+Approach : 
+Initialize a count array cnt[26] to count how many of each character is in the string.
+
+Loop for t transformations:
+Create a new cntNext array.
+
+For each character 'a' to 'z':
+If char is 'z', move cnt[z] to 'a' and 'b'.
+Else, move cnt[c] to c+1.
+
+After all transformations, return the sum of counts in cnt modulo 1e9+7.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(t * 26)
+Space Complexity : O(26)
