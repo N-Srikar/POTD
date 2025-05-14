@@ -1,0 +1,114 @@
+3337. Total Characters in String After Transformations II
+________________________________________________________
+
+class Solution {
+    private static final int MOD = 1_000_000_007;
+    private static final int ALPHABET = 26;
+
+    public int lengthAfterTransformations(String s, int t, List<Integer> nums) {
+        long[] freq = new long[ALPHABET];
+        for (char c : s.toCharArray()) {
+            freq[c - 'a']++;
+        }
+
+        // Build the transformation matrix
+        long[][] transform = new long[ALPHABET][ALPHABET];
+        for (int i = 0; i < ALPHABET; i++) {
+            int len = nums.get(i);
+            for (int j = 1; j <= len; j++) {
+                transform[i][(i + j) % ALPHABET]++;
+            }
+        }
+
+        // Raise the matrix to the power of t
+        long[][] poweredMatrix = matrixPower(transform, t);
+
+        // Apply the powered transformation to the initial frequencies
+        long[] resultFreq = new long[ALPHABET];
+        for (int i = 0; i < ALPHABET; i++) {
+            for (int j = 0; j < ALPHABET; j++) {
+                resultFreq[j] = (resultFreq[j] + freq[i] * poweredMatrix[i][j]) % MOD;
+            }
+        }
+
+        // Sum up total characters
+        long totalLength = 0;
+        for (long val : resultFreq) {
+            totalLength = (totalLength + val) % MOD;
+        }
+
+        return (int) totalLength;
+    }
+
+    private long[][] matrixMultiply(long[][] A, long[][] B) {
+        long[][] res = new long[ALPHABET][ALPHABET];
+        for (int i = 0; i < ALPHABET; i++) {
+            for (int j = 0; j < ALPHABET; j++) {
+                for (int k = 0; k < ALPHABET; k++) {
+                    res[i][j] = (res[i][j] + A[i][k] * B[k][j]) % MOD;
+                }
+            }
+        }
+        return res;
+    }
+
+    private long[][] matrixPower(long[][] base, int exp) {
+        long[][] result = new long[ALPHABET][ALPHABET];
+        for (int i = 0; i < ALPHABET; i++) {
+            result[i][i] = 1;
+        }
+        while (exp > 0) {
+            if ((exp & 1) == 1) {
+                result = matrixMultiply(result, base);
+            }
+            base = matrixMultiply(base, base);
+            exp >>= 1;
+        }
+        return result;
+    }
+}
+
+________________________________________________________
+
+
+
+
+
+Problem Statement : 
+You are given a string s consisting of lowercase English letters, an integer t representing the number of transformations to perform, and an array nums of size 26. In one transformation, every character in s is replaced according to the following rules:
+
+Replace s[i] with the next nums[s[i] - 'a'] consecutive characters in the alphabet. For example, if s[i] = 'a' and nums[0] = 3, the character 'a' transforms into the next 3 consecutive characters ahead of it, which results in "bcd".
+The transformation wraps around the alphabet if it exceeds 'z'. For example, if s[i] = 'y' and nums[24] = 3, the character 'y' transforms into the next 3 consecutive characters ahead of it, which results in "zab".
+Return the length of the resulting string after exactly t transformations.
+
+Since the answer may be very large, return it modulo 109 + 7.
+
+
+
+
+
+
+Approach : 
+Initialize Frequency Vector:
+Count how many times each character (a to z) appears in the original string s.
+
+Build Transformation Matrix:
+Construct a 26×26 matrix M where M[i][j] represents how many times character j appears after transforming character i.
+
+Matrix Exponentiation:
+Raise matrix M to the power t using binary exponentiation to get M^t.
+
+Apply Transformation:
+Multiply the initial frequency vector F by M^t to get the final character frequency vector after t transformations.
+
+Compute Final Length:
+Sum all values in the resulting frequency vector to get the total length of the transformed string.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n + log t)
+Space Complexity : O(1)
