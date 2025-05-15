@@ -1,0 +1,50 @@
+Substrings with same first and last characters
+_______________________________________________________
+
+class Solution {
+    public int countSubstring(String s) {
+        int[] freq = new int[26];
+        for (char ch : s.toCharArray()) {
+            freq[ch - 'a']++;
+        }
+
+        int count = 0;
+        for (int f : freq) {
+            if (f > 0) {
+                count += (f * (f + 1)) / 2;
+            }
+        }
+
+        return count;
+    }
+}
+
+_______________________________________________________
+
+
+
+Problem Statement :
+Given a string s consisting of lowercase characters, the task is to find the count of all substrings that start and end with the same character.
+
+
+
+
+Approach :
+Initialize a frequency array freq[26] to count occurrences of each lowercase letter.
+
+Traverse the string and increment the count of each character in the frequency array.
+
+For each character with frequency f, the number of substrings starting and ending with that character is:
+f substrings of length 1 (the characters themselves), and
+(f * (f - 1)) / 2 substrings of length >1 (where first and last characters match).
+Total = (f * (f + 1)) / 2
+
+Sum the values for all characters and return the total.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
