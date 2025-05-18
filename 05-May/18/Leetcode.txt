@@ -1,0 +1,92 @@
+1931. Painting a Grid With Three Different Colors
+________________________________________________________
+
+class Solution {
+    public int colorTheGrid(int m, int n) {
+        int A = 1 << 2 * m, M = (int) 1e9 + 7;
+        int[] dp = new int[A];
+        for (int i = 1; i < A; i++) {
+            if (ok(i, i >> 2, m - 1)) { 
+                dp[i] = 1;
+            }
+        }
+        for (int i = 1; i < n; i++) {
+            int[] next = new int[A];
+            for (int j = 0; j < A; j++) {
+                for (int k = 0; k < A && dp[j] > 0; k++) {
+                    if (dp[k] > 0 && ok(k, j, m)) {
+                        next[j] += dp[k];
+                        next[j] %= M;
+                    }
+                }
+            }
+            dp = next;
+        }
+        long total = 0;
+        for (int value : dp) {
+            total += value;
+        }
+        total = total % M;
+        return (int) total;
+    }
+
+    private boolean ok(int a, int b, int m) {
+        for (int i = 0; i < m; i++, a /= 4, b /= 4) {
+            if (a % 4 == 0 || b % 4 == 0 || a % 4 == b % 4) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given two integers m and n. Consider an m x n grid where each cell is initially white. You can paint each cell red, green, or blue. All cells must be painted.
+
+Return the number of ways to color the grid with no two adjacent cells having the same color. Since the answer can be very large, return it modulo 109 + 7.
+
+ 
+
+
+
+
+Approach : 
+Encoding the vertical column:
+Each column of m cells can be encoded using base-4 digits (2 bits per cell, since 3 colors = 3 values need ≥2 bits).
+So for m rows, a column can be encoded using 2 * m bits.
+This leads to A = 4^m total possible vertical column encodings.
+
+Initialization:
+dp[i]: Number of ways to paint columns up to the current column using encoding i.
+All valid encodings of the first column (no adjacent cells of same color in a column) are initialized with dp[i] = 1.
+
+Transition:
+For each next column:
+Try all possible current encodings (j) and previous encodings (k).
+If:
+k is a valid column.
+j is a valid column.
+j and k are compatible (no matching colors at the same row between columns).
+Then update next[j] += dp[k].
+
+Validity Check (Function ok):
+Ensures that:
+No adjacent cells in the same column have the same color (a % 4 == a / 4).
+No adjacent cells between columns (same row) are equal (a % 4 == b % 4).
+
+Final Result:
+Sum of all values in the dp[] array gives the total valid ways.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n * 16^m)
+Space Complexity : O(n)
+
