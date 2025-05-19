@@ -1,0 +1,84 @@
+Predecessor and Successor
+__________________________________________________________
+
+class Solution {
+    public ArrayList<Node> findPreSuc(Node root, int key) {
+        ArrayList<Node> result = new ArrayList<>(2);
+        result.add(null); // Predecessor
+        result.add(null); // Successor
+        
+        findPreSucHelper(root, key, result);
+        
+        return result;
+    }
+    
+    private void findPreSucHelper(Node root, int key, ArrayList<Node> result) {
+        if (root == null) return;
+        
+        if (root.data == key) {
+            // Find predecessor (largest in left subtree)
+            if (root.left != null) {
+                Node temp = root.left;
+                while (temp.right != null) {
+                    temp = temp.right;
+                }
+                result.set(0, temp);
+            }
+
+            // Find successor (smallest in right subtree)
+            if (root.right != null) {
+                Node temp = root.right;
+                while (temp.left != null) {
+                    temp = temp.left;
+                }
+                result.set(1, temp);
+            }
+        } else if (root.data > key) {
+            result.set(1, root); // Possible successor
+            findPreSucHelper(root.left, key, result);
+        } else {
+            result.set(0, root); // Possible predecessor
+            findPreSucHelper(root.right, key, result);
+        }
+    }
+}
+
+__________________________________________________________
+
+
+
+Problem Statement :
+You are given root node of the BST and an integer key. You need to find the in-order successor and predecessor of the given key. If either predecessor or successor is not found, then set it to NULL.
+
+Note:- In an inorder traversal the number just smaller than the target is the predecessor and the number just greater than the target is the successor. 
+
+
+
+Approach : 
+Search for the Key in the BST
+Traverse the BST using standard search.
+Keep track of potential predecessor (largest value encountered that’s smaller than the key).
+Keep track of potential successor (smallest value encountered that’s larger than the key).
+
+Finding Exact Predecessor and Successor
+If the key is found:
+Predecessor: Largest value in the left subtree (rightmost node of the left child).
+Successor: Smallest value in the right subtree (leftmost node of the right child).
+
+If the key is not found, predecessor and successor are determined while traversing.
+
+Implement Recursive Traversal
+Recursively move left if key is smaller than root.data (successor tracking).
+Recursively move right if key is greater than root.data (predecessor tracking).
+
+Edge Cases
+If the key is the smallest element, predecessor will be NULL.
+If the key is the largest element, successor will be NULL.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
