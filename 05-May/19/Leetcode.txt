@@ -1,0 +1,59 @@
+3024. Type of Triangle
+________________________________________________________
+
+class Solution {
+    public String triangleType(int[] nums) {
+        if (!isTriangle(nums)) return "none";
+        if (isEquilateral(nums)) return "equilateral";
+        if (isIsosceles(nums)) return "isosceles";
+        return "scalene";
+    }
+
+    private boolean isTriangle(int[] nums) {
+        return nums[0] + nums[1] > nums[2] &&
+               nums[0] + nums[2] > nums[1] &&
+               nums[1] + nums[2] > nums[0];
+    }
+
+    private boolean isEquilateral(int[] nums) {
+        return nums[0] == nums[1] && nums[1] == nums[2];
+    }
+
+    private boolean isIsosceles(int[] nums) {
+        return nums[0] == nums[1] || nums[1] == nums[2] || nums[0] == nums[2];
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given a 0-indexed integer array nums of size 3 which can form the sides of a triangle.
+
+A triangle is called equilateral if it has all sides of equal length.
+A triangle is called isosceles if it has exactly two sides of equal length.
+A triangle is called scalene if all its sides are of different lengths.
+Return a string representing the type of triangle that can be formed or "none" if it cannot form a triangle.
+
+
+
+
+
+Approach : 
+Validate Triangle: First, check whether the input side lengths can form a triangle using the _isTriangle method.
+
+Classify Triangle:
+If valid, check if all sides are equal using isEquilateral.
+If not, check if any two sides are equal using isIsoscales.
+If none are equal, it’s a scalene triangle.
+
+If the triangle condition fails, return "none".
+
+
+
+
+
+Complexity :
+Time Complexity : O(1)
+Space Complexity : O(1)
