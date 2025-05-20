@@ -1,0 +1,97 @@
+Burning Tree
+________________________________________________________
+
+class Solution {
+    public static int minTime(Node root, int target) {
+        // Step 1: Store parent references
+        Map<Node, Node> parentMap = new HashMap<>();
+        Node targetNode = buildParentMap(root, target, parentMap);
+
+        // Step 2: BFS to burn the tree
+        return burnTree(targetNode, parentMap);
+    }
+
+    private static Node buildParentMap(Node root, int target, Map<Node, Node> parentMap) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+        Node targetNode = null;
+
+        while (!queue.isEmpty()) {
+            Node node = queue.poll();
+            if (node.data == target) targetNode = node;
+
+            if (node.left != null) {
+                parentMap.put(node.left, node);
+                queue.add(node.left);
+            }
+            if (node.right != null) {
+                parentMap.put(node.right, node);
+                queue.add(node.right);
+            }
+        }
+        return targetNode;
+    }
+
+    private static int burnTree(Node targetNode, Map<Node, Node> parentMap) {
+        Queue<Node> queue = new LinkedList<>();
+        Set<Node> visited = new HashSet<>();
+        queue.add(targetNode);
+        visited.add(targetNode);
+        int time = 0;
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            boolean spread = false;
+
+            for (int i = 0; i < size; i++) {
+                Node node = queue.poll();
+
+                for (Node neighbor : Arrays.asList(node.left, node.right, parentMap.get(node))) {
+                    if (neighbor != null && !visited.contains(neighbor)) {
+                        queue.add(neighbor);
+                        visited.add(neighbor);
+                        spread = true;
+                    }
+                }
+            }
+
+            if (spread) time++;
+        }
+        return time;
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement : 
+Given a binary tree and a target node, determine the minimum time required to burn the entire tree if the target node is set on fire. In one second, the fire spreads from a node to its left child, right child, and parent.
+Note: The tree contains unique values.
+
+
+
+
+
+Appraoch : 
+Build a Parent Map: 
+Traverse the tree to store parent references for each node.
+
+Find the Target Node: 
+Locate the node where the fire starts.
+
+Simulate Fire Spread using BFS:
+Use a queue to track burning nodes.
+Spread fire to left child, right child, and parent at each step.
+Keep track of visited nodes to avoid redundant computations.
+
+Count Time Until All Nodes Burn: Increase time counter for each level of BFS traversal.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
