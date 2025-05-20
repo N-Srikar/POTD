@@ -1,0 +1,81 @@
+3355. Zero Array Transformation I
+_________________________________________________________
+
+class Solution {
+    public boolean isZeroArray(int[] nums, int[][] queries) {
+        int n = nums.length;
+        int d[] = new int[n+1];
+        d[0] = nums[0];
+        d[n] = 0;
+        for(int i=1; i<n; i++){
+            d[i] = nums[i]-nums[i-1];
+        }
+        int len = queries.length;
+        for(int i=0; i<len; i++){
+            int l = queries[i][0];
+            int r = queries[i][1];
+            d[l]-=1;
+            d[r+1]+=1;
+        }
+        for(int i=0; i<n; i++){
+            if(i==0){
+                nums[i] = d[i];
+                if(d[i]>0){
+                    return false;
+                }
+            }
+            else{
+                nums[i] = d[i]+nums[i-1];
+                if(nums[i]>0)
+                   return false;
+            }
+        }
+        return true;
+    }
+}
+_________________________________________________________
+
+
+
+
+
+Problem Statement : 
+You are given an integer array nums of length n and a 2D array queries, where queries[i] = [li, ri].
+
+For each queries[i]:
+
+Select a subset of indices within the range [li, ri] in nums.
+Decrement the values at the selected indices by 1.
+A Zero Array is an array where all elements are equal to 0.
+
+Return true if it is possible to transform nums into a Zero Array after processing all the queries sequentially, otherwise return false.
+
+
+
+
+
+Approach : 
+Use Difference Array Technique: Construct a difference array d where:
+d[0] = nums[0]
+d[i] = nums[i] - nums[i-1]
+d[n] = 0 (extra space for boundary handling)
+
+Process Queries Efficiently:
+For each query [l, r], decrement d[l] by 1 to signify the start of decrement operation.
+Increment d[r+1] by 1 to signify the end of the decrement effect.
+
+Rebuild the Original Array:
+Convert the difference array d back into nums by computing prefix sums.
+If any element of nums remains greater than zero, return false.
+
+Check for Zero Array Condition:
+Ensure all values in nums are reduced to zero.
+If transformation is successful, return true; otherwise, return false.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n + q)
+Space Complexity : O(n)
