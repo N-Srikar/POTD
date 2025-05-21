@@ -1,0 +1,60 @@
+73. Set Matrix Zeroes
+________________________________________________________
+
+class Solution {
+    public void setZeroes(int[][] matrix){
+
+		int m=matrix.length, n=matrix[0].length;
+        int row[]= new int[m];
+        int col[]= new int[n];
+        
+        Arrays.fill(row,1);
+        Arrays.fill(col,1);
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(matrix[i][j]==0){
+                    row[i]=0;
+                    col[j]=0;
+                }
+            }
+        }
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(row[i]==0 || col[j]==0)
+                    matrix[i][j]=0;
+            }
+        }
+    }
+}
+________________________________________________________
+
+
+
+Problem Statement : 
+Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's.
+You must do it in place.
+
+
+
+
+Approach : 
+1: Initialize Row & Column Arrays
+Create two auxiliary arrays row[] and col[] of sizes m and n, respectively.
+These arrays are initialized to 1, indicating that all rows and columns are initially unaffected.
+
+2: Identify Rows and Columns to be Zeroed
+Iterate through the matrix:
+If matrix[i][j] == 0, mark row[i] = 0 and col[j] = 0.
+This flags which rows and columns should be fully zeroed.
+
+3: Modify Matrix Based on Flags
+Iterate through the matrix again:
+If either row[i] or col[j] is 0, set matrix[i][j] = 0.
+
+
+
+Complexity : 
+Time Complexity : O(m * n)
+Space Complexity : O(m + n)
