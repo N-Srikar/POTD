@@ -1,0 +1,71 @@
+Kth Smallest Number in Multiplication Table
+_______________________________________________________
+
+class Solution {
+    public int kthSmallest(int m, int n, int k) {
+        int left = 1, right = m * n;
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int count = countLessEqual(mid, m, n);
+            
+            if (count < k) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+    
+    private int countLessEqual(int x, int m, int n) {
+        int count = 0;
+        for (int i = 1; i <= m; i++) {
+            count += Math.min(x / i, n);
+        }
+        return count;
+    }
+}
+
+_______________________________________________________
+
+
+
+
+
+Problem Statement : 
+Given three integers m, n and k. Consider a grid of m * n, where mat[i][j] = i * j (1 based index). The task is to return the kth smallest element in the m * n multiplication table.
+
+
+
+
+
+Approach : 
+Instead of constructing the multiplication table explicitly, we use binary search to find the k-th smallest element.
+
+Step 1: Define the Search Space
+The smallest number in the multiplication table is 1, and the largest number is m * n.
+We set left = 1 and right = m * n as the search boundaries.
+
+Step 2: Apply Binary Search
+While left < right:
+Compute mid = (left + right) / 2.
+Count how many elements are ≤ mid using the countLessEqual(mid, m, n) function.
+If the count is less than k, move left forward (left = mid + 1).
+Otherwise, adjust right = mid.
+
+Step 3: Count Elements ≤ mid
+For each row i in the multiplication table (1 ≤ i ≤ m), count elements ≤ mid using:
+count += min(mid / i, n)
+Since each row contains elements {i, 2i, 3i, ...}, the number of elements ≤ mid is min(mid/i, n).
+
+Step 4: Return the Answer
+The binary search stops when left == right, which gives the k-th smallest element.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(m * log(m * n))
+Space Complexity : O(1)
