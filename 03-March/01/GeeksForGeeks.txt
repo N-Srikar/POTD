@@ -1,0 +1,84 @@
+Decode the string
+________________________________________________________
+
+class Solution {
+    static String decodeString(String s) {
+        // code here
+        Stack<Character>stack = new Stack<>();
+        for(Character ch:s.toCharArray()){
+            if(ch==']'){
+                String str = "";
+                while(!stack.isEmpty() && stack.peek()!='['){
+                    str+=stack.pop();
+                }
+                stack.pop();
+                int freq = 0;
+                StringBuilder sb = new StringBuilder();
+                
+                while (!stack.isEmpty() && Character.isDigit(stack.peek())) {
+                    sb.append(stack.pop());
+                }
+                
+                String freqStr = sb.reverse().toString();
+                freq = Integer.parseInt(freqStr);
+                
+                
+                for(int j=0 ; j<freq ; j++){
+                    for(int i=str.length()-1 ; i>=0 ; i--){
+                        stack.push(str.charAt(i));
+                    }
+                }
+            }
+            else{
+                stack.push(ch);
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        while(!stack.isEmpty()){
+            sb.append(stack.pop());
+        }
+        return sb.reverse().toString();
+        
+    }
+}
+________________________________________________________
+
+
+
+Problem Statement : 
+Given an encoded string s, the task is to decode it. The encoding rule is :
+
+k[encodedString], where the encodedString inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer, and encodedString contains only lowercase english alphabets.
+Note: The test cases are generated so that the length of the output string will never exceed 105 .
+
+
+
+Approach : 
+To decode the given encoded string, we use a stack-based approach to process nested brackets efficiently.
+
+Step 1: Initialize a Stack
+Create a stack to store characters as we traverse the string.
+
+Step 2: Traverse the String
+Iterate through each character in the string:
+If the character is ']', it indicates the end of an encoded substring.
+Extract the substring inside the brackets by popping characters from the stack until '[' is found.
+Remove '[' from the stack.
+Extract the repetition count (k) by popping digits from the stack.
+Convert the extracted number into an integer.
+
+Step 3: Expand the Encoded Substring
+Repeat the extracted substring k times.
+Push the expanded substring back onto the stack.
+
+Step 4: Construct the Final Decoded String
+Once the traversal is complete, pop all characters from the stack.
+
+Reverse the characters to form the final decoded string.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
