@@ -1,0 +1,73 @@
+2460. Apply Operations to an Array
+_______________________________________________________
+
+class Solution {
+    public int[] applyOperations(int[] nums) {
+        int n=nums.length;
+        for(int i=0 ; i<n-1 ; i++){
+            if(nums[i]==nums[i+1]){
+                nums[i]*=2;
+                nums[i+1]=0;
+            }
+        }
+        int l=0;
+        int r=0;
+        while(r<n){
+            while(l<n && nums[l]==nums[r] && nums[l]!=0){
+                l++;
+                r++;
+            }
+            r++;
+            while(r<n && nums[r]!=0){
+                int temp=nums[l];
+                nums[l]=nums[r];
+                nums[r]=temp;
+                l++; r++;
+            }
+        }
+        return nums;
+    }
+}
+
+_______________________________________________________
+
+
+
+
+
+Problem Statement : 
+You are given a 0-indexed array nums of size n consisting of non-negative integers.
+
+You need to apply n - 1 operations to this array where, in the ith operation (0-indexed), you will apply the following on the ith element of nums:
+
+If nums[i] == nums[i + 1], then multiply nums[i] by 2 and set nums[i + 1] to 0. Otherwise, you skip this operation.
+After performing all the operations, shift all the 0's to the end of the array.
+
+For example, the array [1,0,2,0,0,1] after shifting all its 0's to the end, is [1,2,1,0,0,0].
+Return the resulting array.
+
+Note that the operations are applied sequentially, not all at once.
+
+
+
+
+
+
+Approach : 
+Step 1: Apply Operations Sequentially
+Traverse the array from index 0 to n-2.
+If nums[i] == nums[i+1], double nums[i] and set nums[i+1] = 0.
+Continue this process for all elements.
+
+Step 2: Shift All Zeros to the End
+Use two pointers (l and r) to rearrange the array:
+l tracks the position where the next non-zero element should be placed.
+r scans the array for non-zero elements.
+Swap non-zero elements forward while maintaining order.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
