@@ -1,0 +1,66 @@
+Minimum Deletions
+________________________________________________________
+
+class Solution {
+    static int minDeletions(String s) {
+        int n = s.length();
+        
+        // Create DP table for longest palindromic subsequence (LPS)
+        int[][] dp = new int[n][n];
+
+        // All single characters are palindromes of length 1
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = 1;
+        }
+
+        // Fill the DP table
+        for (int cl = 2; cl <= n; cl++) { // cl = substring length
+            for (int i = 0; i < n - cl + 1; i++) {
+                int j = i + cl - 1;
+                if (s.charAt(i) == s.charAt(j)) { // If characters match
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                } else { // Otherwise, take max from excluding one of them
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+
+        // Minimum deletions required
+        return n - dp[0][n - 1];
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement : 
+Given a string s, write a program to delete the minimum number of characters from the string so that the resultant string is a palindrome, while maintaining the order of characters.
+
+
+
+
+Approach :
+Create a DP table dp[i][j] to store the length of the longest palindromic subsequence (LPS) for substring s[i:j].
+
+Initialize base cases:
+dp[i][i] = 1 for all i, since single characters are palindromes.
+
+Iterate over all substring lengths from 2 to n (length of the string).
+
+Fill the DP table:
+If s[i] == s[j], then dp[i][j] = dp[i+1][j-1] + 2.
+Otherwise, dp[i][j] = max(dp[i+1][j], dp[i][j-1]).
+
+Extract the final result:
+The longest palindromic subsequence (LPS) is stored in dp[0][n-1].
+Compute minimum deletions as n - dp[0][n-1].
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n^2)
+Space Complexity : O(n^2)
