@@ -1,0 +1,43 @@
+2942. Find Words Containing Character
+__________________________________________________________
+
+class Solution {
+    public List<Integer> findWordsContaining(String[] words, char x) {
+        ArrayList<Integer>map=new ArrayList<>();
+        for(int i=0;i<words.length;i++){
+            if(words[i].indexOf(x)!=-1){
+                map.add(i);
+            }
+        }
+        return map;
+    }
+}
+__________________________________________________________
+
+
+
+Problem Statement : 
+You are given a 0-indexed array of strings words and a character x.
+Return an array of indices representing the words that contain the character x.
+Note that the returned array may be in any order.
+
+
+
+
+Approach : 
+1 . Initialize a List: We start by creating an empty list to store the indices of the strings that contain the target character.
+
+2 . Iterate Through Each String: For each string in the input array, we check if the target character is present.
+
+3 . Check for Character Presence: Using the indexOf method, we determine if the character exists in the current string. If indexOf returns a non-negative value, the character is present.
+
+4 . Record the Index: If the character is found in the string, we add the current index to our list.
+
+5 . Return the Result: After processing all strings, we return the list of indices where the character was found.
+
+
+
+
+Complexity : 
+Time Complexity : O(n * m)
+Space Complexity : O(n)
