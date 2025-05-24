@@ -1,0 +1,55 @@
+Sum of all substrings of a number
+_______________________________________________________
+
+class Solution {
+    public static int sumSubstrings(String s) {
+        int n = s.length();
+        long res = s.charAt(0) - '0';
+        long prev = res;
+        int mod = 1000000007;  // use mod only if needed for larger input, but not required here
+
+        for (int i = 1; i < n; i++) {
+            int num = s.charAt(i) - '0';
+            long curr = (prev * 10 + num * (i + 1));
+            res += curr;
+            prev = curr;
+        }
+
+        return (int) res; // safe cast as per problem constraints
+    }
+}
+
+_______________________________________________________
+
+
+
+
+Problem Statement : 
+Given an integer s represented as a string, the task is to get the sum of all possible sub-strings of this string.
+
+Note: The number may have leading zeros.
+It is guaranteed that the total sum will fit within a 32-bit signed integer.
+
+
+
+
+Approach : 
+Initialize variables:
+res stores the final sum of all substrings.
+prev keeps track of the sum for substrings ending at the previous index.
+
+Iterate over the string (s) from index 1 to n-1:
+Convert the current character to an integer (num).
+Compute curr = (prev * 10 + num * (i + 1)) to efficiently generate the sum.
+Add curr to res.
+Update prev for the next iteration.
+
+Return the computed result (res) as an integer.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
