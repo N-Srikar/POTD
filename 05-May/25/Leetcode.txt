@@ -1,0 +1,71 @@
+2131. Longest Palindrome by Concatenating Two Letter Words
+________________________________________________________
+
+class Solution {
+    public int longestPalindrome(String[] words) {
+        int counter[][] = new int[26][26];
+        int ans = 0;
+        for (String w: words) {
+            int a = w.charAt(0) - 'a', b = w.charAt(1) - 'a';
+            if (counter[b][a] > 0) {
+                ans += 4; 
+                counter[b][a]--; 
+            }
+            else counter[a][b]++;
+        }
+        for (int i = 0; i < 26; i++) {
+            if (counter[i][i] > 0) {
+                ans += 2;
+                break;
+            }
+        }
+        return ans;
+    }
+}
+________________________________________________________
+
+
+
+
+
+Problem Statement : 
+You are given an array of strings words. Each element of words consists of two lowercase English letters.
+
+Create the longest possible palindrome by selecting some elements from words and concatenating them in any order. Each element can be selected at most once.
+
+Return the length of the longest palindrome that you can create. If it is impossible to create any palindrome, return 0.
+
+A palindrome is a string that reads the same forward and backward.
+
+
+
+
+
+
+Approach : 
+1. Use a Hash Table for Counting Pairs
+Create a 2D array (counter[][]) of size 26x26 to store occurrences of each two-letter combination.
+This allows efficient O(1) lookups and updates when processing words.
+
+2. Iterate Through the Words Array
+For each word:
+Extract its first and second characters and convert them into integer indices (0 to 25).
+
+Check if its reverse (b, a) already exists in the counter:
+If yes, it forms a palindrome pair, so add 4 to the result (ans) and decrement the reverse word count.
+If no, increment the count for this word combination in counter.
+
+3. Check for a Middle Element
+After processing all words, scan through counter to check if there exists a word of the format "aa", "bb", etc. that can act as the middle of the palindrome.
+If found, add 2 to ans since this word alone can sit in the middle and extend the palindrome length.
+
+4. Return the Result
+The total palindrome length is stored in ans, so return ans as the final answer.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
