@@ -1,0 +1,65 @@
+Pythagorean Triplet
+__________________________________________________________
+
+class Solution {
+    boolean pythagoreanTriplet(int[] arr) {
+        HashSet<Integer> squares = new HashSet<>();
+        
+        for (int num : arr) {
+            squares.add(num * num);
+        }
+
+        int n = arr.length;
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int sumOfSquares = arr[i] * arr[i] + arr[j] * arr[j];
+                
+                if (squares.contains(sumOfSquares)) {
+                    return true; 
+                }
+            }
+        }
+        
+        return false; 
+    }
+}
+
+__________________________________________________________
+
+
+
+
+
+Problem Statement : 
+Given an array arr[], return true if there is a triplet (a, b, c) from the array (where a, b, and c are on different indexes) that satisfies a2 + b2 = c2, otherwise return false.
+
+
+
+
+Approach : 
+Square the Elements
+Iterate through the array and square each element.
+Store the squared values in a HashSet for O(1) lookups.
+
+Iterate Over All Pairs
+Use two nested loops to iterate over every distinct pair of elements in the array, i.e., 
+for each pair a and b, where i < j.
+
+Calculate the Sum of Squares
+For each pair a and b, compute the sum: a² + b².
+
+Check for Existence of c²
+Check if the sum a² + b² exists in the HashSet of squared values.
+
+If it does, return true because a valid Pythagorean triplet exists.
+
+Return false if No Triplet Found
+If no such pair a and b form a Pythagorean triplet, return false.
+
+
+
+
+Complexity : 
+Time Complexity : O(n^2)
+Space Complexity : O(n)
