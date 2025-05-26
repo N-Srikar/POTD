@@ -1,0 +1,100 @@
+Insert in Sorted Circular Linked List
+_________________________________________________________
+
+class Solution {
+    public Node sortedInsert(Node head, int data) {
+        Node newNode = new Node(data);
+
+        // Case 1: Empty list
+        if (head == null) {
+            newNode.next = newNode;
+            return newNode;
+        }
+
+        Node current = head;
+
+        while (true) {
+            // Case 2a: Normal case: data fits between current and next
+            if (current.data <= data && data <= current.next.data) {
+                break;
+            }
+
+            // Case 2b: At the end of the list where it wraps around
+            if (current.data > current.next.data) {
+                // Insert if data is greater than max or smaller than min
+                if (data >= current.data || data <= current.next.data) {
+                    break;
+                }
+            }
+
+            current = current.next;
+
+            // Case 3: Came full circle
+            if (current == head) {
+                break;
+            }
+        }
+
+        // Insert newNode between current and current.next
+        newNode.next = current.next;
+        current.next = newNode;
+
+        // If inserted before the head (new min), update head
+        if (data < head.data) {
+            head = newNode;
+        }
+
+        return head;
+    }
+}
+
+_________________________________________________________
+
+
+
+
+
+Problem Statement :
+Given a sorted circular linked list, the task is to insert a new node in this circular linked list so that it remains a sorted circular linked list.
+
+
+
+
+
+Approach : 
+Handle Empty List Case:
+If the list is empty (head == null), create a new node.
+Point newNode.next to itself (circular).
+Return the newNode as the new head.
+
+Initialize Current Pointer:
+Set current = head.
+
+Traverse the Circular List to Find Insertion Point:
+Loop through the list until you find the correct position:
+Normal Case: current.data <= data <= current.next.data
+
+Wrap-Around Point: If current.data > current.next.data (end of the list):
+Insert if data >= current.data (new max) or
+data <= current.next.data (new min)
+
+If you complete one full circle (current == head), break the loop.
+
+Insert the New Node:
+Insert newNode between current and current.next.
+newNode.next = current.next
+current.next = newNode
+
+Adjust Head (if needed):
+If the inserted data is smaller than head.data, update head = newNode
+
+Return the (possibly updated) head.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
