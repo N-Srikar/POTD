@@ -1,0 +1,120 @@
+1857. Largest Color Value in a Directed Graph
+________________________________________________________
+
+class Solution {
+    public int largestPathValue(String colors, int[][] edges) {
+        
+        List<List<Integer>> adjList = new ArrayList<>() ;
+        int length = colors.length() ;
+        int inDegree[] = new int[length] ;
+        int colorsDP[][] = new int[length][26] ;
+        int visited = 0 ;
+        
+        for(int i=0 ; i<length ; i++){
+            adjList.add(new ArrayList<>());
+        }
+        
+        for(int i=0 ; i<edges.length ; i++){
+            int start = edges[i][0] ;
+            int end = edges[i][1] ;
+            adjList.get(start).add(end) ;
+            inDegree[end]++ ;
+        }
+        
+        // In DAG there will atleast one node whose indegree will be 0,
+        // and such a nodes or nodes will our starting point
+        Queue<Integer> queue = new LinkedList<>() ;
+        for(int i=0 ; i<inDegree.length ; i++){
+            if(inDegree[i] == 0){
+                queue.add(i);
+            }
+        }
+        
+        while(!queue.isEmpty()){
+            int parent = queue.poll() ;
+            int parentColor = colors.charAt(parent) - 'a' ;
+            //incrementing the parent's color in colorsDP
+            colorsDP[parent][parentColor] = colorsDP[parent][parentColor]+1 ;
+            
+            //for all neighbours of the parent or current node we are processing
+            for(Integer child : adjList.get(parent)){
+                //reduce the indegree of that child
+                inDegree[child]-- ;
+                //indegree if zero than that child/node can behave as source now
+                if(inDegree[child] == 0){
+                    queue.add(child);
+                }
+
+                // Copying all the parent color into child but keeping the max color of child
+                // Hence we can find MAX COLOR till this child.
+                // Or we can say that we our keeping track of all colors till that particular child node/destination node where source is the parent here
+                for(int i=0 ; i<26 ; i++){
+                    colorsDP[child][i] = Math.max(colorsDP[child][i] , colorsDP[parent][i]); 
+                }
+            }
+
+            visited++ ; //this counter is done to maintain 
+        }
+        
+        //If we couldn't visit all the nodes than there is a cycle
+        if(visited != length)
+            return -1 ;
+        
+        
+        int maxColor = 0 ;
+        
+        for(int i=0 ; i<colorsDP.length ; i++){
+            for(int j=0 ; j<26 ; j++){
+                maxColor = Math.max(maxColor , colorsDP[i][j]);
+            }
+        }
+        
+        return maxColor ;
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement : 
+There is a directed graph of n colored nodes and m edges. The nodes are numbered from 0 to n - 1.
+
+You are given a string colors where colors[i] is a lowercase English letter representing the color of the ith node in this graph (0-indexed). You are also given a 2D array edges where edges[j] = [aj, bj] indicates that there is a directed edge from node aj to node bj.
+
+A valid path in the graph is a sequence of nodes x1 -> x2 -> x3 -> ... -> xk such that there is a directed edge from xi to xi+1 for every 1 <= i < k. The color value of the path is the number of nodes that are colored the most frequently occurring color along that path.
+
+Return the largest color value of any valid path in the given graph, or -1 if the graph contains a cycle.
+
+
+
+
+
+Approach : 
+Initialise adjacency list, visited counter, indegree[legnth], colorsDP[i][26](which stores max colors for a node i)
+
+Maintain indegree of each node i (which is all incoming nodes at i)
+
+Push all nodes which have indegree 0 into the queue
+
+For each node(parent/source) in queue
+Increase visited by 1 For all its neighbours (child/destination)of parent(source)
+decrease child's indegree by 1
+
+if indegree == 0 add to queue, they are ready to become source now
+
+maintain max for each color(range 0-26) i.e we are copying parent's color to them, but since we need to maintain max color so colorsDP[child][i] = Math.max(colorsDP[child][i] , colorsDP[parent][i])
+
+If there is a cyle in graph toplogical sort won't let visited count reach the total node count
+
+Find the max-count from the colorsDP and that is the ans.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n + m)
+Space Complexity : O(n + m)
