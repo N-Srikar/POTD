@@ -1,0 +1,50 @@
+2894. Divisible and Non-divisible Sums Difference
+_________________________________________________________
+
+public class Solution {
+    public int differenceOfSums(int n, int m) {
+        int totalSum = n * (n + 1) / 2;
+        int divisibleCount = n / m;
+        int divisibleSum = m * divisibleCount * (divisibleCount + 1) / 2;
+        return totalSum - 2 * divisibleSum;
+    }
+}
+_________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given positive integers n and m.
+
+Define two integers as follows:
+
+num1: The sum of all integers in the range [1, n] (both inclusive) that are not divisible by m.
+num2: The sum of all integers in the range [1, n] (both inclusive) that are divisible by m.
+
+Return the integer num1 - num2.
+
+
+
+
+
+Approach : 
+Calculate the total sum of all integers from 1 to n and store it in totalSum.
+
+Find how many numbers from 1 to n are divisible by m. Store this count in divisibleCount.
+
+Calculate the sum of all numbers from 1 to n that are divisible by m. Store this in divisibleSum.
+
+Subtract twice the divisibleSum from the totalSum:
+
+This gives the difference between the sum of non-divisible numbers and the sum of divisible numbers.
+
+Return the result.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(1)
+Space Complexity : O(1)
