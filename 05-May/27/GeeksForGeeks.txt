@@ -1,0 +1,80 @@
+Print leaf nodes from preorder traversal of BST
+_______________________________________________________
+
+
+class Solution {
+    public ArrayList<Integer> leafNodes(int[] preorder) {
+        ArrayList<Integer> leaves = new ArrayList<>();
+        Stack<Integer> stack = new Stack<>();
+
+        int n = preorder.length;
+
+        for (int i = 0; i < n - 1; i++) {
+            boolean isLeaf = false;
+
+            if (preorder[i] > preorder[i + 1]) {
+                // next element is in left subtree
+                stack.push(preorder[i]);
+            } else {
+                // next element is in right subtree of some ancestor
+                while (!stack.isEmpty() && preorder[i + 1] > stack.peek()) {
+                    stack.pop();
+                    isLeaf = true;
+                }
+
+                // if we popped elements, current node is a leaf
+                if (isLeaf) {
+                    leaves.add(preorder[i]);
+                }
+            }
+        }
+
+        // Last node is always a leaf
+        leaves.add(preorder[n - 1]);
+
+        return leaves;
+    }
+}
+
+
+_______________________________________________________
+
+
+
+
+Problem Statement : 
+Given a preorder traversal of a BST, find the leaf nodes of the tree without building the tree.
+
+
+
+
+
+Approach :
+Initialize:
+Create an empty stack to simulate ancestors.
+Create a list to store leaf nodes.
+
+Iterate through the preorder array from index 0 to n - 2 (exclude the last element for now):
+For each node, compare it with the next node in preorder.
+
+Left Subtree Case:
+If preorder[i] > preorder[i + 1], the next node lies in the left subtree.
+Push the current node onto the stack (it may still have a right child later).
+
+Right Subtree Case:
+If preorder[i] < preorder[i + 1], the next node lies in the right subtree of some ancestor.
+While the stack is not empty and preorder[i + 1] > stack.peek(), pop elements from the stack (we’re moving up the tree).
+Mark preorder[i] as a leaf node (since we completed visiting its subtree).
+
+After loop, add the last element of the preorder array to the leaf list (since it’s always a leaf).
+
+Return the list of leaf nodes.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
