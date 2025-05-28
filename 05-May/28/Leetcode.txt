@@ -1,0 +1,141 @@
+3372. Maximize the Number of Target Nodes After Connecting Trees I
+________________________________________________________
+
+import java.util.*;
+
+class Solution {
+    public int[] maxTargetNodes(int[][] edges1, int[][] edges2, int k) {
+        if (k == 0) {
+            int[] result = new int[edges1.length + 1];
+            Arrays.fill(result, 1);
+            return result;
+        }
+
+        // Create adjacency lists
+        List<List<Integer>> adj1 = new ArrayList<>(edges1.length + 1);
+        List<List<Integer>> adj2 = new ArrayList<>(edges2.length + 1);
+
+        // Initialize adjacency lists
+        for (int i = 0; i <= edges1.length; i++) {
+            adj1.add(new ArrayList<>());
+        }
+        for (int i = 0; i <= edges2.length; i++) {
+            adj2.add(new ArrayList<>());
+        }
+
+        // Populate adjacency list for first graph
+        for (int[] edge : edges1) {
+            int u = edge[0], v = edge[1];
+            adj1.get(u).add(v);
+            adj1.get(v).add(u);
+        }
+
+        // Populate adjacency list for second graph
+        for (int[] edge : edges2) {
+            int u = edge[0], v = edge[1];
+            adj2.get(u).add(v);
+            adj2.get(v).add(u);
+        }
+
+        // Calculate target nodes for first graph
+        int[] ans1 = new int[edges1.length + 1];
+        for (int i = 0; i < adj1.size(); i++) {
+            ans1[i] = bfs(adj1, i, k);
+        }
+
+        // Calculate target nodes for second graph
+        int[] ans2 = new int[edges2.length + 1];
+        for (int i = 0; i < adj2.size(); i++) {
+            ans2[i] = bfs(adj2, i, k - 1);
+        }
+
+        // Find maximum value in ans2
+        int maxi = Arrays.stream(ans2).max().orElse(0);
+
+        // Combine results
+        for (int i = 0; i < ans1.length; i++) {
+            ans1[i] += maxi;
+        }
+
+        return ans1;
+    }
+
+    private int bfs(List<List<Integer>> adj, int start, int maxDepth) {
+        Queue<Integer> q = new LinkedList<>();
+        boolean[] visited = new boolean[adj.size()];
+        q.offer(start);
+        visited[start] = true;
+
+        int depth = 1;
+        while (!q.isEmpty() && depth <= maxDepth) {
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                int current = q.poll();
+                for (int neighbor : adj.get(current)) {
+                    if (!visited[neighbor]) {
+                        visited[neighbor] = true;
+                        q.offer(neighbor);
+                    }
+                }
+            }
+            depth++;
+        }
+
+        // Count visited nodes
+        int visitedCount = 0;
+        for (boolean v : visited) {
+            if (v) visitedCount++;
+        }
+        return visitedCount;
+    }
+}
+________________________________________________________
+
+
+
+
+
+
+Problem Statement : 
+There exist two undirected trees with n and m nodes, with distinct labels in ranges [0, n - 1] and [0, m - 1], respectively.
+
+You are given two 2D integer arrays edges1 and edges2 of lengths n - 1 and m - 1, respectively, where edges1[i] = [ai, bi] indicates that there is an edge between nodes ai and bi in the first tree and edges2[i] = [ui, vi] indicates that there is an edge between nodes ui and vi in the second tree. You are also given an integer k.
+
+Node u is target to node v if the number of edges on the path from u to v is less than or equal to k. Note that a node is always target to itself.
+
+Return an array of n integers answer, where answer[i] is the maximum possible number of nodes target to node i of the first tree if you have to connect one node from the first tree to another node in the second tree.
+
+Note that queries are independent from each other. That is, for every query you will remove the added edge before proceeding to the next query.
+
+
+
+
+
+
+
+
+
+Approach : 
+Handle the Edge Case (k = 0): If k == 0, no connections can help reach other nodes. Each node in Tree 1 can only target itself. Return an array of size n (nodes in Tree 1), filled with 1.
+
+Construct Adjacency Lists for Both Trees: Create adj1 for Tree 1 with size n = edges1.length + 1. Create adj2 for Tree 2 with size m = edges2.length + 1. These adjacency lists enable efficient BFS traversal.
+
+Populate the Adjacency Lists: For each edge [u, v] in edges1, add both u → v and v → u in adj1. Repeat the same for edges2 to fill adj2.
+
+Compute Reachable Nodes Using BFS: For Tree 1: Run BFS from every node with depth limit k. Count how many nodes are reachable (including the node itself). Store the result in array ans1.
+
+For Tree 2: Run BFS from every node with depth limit k - 1. Store reachable counts in array ans2. Use a standard BFS with a queue and a visited array.
+
+Find the Maximum Reachable Nodes in Tree 2: From array ans2, find the maximum reachable count. This represents the best-case gain when connecting any node in Tree 1 to Tree 2.
+
+Combine Results for the Final Answer: For each node i in Tree 1: Final result = ans1[i] + max(ans2) This reflects the maximum possible target nodes after optimally adding one edge. Return the final ans1 array as the answer.
+
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n^2+m^2)
+Space Complexity : O(n + m)
