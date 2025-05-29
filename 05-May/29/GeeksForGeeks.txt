@@ -1,0 +1,77 @@
+Sum of nodes on the longest path
+_______________________________________________________
+
+class Solution {
+    int maxlen=0;
+    int maxsum=0;
+    public int sumOfLongRootToLeafPath(Node root) {
+        dfs(root,0,0);
+        return maxsum;
+    }
+    public void dfs(Node node, int sum , int length){
+        if(node.left==null && node.right==null){
+            sum+=node.data;
+            if(length>maxlen) {
+                maxlen=length;
+                maxsum=sum;
+            }
+            if(length==maxlen){
+                maxsum=Math.max(sum,maxsum);
+            }
+            return;
+        }
+        if(node.left!=null)
+        dfs(node.left, sum+node.data , length+1);
+        if(node.right!=null)
+        dfs(node.right, sum+node.data , length+1);
+        
+    }
+}
+
+_______________________________________________________
+
+
+
+
+
+Problem Statement : 
+Given a binary tree root[], you need to find the sum of the nodes on the longest path from the root to any leaf node. If two or more paths have the same length, the path with the maximum sum of node values should be considered.
+
+
+
+
+
+
+Approach : 
+Initialize Global Variables:
+maxlen: Stores the length of the longest root-to-leaf path.
+maxsum: Stores the maximum sum of nodes along the longest path.
+
+Start DFS Traversal:
+Call the dfs(root, 0, 0), where:
+sum: Keeps track of the sum of the nodes along the current path.
+length: Keeps track of the length of the current path.
+
+Process Each Node in DFS:
+If the current node is a leaf (node.left == null && node.right == null):
+Add node.data to sum.
+
+Compare length with maxlen:
+If it's greater, update maxlen and maxsum.
+If equal, update maxsum with the maximum sum found so far.
+Return since it's a leaf.
+
+Recursive Calls for Left and Right Subtrees:
+If the node has a left child, recursively call DFS with sum + node.data and length + 1.
+If the node has a right child, recursively call DFS similarly.
+
+Final Result:
+After completing the DFS traversal, maxsum will store the sum of the longest root-to-leaf path with the highest value.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(h)
