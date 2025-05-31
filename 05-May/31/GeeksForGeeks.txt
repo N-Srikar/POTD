@@ -1,0 +1,77 @@
+Kth element in Matrix
+________________________________________________________
+
+class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        int n = matrix.length;
+        int low = matrix[0][0];
+        int high = matrix[n - 1][n - 1];
+        
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            int count = countLessEqual(matrix, mid, n);
+            
+            if (count < k) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        
+        return low;
+    }
+
+    private int countLessEqual(int[][] matrix, int mid, int n) {
+        int count = 0;
+        int row = n - 1;
+        int col = 0;
+
+        while (row >= 0 && col < n) {
+            if (matrix[row][col] <= mid) {
+                count += row + 1;
+                col++;
+            } else {
+                row--;
+            }
+        }
+        return count;
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement : 
+Given a matrix mat[][] of size n*n, where each row and column is sorted in non-decreasing order. Find the kth smallest element in the matrix.
+
+
+
+
+
+
+
+Approach : 
+Initialize search range:
+low = matrix[0][0] (smallest element in matrix)
+high = matrix[n-1][n-1] (largest element in matrix)
+
+Binary search loop:
+While low < high:
+Compute mid = (low + high) / 2
+
+Count how many elements in the matrix are <= mid using a helper function.
+If the count is less than k, discard left half by setting low = mid + 1
+Else, keep the current mid by setting high = mid
+
+Return low at the end — this is the kth smallest element.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n * log(max - min))
+Space Complexity : O(1)
