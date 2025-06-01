@@ -1,0 +1,56 @@
+2929. Distribute Candies Among Children II
+________________________________________________________
+
+class Solution {
+    public long distributeCandies(int n, int limit) {
+        long ans = 0;
+        int firstMin = Math.max(0, n - 2*limit);
+        int firstMax = Math.min(limit, n);
+        for(int i=firstMin ; i<=firstMax ; ++i ){
+            int secondMin = Math.max(0, n-i-limit);
+            int secondMax = Math.min(limit, n-i);
+            ans += secondMax - secondMin + 1;
+        }
+        return ans;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given two positive integers n and limit.
+
+Return the total number of ways to distribute n candies among 3 children such that no child gets more than limit candies.
+
+
+
+
+
+Approach : 
+Determine the possible range for the first candidate's candies:
+The minimum value is calculated as max(0, n - 2 * limit), ensuring the first candidate receives at least 0 candies.
+The maximum value is min(limit, n), ensuring they don't exceed the limit or the total available candies.
+
+Iterate through all possible values for the first candidate:
+For each fixed value of candies given to the first candidate (i), determine the possible range for the second candidate.
+
+Determine the possible range for the second candidate's candies:
+Remaining candies after giving i to the first candidate: n - i
+The minimum value is max(0, n - i - limit), ensuring the second candidate receives at least 0 candies.
+The maximum value is min(limit, n - i), ensuring they don't exceed the limit or the remaining candies.
+
+Calculate the number of possible ways to distribute candies to the second candidate:
+The count is secondMax - secondMin + 1.
+
+Accumulate the result for each iteration:
+Add the count of possible ways for the second candidate to the final answer.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
