@@ -1,0 +1,67 @@
+Substrings with K Distinct
+________________________________________________________
+
+class Solution {
+    int countSubstr(String s, int k) {
+        return countAtMostK(s, k) - countAtMostK(s, k - 1);
+    }
+    
+    private int countAtMostK(String s, int k) {
+        if (k == 0) return 0;
+        
+        Map<Character, Integer> map = new HashMap<>();
+        int left = 0, right = 0, count = 0;
+        
+        while (right < s.length()) {
+            char rChar = s.charAt(right);
+            map.put(rChar, map.getOrDefault(rChar, 0) + 1);
+            
+            while (map.size() > k) {
+                char lChar = s.charAt(left);
+                map.put(lChar, map.get(lChar) - 1);
+                if (map.get(lChar) == 0) {
+                    map.remove(lChar);
+                }
+                left++;
+            }
+            
+            count += right - left + 1;
+            right++;
+        }
+        
+        return count;
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given a string consisting of lowercase characters and an integer k, the task is to count all possible substrings (not necessarily distinct) that have exactly k distinct characters. 
+
+
+
+
+
+Approach : 
+Define a helper function countAtMostK(s, k):
+This function counts the number of substrings with at most k distinct characters using a sliding window.
+
+Use a sliding window technique in countAtMostK:
+Initialize a HashMap<Character, Integer> to track character frequency in the current window.
+Expand the right end of the window (right++) and update the frequency map.
+If the number of distinct characters exceeds k, shrink the window from the left (left++) until it has at most k distinct characters.
+For each valid window, add (right - left + 1) to the result (this counts all substrings ending at right and starting from left to right).
+
+Use Inclusion-Exclusion:
+The number of substrings with exactly k distinct characters is:
+countAtMostK(s, k) - countAtMostK(s, k - 1)
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(k)
