@@ -1,0 +1,64 @@
+3403. Find the Lexicographically Largest String From the Box I
+________________________________________________________
+
+class Solution {
+    public String answerString(String word, int numFriends) {
+        if(numFriends == 1) return word;
+        int n = word.length();
+        int maxlen = (n-numFriends+1);
+        char maxchar = word.charAt(0);
+        String res = "";
+        for(int i=0; i<n; i++) {
+            if(word.charAt(i) >= maxchar) {
+                String curr = word.substring(i, Math.min(i+maxlen, n));
+                if(curr.compareTo(res) > 0) res = curr;
+                maxchar = word.charAt(i);
+            }
+        }
+        return res;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given a string word, and an integer numFriends.
+
+Alice is organizing a game for her numFriends friends. There are multiple rounds in the game, where in each round:
+
+word is split into numFriends non-empty strings, such that no previous round has had the exact same split.
+All the split words are put into a box.
+Find the lexicographically largest string from the box after all the rounds are finished.
+
+
+
+
+
+Approach : 
+If numFriends == 1, return the string word as no split is required.
+Calculate the maxlen, the maximum possible length of a substring from the split, as (n - numFriends + 1) where n is the length of the word.
+Initialize maxchar as the first character of the word and res as an empty string to store the lexicographically largest result.
+
+Iterate Over the String:
+Loop through the string word from index 0 to n-1.
+For each character, check if the character is greater than or equal to maxchar (to ensure lexicographically larger substrings).
+
+Substring Selection:
+For each valid character, extract a substring starting from that character and of maximum length maxlen (adjusting for the string boundaries).
+Compare this substring (curr) with the current result (res) and update res if curr is lexicographically larger.
+
+Update maxchar:
+Update maxchar after selecting each valid substring to ensure that future substrings start with characters that are lexicographically larger or equal.
+
+Return Result:
+After iterating through the string, return the string stored in res, which holds the lexicographically largest substring from the splits.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
