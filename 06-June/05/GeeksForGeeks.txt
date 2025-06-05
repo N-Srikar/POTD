@@ -1,0 +1,75 @@
+Count the paths
+________________________________________________________
+
+class Solution {
+    public int countPaths(int[][] edges, int V, int src, int dest) {
+        // Build adjacency list
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            graph.get(edge[0]).add(edge[1]);
+        }
+
+        // Memoization array to store paths count from each node
+        Integer[] memo = new Integer[V];
+        return dfs(graph, src, dest, memo);
+    }
+
+    private int dfs(List<List<Integer>> graph, int curr, int dest, Integer[] memo) {
+        // Base case: reached destination
+        if (curr == dest) return 1;
+
+        // If already computed, return memoized result
+        if (memo[curr] != null) return memo[curr];
+
+        int count = 0;
+        for (int neighbor : graph.get(curr)) {
+            count += dfs(graph, neighbor, dest, memo);
+        }
+
+        memo[curr] = count;
+        return count;
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement : 
+Given a Directed Acyclic Graph (DAG) with V nodes labeled from 0 to V-1, and a list of directed edges, count the total number of distinct paths from a given start node to a destination node. Each edge is represented as edges[i] = [u, v], indicating a directed edge from u to v.
+
+
+
+
+
+Approach : 
+Build the Graph:
+Convert the edge list into an adjacency list for efficient traversal.
+
+Use DFS + Memoization:
+Use Depth-First Search (DFS) to explore all paths from src to dest.
+Use a memoization array to store and reuse the number of paths from a node to dest.
+
+DFS Base Cases:
+If curr == dest, return 1 (found a path).
+If the result is already in memo, return it to avoid recomputation.
+
+Recurse:
+For every neighbor of the current node, recursively count the paths to the destination.
+Accumulate the result and store it in memo.
+
+Return the Result:
+The DFS function returns the total count of distinct paths from src to dest.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(v + e)
+Space Complexity : O(v + e)
