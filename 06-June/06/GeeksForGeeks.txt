@@ -1,0 +1,121 @@
+Search Pattern (Rabin-Karp Algorithm)
+_________________________________________________________
+
+class Solution {
+    // Function to search for pattern in text using Rabin-Karp algorithm
+    ArrayList<Integer> search(String pat, String txt) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int m = pat.length();
+        int n = txt.length();
+        int d = 256; // Number of characters in the input alphabet (256 for extended ASCII)
+        int q = 101; // A prime number to mod the hash values (to avoid overflow and collisions)
+        
+        if (m > n) {
+            return result; // If pattern is longer than text, no matches possible
+        }
+        
+        int hPattern = 0; // Hash value for the pattern
+        int hText = 0;    // Hash value for the text's current window
+        int hMultiplier = 1; // The value of d^(m-1) % q
+        
+        // Precompute d^(m-1) % q
+        for (int i = 0; i < m - 1; i++) {
+            hMultiplier = (hMultiplier * d) % q;
+        }
+        
+        // Calculate initial hash values for pattern and first window of text
+        for (int i = 0; i < m; i++) {
+            hPattern = (d * hPattern + pat.charAt(i)) % q;
+            hText = (d * hText + txt.charAt(i)) % q;
+        }
+        
+        // Start sliding the window over text
+        for (int i = 0; i <= n - m; i++) {
+            // If hash values match, check the actual characters
+            if (hPattern == hText) {
+                // Verify the match by comparing characters one by one
+                boolean matchFound = true;
+                for (int j = 0; j < m; j++) {
+                    if (txt.charAt(i + j) != pat.charAt(j)) {
+                        matchFound = false;
+                        break;
+                    }
+                }
+                // If match found, add the position (1-based indexing)
+                if (matchFound) {
+                    result.add(i + 1);
+                }
+            }
+            
+            // Calculate the hash for the next window of text
+            if (i < n - m) {
+                hText = (d * (hText - txt.charAt(i) * hMultiplier) + txt.charAt(i + m)) % q;
+                if (hText < 0) {
+                    hText += q; // Ensure non-negative hash value
+                }
+            }
+        }
+        
+        return result;
+    }
+}
+
+_________________________________________________________
+
+
+
+
+
+Problem Statement :
+Given two strings:
+A text string in which you want to search.
+A pattern string that you are looking for within the text.
+
+Return all positions (1-based indexing) where the pattern occurs as a substring in the text. If the pattern does not occur, return an empty list.
+
+All characters in both strings are lowercase English letters (a to z).
+
+
+
+
+
+Approach : 
+Initialize Variables:
+d = 256: Number of possible characters (ASCII).
+q = 101: A large prime number to minimize hash collisions.
+m = pat.length(), n = txt.length().
+
+Edge Case:
+If m > n, return an empty list — the pattern is longer than the text.
+
+Precompute Multiplier:
+Compute h = d^(m-1) % q to help with rolling hash.
+
+Compute Initial Hashes:
+Calculate the hash of the pattern pat.
+Calculate the hash of the first window (first m characters) of the txt.
+
+Slide the Pattern Over the Text (Window of Length m):
+For each position i from 0 to n - m:
+
+Check Hash Match:
+If the hash of the current window matches the pattern's hash:
+Compare the strings character by character to confirm a match (due to possible hash collisions).
+If they match, add (i + 1) (1-based index) to the result list.
+
+Roll the Hash (except last window):
+Remove the leftmost character’s contribution.
+Add the next character’s contribution.
+Use modulus q to keep hash values bounded and avoid negative values.
+
+Return the Result List:
+List of all starting positions (1-based) where pattern is found.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n * m)
+Space Complexity : O(k)
