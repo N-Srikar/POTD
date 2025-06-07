@@ -1,0 +1,66 @@
+Longest Span in two Binary Arrays
+________________________________________________________
+
+class Solution {
+    public int longestCommonSum(int[] a1, int[] a2) {
+        int n = a1.length;
+
+        int sum = 0, maxLen = 0;
+
+        HashMap<Integer,Integer> map = new HashMap<>();
+
+        for (int i=0 ; i<n ; i++) {
+            int diff = a1[i] - a2[i];
+            sum += diff;
+
+            if (sum == 0) {
+                maxLen = i + 1;
+            }
+
+            if (map.containsKey(sum)) {
+                int prevIndex = map.get(sum);
+                maxLen = Math.max(maxLen, i - prevIndex);
+            } 
+            else {
+                map.put(sum, i);
+            }
+        }
+
+        return maxLen;
+    }
+}
+
+________________________________________________________
+
+
+
+Problem Statement : 
+Given two binary arrays, a1[] and a2[]. Find the length of longest common span (i, j) where j>= i such that :
+a1[i] + a1[i+1] + .... + a1[j] =  a2[i] + a2[i+1] + ... + a2[j].
+
+
+
+
+
+Approach : 
+Create a difference array: diff[i] = a1[i] - a2[i].
+
+Initialize a prefix sum (sum = 0).
+
+Use a HashMap to store the first occurrence of each prefix sum.
+
+Traverse the array:
+Add diff[i] to sum.
+
+If sum == 0, the subarray from index 0 to i has equal sums.
+If sum has been seen before, the subarray between the first index and i has sum 0 — update max length.
+Else, store the index for this sum in the map.
+
+return the max length.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
