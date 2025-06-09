@@ -1,0 +1,64 @@
+440. K-th Smallest in Lexicographical Order
+________________________________________________________
+
+class Solution {
+    public int findKthNumber(int n, int k) {
+        int currentPrefix = 1;
+        k--;  // Decrement k to handle zero-based indexing
+        
+        while (k > 0) {
+            int count = countNumbersWithPrefix(currentPrefix, n);
+            if (k >= count) {
+                currentPrefix++;  // Move to the next prefix
+                k -= count;
+            } else {
+                currentPrefix *= 10;  // Go deeper in the current prefix
+                k--;
+            }
+        }
+        
+        return currentPrefix;
+    }
+
+    private int countNumbersWithPrefix(int prefix, int n) {
+        long firstNumber = prefix, nextNumber = prefix + 1;
+        int totalCount = 0;
+
+        while (firstNumber <= n) {
+            totalCount += Math.min(n + 1, nextNumber) - firstNumber;
+            firstNumber *= 10;
+            nextNumber *= 10;
+        }
+
+        return totalCount;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+Given two integers n and k, return the kth lexicographically smallest integer in the range [1, n].
+
+
+
+
+
+
+Approach : 
+Prefix Tree Traversal: Start with the smallest prefix (1) and traverse the tree. For each prefix, count how many numbers exist under it within the limit n.
+
+Count Steps: Use a helper function countSteps to count how many numbers fall within the range of the current prefix. If the count is less than or equal to k, move to the next prefix. Otherwise, go deeper into the current prefix (multiply it by 10).
+
+Adjusting k: As you move down the tree or switch prefixes, adjust k accordingly. This helps in determining how many more steps are needed to reach the k-th number.
+
+Return Result: Once k reaches zero, the current prefix is the k-th number in lexicographical order.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(log(n) * log(k))
+Space Complexity : O(1)
