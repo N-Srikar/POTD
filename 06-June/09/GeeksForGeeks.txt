@@ -1,0 +1,67 @@
+BST with Dead End
+________________________________________________________
+
+class Solution {
+    public boolean isDeadEnd(Node root) {
+        return isDeadEndUtil(root, 1, Integer.MAX_VALUE);
+    }
+    
+    private boolean isDeadEndUtil(Node node, int min, int max) {
+        if (node == null)
+            return false;
+
+        if (min == max)
+            return true;
+
+        return isDeadEndUtil(node.left, min, node.data - 1) ||
+               isDeadEndUtil(node.right, node.data + 1, max);
+    }
+}
+
+________________________________________________________
+
+
+
+
+
+Problem Statement :
+You are given a Binary Search Tree (BST) containing unique positive integers greater than 0.
+
+Your task is to determine whether the BST contains a dead end.
+
+Note: A dead end is a leaf node in the BST such that no new node can be inserted in the BST at or below this node while maintaining the BST property and the constraint that all node values must be > 0.
+
+
+
+
+
+
+Approach : 
+Use Recursion to Traverse the Tree:
+Traverse the BST recursively to check possible insertion ranges at each node.
+
+Track the Range of Valid Values:
+For each node:
+Maintain a range [min, max] of values that can be inserted in its subtree.
+Initially: min = 1, max = Integer.MAX_VALUE.
+
+Check for Dead End:
+If at any node, min == max, it means there is no room for inserting new nodes — this is a dead end.
+
+Recurse for Left and Right Subtrees:
+Left Subtree Range: [min, node.data - 1]
+Right Subtree Range: [node.data + 1, max]
+
+Return True if Any Subtree Has Dead End:
+If either left or right subtree contains a dead end, return true.
+
+Base Case for Recursion:
+If the node is null, return false.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(h)
