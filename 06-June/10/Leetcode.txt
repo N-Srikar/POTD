@@ -1,0 +1,63 @@
+3442. Maximum Difference Between Even and Odd Frequency I
+_________________________________________________________
+
+public class Solution {
+    public int maxDifference(String s) {
+        int[] freq = new int[26];
+        for (char c : s.toCharArray()) {
+            freq[c - 'a']++;
+        }
+
+        int odd = 0;
+        int even = s.length();
+        for (int n : freq) {
+            if ((n & 1) == 1) {
+                odd = Math.max(odd, n);
+            } else if (n != 0) {
+                even = Math.min(even, n);
+            }
+        }
+
+        return odd - even;
+    }
+}
+_________________________________________________________
+
+
+
+
+
+Problem Statement :
+You are given a string s consisting of lowercase English letters.
+
+Your task is to find the maximum difference diff = freq(a1) - freq(a2) between the frequency of characters a1 and a2 in the string such that:
+a1 has an odd frequency in the string.
+a2 has an even frequency in the string.
+Return this maximum difference.
+
+
+
+
+
+Approach : 
+Initialize a frequency array freq of size 26 to store the frequency of each lowercase alphabet character.
+
+Traverse the string and increment the count in freq for each character.
+
+Initialize two variables:
+odd to track the maximum odd frequency.
+even to track the minimum non-zero even frequency, initialized with the string length.
+
+Iterate over the frequency array:
+If the frequency is odd, update odd to the maximum of its current value and the frequency.
+If the frequency is even and not zero, update even to the minimum of its current value and the frequency.
+
+Return odd - even as the result.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
