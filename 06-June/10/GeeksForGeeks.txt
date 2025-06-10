@@ -1,0 +1,62 @@
+Exactly one swap
+_________________________________________________________
+
+class Solution {
+    int countStrings(String s) {
+        int n = s.length();
+        long totalPairs = (long) n * (n - 1) / 2;
+        long equalPairs = 0;
+        
+        int[] freq = new int[26];
+        for (char c : s.toCharArray()) {
+            freq[c - 'a']++;
+        }
+        
+        for (int count : freq) {
+            equalPairs += (long) count * (count - 1) / 2;
+        }
+        
+        long distinctResults = (totalPairs - equalPairs) + (equalPairs > 0 ? 1 : 0);
+        
+        return (int) distinctResults;
+    }
+}
+
+_________________________________________________________
+
+
+
+
+Problem Statement :
+Given a string s, return the number of distinct strings that can be obtained by exactly one swap of two different indices (i < j).
+
+
+
+
+
+Approach :
+Calculate Total Possible Swaps:
+A string of length n has n(n-1)/2 possible swaps for indices (i, j) where i < j.
+This represents the total pairs we could swap.
+
+Find Pairs That Don't Change the String:
+Some swaps don't generate a new string because the characters swapped are the same.
+Use character frequency counting to determine these cases.
+If a character appears f times, the number of non-changing swaps for that character is f(f-1)/2.
+
+Count Distinct Swaps:
+The number of swaps that create a new string is:
+distinct swaps = TotalPairs − EqualPairs
+
+Account for Identical Strings:
+If any character appears more than once, swapping those identical characters doesn’t change the string, so add 1 to the result.
+
+Final Formula :
+distinct outcomes  = (totalPairs - equalPairs) + (has duplicate characters ? 1 : 0)
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(1)
