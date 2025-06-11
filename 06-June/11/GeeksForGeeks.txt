@@ -1,0 +1,60 @@
+Remove the balls
+________________________________________________________
+
+class Solution {
+    public int findLength(int[] color, int[] radius) {
+        Stack<int[]> stack = new Stack<>();
+        
+        for (int i = 0; i < color.length; i++) {
+            int[] currentBall = new int[]{color[i], radius[i]};
+            
+            if (!stack.isEmpty()) {
+                int[] top = stack.peek();
+                if (top[0] == currentBall[0] && top[1] == currentBall[1]) {
+                    stack.pop();  // Remove matching pair
+                    continue;
+                }
+            }
+            stack.push(currentBall);  // No match, keep the ball
+        }
+        
+        return stack.size();  // Number of remaining balls
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+You are given two arrays, color and radius, representing a sequence of balls:
+color[i] is the color of the i-th ball.
+radius[i] is the radius of the i-th ball.
+
+If two consecutive balls have the same color and radius, remove them both. Repeat this process until no more such pairs exist.
+
+Return the number of balls remaining after all possible removals.
+
+
+
+
+
+Approach :
+Initialize a stack to keep track of the balls that are not yet removed.
+
+Iterate over the arrays color[] and radius[] together.
+
+For each ball:
+If the stack is not empty and the top element has the same color and radius, pop the top (remove both).
+Otherwise, push the current ball onto the stack.
+
+After processing all balls, the size of the stack is the number of balls left.
+
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(n)
