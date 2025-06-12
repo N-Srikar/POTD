@@ -1,0 +1,37 @@
+3423. Maximum Difference Between Adjacent Elements in a Circular Array
+________________________________________________________
+
+class Solution {
+    public int maxAdjacentDistance(int[] nums) {
+        int maxi = 0;
+        for (int i = 0; i < nums.length - 1; i++)
+            maxi = Math.max(maxi, Math.abs(nums[i + 1] - nums[i]));
+        maxi = Math.max(maxi, Math.abs(nums[nums.length - 1] - nums[0]));
+        return maxi;
+    }
+}
+________________________________________________________
+
+
+
+Problem Statement :
+Given a circular array nums, find the maximum absolute difference between adjacent elements.
+
+Note: In a circular array, the first and last elements are adjacent.
+
+
+
+
+
+Approach : 
+Simply traverse through all the elements and track the maximum difference between adjacent elements in a variable maxi.
+
+Return maxi at the end.
+
+
+
+
+
+Complexity : 
+Time Complexity :O(n)
+Space Complexity : O(1)
