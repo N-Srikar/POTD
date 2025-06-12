@@ -1,0 +1,82 @@
+K closest elements
+_______________________________________________________
+
+class Solution {
+    int[] printKClosest(int[] arr, int k, int x) {
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a, b) -> {
+            if (b[0] != a[0]) return b[0] - a[0]; // compare by distance
+            return a[1] - b[1]; // if distance is same, prefer larger value => smaller comes last
+        });
+
+        for (int num : arr) {
+            if (num == x) continue; // skip x itself
+            int dist = Math.abs(num - x);
+            maxHeap.offer(new int[]{dist, num});
+            if (maxHeap.size() > k) {
+                maxHeap.poll();
+            }
+        }
+
+        List<int[]> resultList = new ArrayList<>(maxHeap);
+        resultList.sort((a, b) -> {
+            if (a[0] != b[0]) return a[0] - b[0]; // closer first
+            return b[1] - a[1]; // prefer larger number
+        });
+
+        int[] result = new int[k];
+        for (int i = 0; i < k; i++) {
+            result[i] = resultList.get(i)[1];
+        }
+
+        return result;
+    }
+}
+
+_______________________________________________________
+
+
+
+
+
+Problem Statement : 
+You are given a sorted array arr[] of unique integers, an integer k, and a target value x. Return exactly k elements from the array closest to x, excluding x if it exists.
+
+An element a is closer to x than b if:
+|a - x| < |b - x|, or
+|a - x| == |b - x| and a > b (i.e., prefer the larger element if tied)
+
+Return the k closest elements in order of closeness.
+
+
+
+
+
+
+Approach : 
+Initialize a max-heap (PriorityQueue of size k):
+Store pairs: (distance, value)
+
+Use comparator:
+Larger |a - x| first
+If tie, smaller a first (so larger is preferred)
+
+Traverse the array:
+Skip x if present
+Compute |a - x| and add (distance, value) to heap
+If heap size > k, remove the farthest element
+
+Extract elements from heap to a list
+
+Sort the list by:
+Smaller distance
+If tie, larger value
+
+Return the values as the result array
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logk)
+Space Complexity : O(k)
