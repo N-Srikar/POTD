@@ -1,0 +1,71 @@
+2616. Minimize the Maximum Difference of Pairs
+_______________________________________________________
+
+class Solution {
+    public boolean solve(int[] nums, int d, int p) {
+        int n = nums.length;
+        int c = 0;
+        for (int i = 0; i < n - 1; i++) {
+            if (nums[i + 1] - nums[i] <= d) {
+                c++;
+                i++;
+            }
+            if (c >= p) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public int minimizeMax(int[] nums, int p) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        int lo = 0, hi = nums[n - 1] - nums[0];
+        
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+            
+            if (solve(nums, mid, p)) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        return lo;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement :
+You are given a 0-indexed integer array nums and an integer p. Find p pairs of indices of nums such that the maximum difference amongst all the pairs is minimized. Also, ensure no index appears more than once amongst the p pairs.
+
+Note that for a pair of elements at the index i and j, the difference of this pair is |nums[i] - nums[j]|, where |x| represents the absolute value of x.
+
+Return the minimum maximum difference among all p pairs. We define the maximum of an empty set to be zero.
+
+ 
+
+
+
+Approach : 
+Sort the given nums array in ascending order.
+Initialize lo to 0 and hi to the maximum difference between the largest and smallest elements in the sorted array.
+
+Perform a binary search loop while lo is less than hi.
+Calculate the midpoint mid between lo and hi.
+Count the number of pairs with a difference less than or equal to mid while ensuring that no index appears more than once among the pairs.
+
+If the count is greater than or equal to p, update hi to mid.
+Otherwise, update lo to mid + 1.
+
+Return the value of lo as the minimum maximum difference that allows forming at least p valid pairs.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(1)
