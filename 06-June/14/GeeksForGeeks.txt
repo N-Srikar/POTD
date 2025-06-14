@@ -1,0 +1,63 @@
+Symmetric Tree
+________________________________________________________
+
+class Solution {
+    public boolean isSymmetric(Node root) {
+        if (root == null) {
+            return true;
+        }
+        return isMirror(root.left, root.right);
+    }
+    
+    private boolean isMirror(Node t1, Node t2) {
+        if (t1 == null && t2 == null) {
+            return true;
+        }
+        if (t1 == null || t2 == null) {
+            return false;
+        }
+        return (t1.data == t2.data) && 
+               isMirror(t1.left, t2.right) && 
+               isMirror(t1.right, t2.left);
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given the root of a binary tree, check whether it is symmetric, i.e., whether the tree is a mirror image of itself.
+
+A binary tree is symmetric if the left subtree is a mirror reflection of the right subtree.
+
+
+
+
+
+Approach : 
+Check if root is null:
+If the root is null, return true (an empty tree is symmetric).
+
+Call Helper Function:
+Call the helper function isMirror(root.left, root.right) to check if the left and right subtrees are mirrors of each other.
+
+Base Case for Recursion:
+If both nodes are null, return true (both are mirrors).
+If one node is null and the other is not, return false (they can't be mirrors).
+
+Recursive Case:
+Check if the current nodes have the same value.
+Recursively check if the left subtree of the first node is a mirror of the right subtree of the second node, and if the right subtree of the first node is a mirror of the left subtree of the second node.
+
+Return Result:
+If all the recursive checks pass, return true, otherwise return false.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(h)
