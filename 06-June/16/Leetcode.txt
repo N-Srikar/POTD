@@ -1,0 +1,45 @@
+2016. Maximum Difference Between Increasing Elements
+________________________________________________________
+
+class Solution {
+    public int maximumDifference(int[] nums) {
+        int ans = -1;
+        for (int i = 0; i < nums.length - 1; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] < nums[j]) {
+                    ans = Math.max(ans, nums[j] - nums[i]);
+                }
+            }
+        }
+        return ans;
+    }
+}
+________________________________________________________
+
+
+
+
+
+Problem Statement :
+Given a 0-indexed integer array nums of size n, find the maximum difference between nums[i] and nums[j] (i.e., nums[j] - nums[i]), such that 0 <= i < j < n and nums[i] < nums[j].
+
+Return the maximum difference. If no such i and j exists, return -1.
+
+
+
+
+
+
+Approach : 
+Iterate through all pairs (i, j) where j > i.
+Check if nums[i] < nums[j].
+If yes, compute nums[j] - nums[i] and update the maximum difference found so far.
+If no such pair exists, return -1.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n^2)
+Space Complexity : O(1)
