@@ -1,0 +1,82 @@
+Smallest Divisor
+_______________________________________________________
+
+class Solution {
+    public int smallestDivisor(int[] arr, int k) {
+        int left = 1;
+        int right = getMax(arr);
+        int result = right;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int sum = computeSum(arr, mid);
+
+            if (sum <= k) {
+                result = mid; // mid might be the answer, try smaller
+                right = mid - 1;
+            } else {
+                left = mid + 1; // try larger divisor
+            }
+        }
+
+        return result;
+    }
+
+    // Helper to get maximum element
+    private int getMax(int[] arr) {
+        int max = arr[0];
+        for (int num : arr) {
+            if (num > max) max = num;
+        }
+        return max;
+    }
+
+    // Helper to compute sum of ceilings for a given divisor
+    private int computeSum(int[] arr, int divisor) {
+        int sum = 0;
+        for (int num : arr) {
+            sum += (num + divisor - 1) / divisor; // Equivalent to ceil(num / divisor)
+        }
+        return sum;
+    }
+}
+
+_______________________________________________________
+
+
+
+
+Problem Statement :
+Given an integer array arr[] and an integer k (where k ≥ arr.length), find the smallest positive integer divisor such that the sum of the ceiling values of each element in arr[] divided by this divisor is less than or equal to k.
+
+
+
+
+Approach :
+Define Search Range for Divisor:
+The minimum possible divisor is 1.
+The maximum possible divisor is max(arr) (because dividing by anything more will always result in 1 or lower ceil values).
+
+Use Binary Search on the Divisor Range:
+Initialize left = 1 and right = max(arr).
+Use binary search to minimize the divisor that meets the condition.
+
+For Each Mid (Divisor Candidate):
+Calculate the sum of ceilings:
+sum += ceil(arr[i] / mid) for all i.
+Use (arr[i] + mid - 1) / mid to calculate ceil efficiently without using floating point math.
+
+Compare with k:
+If the sum is ≤ k, update result and try to minimize divisor by searching left side (right = mid - 1).
+If the sum is > k, increase divisor (left = mid + 1).
+
+Return the Minimum Valid Divisor:
+After the loop ends, return the smallest divisor found.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(1)
