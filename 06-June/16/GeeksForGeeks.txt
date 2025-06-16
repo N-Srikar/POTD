@@ -1,0 +1,81 @@
+Equalize the Towers
+_______________________________________________________
+
+class Solution {
+    public int minCost(int[] heights, int[] cost) {
+        int left = Integer.MAX_VALUE;
+        int right = Integer.MIN_VALUE;
+
+        for (int h : heights) {
+            left = Math.min(left, h);
+            right = Math.max(right, h);
+        }
+
+        int answer = Integer.MAX_VALUE;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            long cost1 = getTotalCost(heights, cost, mid);
+            long cost2 = getTotalCost(heights, cost, mid + 1);
+
+            answer = (int) Math.min(cost1, cost2);
+
+            if (cost1 < cost2) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return answer;
+    }
+
+    private long getTotalCost(int[] heights, int[] cost, int targetHeight) {
+        long total = 0;
+        for (int i = 0; i < heights.length; i++) {
+            total += (long) Math.abs(heights[i] - targetHeight) * cost[i];
+        }
+        return total;
+    }
+}
+
+_______________________________________________________
+
+
+
+
+Problem Statement :
+You are given an array heights[] representing the heights of towers and another array cost[] where each element represents the cost of modifying the height of respective tower.
+
+The goal is to make all towers of same height by either adding or removing blocks from each tower.
+Modifying the height of tower (add or remove) 'i' by 1 unit costs cost[i].
+Return the minimum cost to equalize the heights of all towers.
+
+
+
+
+
+Approach : 
+Set search range:
+left = min(heights), right = max(heights)
+
+Define getTotalCost(target):
+For each tower, calculate
+cost += |heights[i] - target| * cost[i]
+
+Binary search on target height:
+While left < right:
+mid = (left + right) / 2
+Compare getTotalCost(mid) and getTotalCost(mid + 1)
+If cost at mid < cost at mid+1: move left → right = mid
+Else: move right → left = mid + 1
+
+Return the minimum cost from either mid or mid + 1
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(1)
