@@ -1,0 +1,88 @@
+Coin Piles
+________________________________________________________
+
+
+class Solution {
+    public int minimumCoins(int[] arr, int k) {
+        Arrays.sort(arr);
+        int n = arr.length;
+
+        long[] prefix = new long[n + 1];
+        for (int i = 0; i < n; i++) {
+            prefix[i + 1] = prefix[i] + arr[i];
+        }
+
+        long minCoins = Long.MAX_VALUE;
+
+        for (int i = 0; i < n; i++) {
+            int minPile = arr[i];
+            int maxAllowed = minPile + k;
+
+            int j = upperBound(arr, maxAllowed); // index of first element > maxAllowed
+
+            // Remove all coins before i
+            long leftRemove = prefix[i];
+
+            // Reduce piles from j to n-1 to maxAllowed
+            long rightRemove = (prefix[n] - prefix[j]) - (long)(n - j) * maxAllowed;
+
+            long totalRemove = leftRemove + rightRemove;
+            minCoins = Math.min(minCoins, totalRemove);
+        }
+
+        return (int) minCoins;
+    }
+
+    // Find first index where arr[idx] > value
+    private int upperBound(int[] arr, int value) {
+        int low = 0, high = arr.length;
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (arr[mid] <= value) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        return low;
+    }
+}
+
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+You are given an array arr[] of integers, where each element represents the number of coins in a pile. You are also given an integer k.
+Your task is to remove the minimum number of coins such that the absolute difference between the number of coins in any two updated piles is at most k.
+
+Note: You can also remove a pile by removing all the coins of that pile.
+
+
+
+
+
+Approach : 
+Sort the array.
+
+Prefix sum of the array to calculate total coins in O(1) time for any range.
+
+For each pile at index i, assume it's the minimum pile to keep (arr[i]).
+All piles < i are removed completely → cost: prefix[i].
+All piles > arr[i] + k need to be reduced.
+
+Use binary search to find first index j where arr[j] > arr[i] + k.
+
+Total coins to remove from arr[j]...n-1: 
+prefix[n] - prefix[j] - (n - j) * (arr[i] + k).
+
+return the mincoins result.
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(n)
