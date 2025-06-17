@@ -1,0 +1,68 @@
+3405. Count the Number of Arrays with K Matching Adjacent Elements
+_______________________________________________________
+
+class Solution {
+    static final int MOD = 1_000_000_007;
+
+    long modPow(long x, long y) {
+        long res = 1;
+        while (y > 0) {
+            if ((y & 1) == 1) res = res * x % MOD;
+            x = x * x % MOD;
+            y >>= 1;
+        }
+        return res;
+    }
+
+    long modInv(long x) {
+        return modPow(x, MOD - 2);
+    }
+
+    public int countGoodArrays(int n, int m, int k) {
+        long[] fact = new long[n];
+        fact[0] = 1;
+        for (int i = 1; i < n; i++) {
+            fact[i] = fact[i - 1] * i % MOD;
+        }
+
+        long comb = fact[n - 1] * modInv(fact[k]) % MOD * modInv(fact[n - 1 - k]) % MOD;
+        long result = comb * m % MOD * modPow(m - 1, n - 1 - k) % MOD;
+        return (int) result;
+    }
+}
+
+_______________________________________________________
+
+
+
+
+Problem Statement :
+You are given three integers n, m, k. A good array arr of size n is defined as follows:
+
+Each element in arr is in the inclusive range [1, m].
+Exactly k indices i (where 1 <= i < n) satisfy the condition arr[i - 1] == arr[i].
+Return the number of good arrays that can be formed.
+
+Since the answer may be very large, return it modulo 10^9 + 7.
+
+
+
+
+
+Approach : 
+Mathematically:
+Choose k positions out of n-1 → C(n-1, k)
+
+Choose the first element → m ways
+
+For the remaining n - 1 - k positions: each must be different → (m - 1)^(n - 1 - k)
+
+Final Formula:
+ans = C (n−1,k) × m × (m−1)^(n−1−k) % 10^9 + 7
+
+
+
+
+Complexity : 
+Time Complexity : O(n + logn)
+Space Complexity : O(n)
