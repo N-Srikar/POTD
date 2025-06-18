@@ -1,0 +1,49 @@
+2966. Divide Array Into Arrays With Max Difference
+________________________________________________________
+
+class Solution {
+    public int[][] divideArray(int[] nums, int k) {
+        Arrays.sort(nums);
+        List<int[]> res = new ArrayList<>();
+        for (int i = 2; i < nums.length; i += 3) {
+            if (nums[i] - nums[i - 2] > k) return new int[][]{};
+            res.add(new int[]{nums[i - 2], nums[i - 1], nums[i]});
+        }
+        return res.toArray(new int[res.size()][]);
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given an integer array nums of size n where n is a multiple of 3 and a positive integer k.
+
+Divide the array nums into n / 3 arrays of size 3 satisfying the following condition:
+
+The difference between any two elements in one array is less than or equal to k.
+Return a 2D array containing the arrays. If it is impossible to satisfy the conditions, return an empty array. And if there are multiple answers, return any of them.
+
+
+
+
+
+Approach :
+Sort the input array.
+
+Traverse the array in steps of 3:
+Check whether nums[i + 2] - nums[i] <= k (which ensures the max difference in the triplet is within k).
+
+If valid, add [nums[i], nums[i+1], nums[i+2]] to the result.
+Otherwise, return [] (as we cannot form a valid group).
+
+After all groups are formed, return the final list.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(n)
