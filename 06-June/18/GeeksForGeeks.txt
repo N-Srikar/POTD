@@ -1,0 +1,68 @@
+All Palindromic Partitions
+__________________________________________________________
+
+class Solution {
+    public ArrayList<ArrayList<String>> palinParts(String s) {
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+        ArrayList<String> current = new ArrayList<>();
+        backtrack(s, 0, current, result);
+        return result;
+    }
+
+    // Recursive backtracking function
+    private void backtrack(String s, int start, ArrayList<String> current, ArrayList<ArrayList<String>> result) {
+        if (start == s.length()) {
+            result.add(new ArrayList<>(current));
+            return;
+        }
+
+        for (int end = start + 1; end <= s.length(); end++) {
+            String prefix = s.substring(start, end);
+            if (isPalindrome(prefix)) {
+                current.add(prefix);
+                backtrack(s, end, current, result); // Recurse for remaining string
+                current.remove(current.size() - 1); // Backtrack
+            }
+        }
+    }
+
+    // Helper to check if a string is a palindrome
+    private boolean isPalindrome(String s) {
+        int left = 0, right = s.length() - 1;
+        while (left < right) {
+            if (s.charAt(left++) != s.charAt(right--)) return false;
+        }
+        return true;
+    }
+}
+
+__________________________________________________________
+
+
+
+Problem Statement :
+Given a string s, find all possible ways to partition it such that every substring in the partition is a palindrome.
+
+
+
+
+Approach : 
+Backtracking:
+Use recursion to explore every possible partition of the string.
+
+Check for Palindromes:
+At each recursive call, check if the current substring is a palindrome. If it is, include it in the current partition and move forward.
+
+Base Case:
+If the start index reaches the end of the string, add the current partition to the result.
+
+Backtrack:
+After exploring one partition, remove the last substring and try other possible cuts.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n * 2^n)
+Space Complexity : O(n * 2^n)
