@@ -1,0 +1,67 @@
+Case-specific Sorting of Strings
+_______________________________________________________
+
+class Solution {
+    public static String caseSort(String s) {
+        // Lists to store uppercase and lowercase characters
+        List<Character> upper = new ArrayList<>();
+        List<Character> lower = new ArrayList<>();
+
+        // Separate characters based on case
+        for (char c : s.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                upper.add(c);
+            } else {
+                lower.add(c);
+            }
+        }
+
+        // Sort both lists
+        Collections.sort(upper);
+        Collections.sort(lower);
+
+        // Pointers for uppercase and lowercase lists
+        int u = 0, l = 0;
+        StringBuilder result = new StringBuilder();
+
+        // Reconstruct the result string
+        for (char c : s.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                result.append(upper.get(u++));
+            } else {
+                result.append(lower.get(l++));
+            }
+        }
+
+        return result.toString();
+    }
+}
+
+_______________________________________________________
+
+
+
+
+Pronblem Statement :
+Given a string s consisting of only uppercase and lowercase characters. The task is to sort uppercase and lowercase letters separately such that if the ith place in the original string had an Uppercase character then it should not have a lowercase character after being sorted and vice versa.
+
+
+
+
+
+Approach : 
+Extract and Separate all uppercase and lowercase characters into separate lists.
+
+Sort both lists individually.
+
+Reconstruct the result string by iterating over the original string:
+If the current character is uppercase, pick the next character from the sorted uppercase list.
+If the current character is lowercase, pick the next character from the sorted lowercase list.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(n)
