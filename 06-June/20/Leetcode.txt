@@ -1,0 +1,73 @@
+3443. Maximum Manhattan Distance After K Changes
+_______________________________________________________
+
+class Solution {
+    public int maxDistance(String st, int k) {
+        
+        int n = 0, s = 0, e = 0, w = 0;
+        int max = 0;
+       
+        for (char c : st.toCharArray()) {
+            if (c == 'N') {
+                n++;
+            } else if (c == 'S') {
+                s++;
+            } else if (c == 'E') {
+                e++;
+            } else {
+                w++;
+            }
+            max = Math.max(max, n + e - w - s + 2 * Math.min(s + w, k));
+            max = Math.max(max, n + w - s - e + 2 * Math.min(s + e, k));
+            max = Math.max(max, s + e - n - w + 2 * Math.min(n + w, k));
+            max = Math.max(max, s + w - n - e + 2 * Math.min(n + e, k));
+        }
+
+        return max;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement : 
+You are given a string s consisting of the characters 'N', 'S', 'E', and 'W', where s[i] indicates movements in an infinite grid:
+
+'N' : Move north by 1 unit.
+'S' : Move south by 1 unit.
+'E' : Move east by 1 unit.
+'W' : Move west by 1 unit.
+Initially, you are at the origin (0, 0). You can change at most k characters to any of the four directions.
+
+Find the maximum Manhattan distance from the origin that can be achieved at any time while performing the movements in order.
+
+The Manhattan Distance between two cells (xi, yi) and (xj, yj) is |xi - xj| + |yi - yj|.
+
+
+
+
+
+Approach : 
+We count occurrences of each movement ('N', 'S', 'E', 'W'). The net displacement in the x and y directions is given by:
+
+netX = East count − West count
+netY = North count − South count
+
+The initial Manhattan distance is:
+
+distance = |netX| + |netY|
+
+Since we can change at most ( k ) characters, we maximize the distance by converting up to ( k ) movements to further increase the displacement in one direction. We consider four possible directions and take the maximum:
+
+Maximizing (N + E) - (S + W)
+Maximizing (N + W) - (S + E)
+Maximizing (S + E) - (N + W)
+Maximizing (S + W) - (N + E)
+For each case, we add ( 2 * min(opposite moves, k) to shift movements optimally. The answer is the maximum possible distance across these cases.
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(1)
