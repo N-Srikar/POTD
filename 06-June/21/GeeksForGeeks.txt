@@ -1,0 +1,70 @@
+Police and Thieves
+________________________________________________________
+
+class Solution {
+    public int catchThieves(char[] arr, int k) {
+        int n = arr.length;
+        List<Integer> police = new ArrayList<>();
+        List<Integer> thieves = new ArrayList<>();
+
+        // Step 1: Store positions of police and thieves
+        for (int i = 0; i < n; i++) {
+            if (arr[i] == 'P') {
+                police.add(i);
+            } else if (arr[i] == 'T') {
+                thieves.add(i);
+            }
+        }
+
+        // Step 2: Use two pointers to match
+        int p = 0, t = 0, count = 0;
+        while (p < police.size() && t < thieves.size()) {
+            if (Math.abs(police.get(p) - thieves.get(t)) <= k) {
+                count++;
+                p++;
+                t++;
+            } else if (thieves.get(t) < police.get(p)) {
+                t++;
+            } else {
+                p++;
+            }
+        }
+
+        return count;
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given an array arr[], where each element contains either a 'P' for policeman or a 'T' for thief. Find the maximum number of thieves that can be caught by the police. 
+Keep in mind the following conditions :
+
+Each policeman can catch only one thief.
+A policeman cannot catch a thief who is more than k units away from him.
+
+
+
+
+Approach :
+Create two lists or queues:
+One for storing the indices of 'P' (policemen)
+One for storing the indices of 'T' (thieves)
+
+Traverse the array:
+Add indices to the respective lists when you find 'P' or 'T'.
+
+Use a while loop to match the front of both queues:
+If the absolute distance between them is ≤ k, count it as a catch, and move both pointers ahead.
+If the policeman is too far to the right, move the thief pointer.
+If the thief is too far to the right, move the policeman pointer.
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(n)
