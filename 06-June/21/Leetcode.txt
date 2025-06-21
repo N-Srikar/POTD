@@ -1,0 +1,83 @@
+3085. Minimum Deletions to Make String K-Special
+_________________________________________________________
+
+class Solution {
+    public int minimumDeletions(String word, int k) {
+         Map<Character, Integer> freqMap = new HashMap<>();
+        for (char c : word.toCharArray()) {
+            freqMap.put(c, freqMap.getOrDefault(c, 0) + 1);
+        }
+        
+        // Step 2: Collect frequencies and sort them
+        List<Integer> frequencies = new ArrayList<>(freqMap.values());
+        Collections.sort(frequencies);
+        
+        int minDeletions = Integer.MAX_VALUE;
+        int n = frequencies.size();
+        
+        // Step 3: For each frequency, consider it as the base and calculate deletions
+        for (int i = 0; i < n; i++) {
+            int base = frequencies.get(i);
+            int totalDeletions = 0;
+            
+            // For frequencies less than base, delete all occurrences (since we can't increase frequencies)
+            for (int j = 0; j < i; j++) {
+                totalDeletions += frequencies.get(j);
+            }
+            
+            // For frequencies greater than base + k, reduce them to base + k
+            for (int j = i; j < n; j++) {
+                if (frequencies.get(j) > base + k) {
+                    totalDeletions += frequencies.get(j) - (base + k);
+                }
+            }
+            
+            if (totalDeletions < minDeletions) {
+                minDeletions = totalDeletions;
+            }
+        }
+        
+        return minDeletions;
+        
+    }
+}
+_________________________________________________________
+
+
+
+
+
+Problem Statement : 
+You are given a string word and an integer k.
+
+We consider word to be k-special if |freq(word[i]) - freq(word[j])| <= k for all indices i and j in the string.
+
+Here, freq(x) denotes the frequency of the character x in word, and |y| denotes the absolute value of y.
+
+Return the minimum number of characters you need to delete to make word k-special.
+
+ 
+
+
+
+
+Approach : 
+1 . Count Frequencies:
+First, we count how many times each character appears in the string using a frequency map.
+
+2 . Sort Frequencies:
+We collect these frequency counts into a list and sort them in ascending order. This helps us systematically analyze the frequencies.
+
+3 . Find Minimum Deletions:
+For each frequency in the sorted list, we treat it as a potential "base" frequency.
+We then calculate how many deletions would be needed to make all other frequencies fall within the range [base, base + k]:
+For frequencies smaller than the base: We must delete all of them (since we can't increase frequencies, only decrease)
+For frequencies larger than base + k: We reduce them to exactly base + k by deleting the excess characters
+We keep track of the minimum deletions needed across all possible base frequencies.
+
+
+
+
+Complexity : 
+Time Complexity :O(n logn)
+Space Complexity : O(n)
