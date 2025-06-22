@@ -1,0 +1,88 @@
+Largest Divisible Subset
+________________________________________________________
+
+class Solution {
+    public ArrayList<Integer> largestSubset(int[] arr) {
+        int n = arr.length;
+        Arrays.sort(arr);
+
+        // Each index i will store the actual subset ending at arr[i]
+        ArrayList<Integer>[] dp = new ArrayList[n];
+
+        ArrayList<Integer> maxSubset = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            dp[i] = new ArrayList<>();
+            dp[i].add(arr[i]);
+
+            for (int j = 0; j < i; j++) {
+                if (arr[i] % arr[j] == 0) {
+                    ArrayList<Integer> candidate = new ArrayList<>(dp[j]);
+                    candidate.add(arr[i]);
+
+                    if (candidate.size() > dp[i].size() ||
+                       (candidate.size() == dp[i].size() && isLexGreater(candidate, dp[i]))) {
+                        dp[i] = candidate;
+                    }
+                }
+            }
+
+            if (dp[i].size() > maxSubset.size() ||
+               (dp[i].size() == maxSubset.size() && isLexGreater(dp[i], maxSubset))) {
+                maxSubset = dp[i];
+            }
+        }
+
+        return maxSubset;
+    }
+
+    // Returns true if a is lex greater than b
+    private boolean isLexGreater(ArrayList<Integer> a, ArrayList<Integer> b) {
+        int n = Math.min(a.size(), b.size());
+        for (int i = 0; i < n; i++) {
+            if (!a.get(i).equals(b.get(i))) {
+                return a.get(i) > b.get(i);
+            }
+        }
+        return a.size() > b.size();
+    }
+}
+
+________________________________________________________
+
+
+
+
+
+Problem Statement :
+Given an array arr[] of distinct positive integers. Your task is to find the largest subset such that for every pair of elements (x, y) in the subset, either x divides y or y divides x.
+Note : If multiple subsets of the same maximum length exist, return the one that is lexicographically greatest, after sorting the subset in ascending order.
+
+
+
+
+Approach : 
+Sort the input array in ascending order.
+
+Initialize a DP array where each dp[i] stores the largest divisible subset ending at arr[i].
+
+Loop through each element arr[i]:
+For each previous element arr[j] (j < i):
+If arr[i] % arr[j] == 0, then:
+Create a candidate subset by extending dp[j] with arr[i].
+
+Update dp[i] if:
+The candidate subset is longer than dp[i], or
+Same length but lexicographically greater.
+
+Track the overall largest subset during the DP iteration.
+
+Return the largest subset found (already sorted due to initial array sort).
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n^2)
+Space Complexity : O(n)
