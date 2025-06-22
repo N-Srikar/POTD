@@ -1,0 +1,60 @@
+2138. Divide a String Into Groups of Size k
+_______________________________________________________
+
+class Solution {
+    public String[] divideString(String s, int k, char fill) {
+        List<String> result = new ArrayList<>();
+        int n = s.length();
+
+        for (int i = 0; i < n; i += k) {
+            StringBuilder chunk = new StringBuilder();
+            for (int j = i; j < i + k; j++) {
+                if (j < n)
+                    chunk.append(s.charAt(j));
+                else
+                    chunk.append(fill);
+            }
+            result.add(chunk.toString());
+        }
+
+        return result.toArray(new String[0]); 
+    }
+}
+_______________________________________________________
+
+
+
+
+Problem Statement : 
+A string s can be partitioned into groups of size k using the following procedure:
+
+The first group consists of the first k characters of the string, the second group consists of the next k characters of the string, and so on. Each element can be a part of exactly one group.
+For the last group, if the string does not have k characters remaining, a character fill is used to complete the group.
+Note that the partition is done so that after removing the fill character from the last group (if it exists) and concatenating all the groups in order, the resultant string should be s.
+
+Given the string s, the size of each group k and the character fill, return a string array denoting the composition of every group s has been divided into, using the above procedure.
+
+
+
+
+
+
+Approach :
+Traverse the string in chunks of size k.
+
+For each chunk:
+Use a loop to construct the substring.
+If the remaining characters are less than k, add the fill character until the chunk has size k.
+
+Add each valid group to a list and return the list.
+
+return the list.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
