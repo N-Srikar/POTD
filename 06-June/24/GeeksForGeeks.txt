@@ -1,0 +1,61 @@
+Lexicographically Largest String After K Deletions
+_______________________________________________________
+
+class Solution {
+    public static String maxSubseq(String s, int k) {
+        int n = s.length();
+        int keep = n - k;
+        StringBuilder stack = new StringBuilder();
+        
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            while (stack.length() > 0 && k > 0 && stack.charAt(stack.length() - 1) < c && 
+                   (stack.length() - 1 + (n - i)) >= keep) {
+                stack.deleteCharAt(stack.length() - 1);
+                k--;
+            }
+            if (stack.length() < keep) {
+                stack.append(c);
+            } else {
+                k--; 
+            }
+        }
+        return stack.toString();
+    }
+}
+
+_______________________________________________________
+
+
+
+
+Problem Statement :
+Given a string s consisting of lowercase English letters and an integer k, your task is to remove exactly k characters from the string. The resulting string must be the largest possible in lexicographical  order, while maintain the relative order of the remaining characters.
+
+
+
+
+Approach : 
+Let the length of the result string be keep = n - k.
+
+Use a stack (or StringBuilder used like a stack).
+
+Traverse the string from left to right:
+While the stack is not empty,
+And the current character is greater than the character at the top of the stack,
+And there are enough characters left in the string to still build a full result (i.e., (stack.length + remaining characters) > keep)
+And we still have characters we can delete (k > 0),
+Then pop the stack and reduce k.
+
+If the stack size is less than keep, push the current character.
+
+At the end, return the stack as a string.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
