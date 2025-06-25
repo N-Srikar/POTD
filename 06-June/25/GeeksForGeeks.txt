@@ -1,0 +1,72 @@
+Check if frequencies can be equal
+________________________________________________________
+
+class Solution {
+    boolean sameFreq(String s) {
+        Map<Character, Integer> freqMap = new HashMap<>();
+
+        // Step 1: Count frequencies of each character
+        for (char c : s.toCharArray()) {
+            freqMap.put(c, freqMap.getOrDefault(c, 0) + 1);
+        }
+
+        // Step 2: Count frequency of frequencies
+        Map<Integer, Integer> freqCount = new HashMap<>();
+        for (int freq : freqMap.values()) {
+            freqCount.put(freq, freqCount.getOrDefault(freq, 0) + 1);
+        }
+
+        // Step 3: Analyze the freqCount
+        if (freqCount.size() == 1) return true; // All frequencies are same
+
+        if (freqCount.size() == 2) {
+            List<Integer> keys = new ArrayList<>(freqCount.keySet());
+            int f1 = keys.get(0), f2 = keys.get(1);
+            int c1 = freqCount.get(f1), c2 = freqCount.get(f2);
+
+            // Case 1: one frequency is 1 and it appears once
+            if ((f1 == 1 && c1 == 1) || (f2 == 1 && c2 == 1)) return true;
+
+            // Case 2: difference is 1 and higher freq appears only once
+            if ((Math.abs(f1 - f2) == 1) && ((f1 > f2 && c1 == 1) || (f2 > f1 && c2 == 1))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given a string s consisting only lowercase alphabetic characters, check whether it is possible to remove at most one character such that the  frequency of each distinct character in the string becomes same. Return true if it is possible; otherwise, return false.
+
+
+
+
+
+Approach :
+Count frequencies of each character using a HashMap.
+
+Count frequency of those frequencies — how many characters have that frequency — using another map.
+
+There are 3 possible valid scenarios:
+All characters already have the same frequency.
+
+There are two frequency values, and:
+One frequency is 1 and it appears only once (removing that one character makes all others the same).
+OR one frequency is freq+1 and it appears only once (removing one occurrence from that character brings it down to the lower freq).
+
+Return true if any of the above is satisfied; otherwise, return false.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
