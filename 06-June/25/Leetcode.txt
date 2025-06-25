@@ -1,0 +1,92 @@
+2040. Kth Smallest Product of Two Sorted Arrays
+_______________________________________________________
+
+class Solution {
+    public long kthSmallestProduct(int[] nums1, int[] nums2, long k) {
+        long left = -10000000000L;
+        long right = 10000000000L;
+        
+        while (left < right) {
+            long mid = left + (right - left) / 2;
+            if (countProducts(nums1, nums2, mid) < k) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        
+        return left;
+    }
+    
+    private long countProducts(int[] nums1, int[] nums2, long target) {
+        long count = 0;
+        for (int num1 : nums1) {
+            if (num1 == 0) {
+                if (target >= 0) count += nums2.length;
+                continue;
+            }
+            
+            int low = 0, high = nums2.length;
+            while (low < high) {
+                int mid = low + (high - low) / 2;
+                long product = (long) num1 * nums2[mid];
+                if (product <= target) {
+                    if (num1 > 0) low = mid + 1;
+                    else high = mid;
+                } else {
+                    if (num1 > 0) high = mid;
+                    else low = mid + 1;
+                }
+            }
+            
+            count += (num1 > 0) ? low : nums2.length - low;
+        }
+        return count;
+    }
+}
+_______________________________________________________
+
+
+
+
+Problem Statement :
+Given two sorted 0-indexed integer arrays nums1 and nums2 as well as an integer k, return the kth (1-based) smallest product of nums1[i] * nums2[j] where 0 <= i < nums1.length and 0 <= j < nums2.length.
+
+
+
+Approach : 
+
+1. Binary Search Setup
+Initialize left = -1e10 and right = 1e10 (covering all possible products).
+
+While left < right:
+Compute mid = left + (right - left) / 2.
+Calculate count = countLessOrEqual(nums1, nums2, mid).
+If count < k, the k-th smallest product is larger than mid → set left = mid + 1.
+Else, it’s ≤ mid → set right = mid.
+
+2. Counting Products ≤ Target(countLessOrEqual)
+For each num1 in nums1:
+Case 1: num1 == 0
+▪ If target ≥ 0, all nums2 elements contribute (count += nums2.length).
+
+Case 2: num1 > 0
+▪ Binary search to find the largest nums2[j] where num1 * nums2[j] ≤ target.
+▪ The count is low (number of elements ≤ target).
+
+Case 3: num1 < 0
+▪ Binary search to find the smallest nums2[j] where num1 * nums2[j] ≤ target.
+▪ The count is nums2.length - low (number of elements ≥ target).
+
+3. Termination
+When left == right, it is the smallest product with at least k products ≤ it (the k-th smallest).
+
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logm)
+Space Complexity : O(n + m)
