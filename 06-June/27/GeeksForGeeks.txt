@@ -1,0 +1,85 @@
+Mobile numeric keypad
+_______________________________________________________
+
+class Solution {
+    public int getCount(int n) {
+        if (n <= 0) return 0;
+        if (n == 1) return 10;
+
+        int[][] moves = {
+            {0, 8},       // 0
+            {1, 2, 4},    // 1
+            {2, 1, 3, 5}, // 2
+            {3, 2, 6},    // 3
+            {4, 1, 5, 7}, // 4
+            {5, 2, 4, 6, 8}, // 5
+            {6, 3, 5, 9}, // 6
+            {7, 4, 8},    // 7
+            {8, 5, 7, 9, 0}, // 8
+            {9, 6, 8}     // 9
+        };
+
+        int[][] dp = new int[10][n + 1];
+
+        // Base case: sequences of length 1
+        for (int digit = 0; digit <= 9; digit++) {
+            dp[digit][1] = 1;
+        }
+
+        // Fill dp table for lengths from 2 to n
+        for (int len = 2; len <= n; len++) {
+            for (int digit = 0; digit <= 9; digit++) {
+                dp[digit][len] = 0;
+                for (int neighbor : moves[digit]) {
+                    dp[digit][len] += dp[neighbor][len - 1];
+                }
+            }
+        }
+
+        // Sum sequences of length n starting from any digit
+        int totalCount = 0;
+        for (int digit = 0; digit <= 9; digit++) {
+            totalCount += dp[digit][n];
+        }
+
+        return totalCount;
+    }
+}
+
+_______________________________________________________
+
+
+
+Problem Statement : 
+There is a standard numeric keypad on a mobile phone. You can press the current button or any button that is directly above, below, to the left, or to the right of it. For example, if you press 5, then pressing 2, 4, 6, or 8 is allowed. However, diagonal movements and pressing the bottom row corner buttons (* and #) are not allowed.
+
+Given an integer n, determine how many unique sequences of length n can be formed by pressing buttons on the keypad, starting from any digit.
+
+
+
+
+Approach : 
+Model the keypad as a graph where each digit can move to certain neighbors (up, down, left, right, or stay).
+
+Create a 2D DP table:
+dp[d][l] = number of sequences of length l ending with digit d.
+
+Initialize base case:
+For all digits d:
+dp[d][1] = 1 (each digit forms a sequence of length 1 by itself)
+
+Fill the DP table:
+For each length l from 2 to n,
+For each digit d,
+Add all dp[neighbor][l - 1] values for each neighbor of d.
+
+Compute final result:
+Sum all dp[d][n] for d = 0 to 9 to get total valid sequences of length n.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
