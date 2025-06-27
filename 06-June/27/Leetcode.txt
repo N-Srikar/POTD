@@ -1,0 +1,81 @@
+2014. Longest Subsequence Repeated k Times
+_______________________________________________________
+
+class Solution {
+    public String longestSubsequenceRepeatedK(String s, int k) {
+        String result = "";
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(""); // Start with empty string
+        
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String current = queue.poll();
+                // Try appending each character in order
+                for (char ch = 'a'; ch <= 'z'; ch++) {
+                    String candidate = current + ch;
+                    if (isRepeatedKTimes(candidate, s, k)) {
+                        result = candidate; // Update longest valid
+                        queue.offer(candidate);
+                    }
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    private boolean isRepeatedKTimes(String sub, String s, int k) {
+        int count = 0;
+        int subIndex = 0;
+        
+        for (char ch : s.toCharArray()) {
+            if (ch == sub.charAt(subIndex)) {
+                subIndex++;
+                if (subIndex == sub.length()) {
+                    count++;
+                    subIndex = 0;
+                    if (count == k) return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+}
+_______________________________________________________
+
+
+
+
+Problem Statement :
+You are given a string s of length n, and an integer k. You are tasked to find the longest subsequence repeated k times in string s.
+
+A subsequence is a string that can be derived from another string by deleting some or no characters without changing the order of the remaining characters.
+
+A subsequence seq is repeated k times in the string s if seq * k is a subsequence of s, where seq * k represents a string constructed by concatenating seq k times.
+
+Return the longest subsequence repeated k times in string s. If multiple such subsequences are found, return the lexicographically largest one. If there is no such subsequence, return an empty string.
+
+
+
+
+
+Approach : 
+Initialize BFS: Start with empty string
+
+Level-wise Expansion:
+For each candidate, try appending 'a'-'z'
+Verify if new candidate appears ≥k times
+
+Track Result: Keep the longest valid candidate found
+
+Termination: When queue is empty (no more candidates to check)
+
+
+
+
+
+Complexity : 
+Time Complexity : O(26^L × n × L)
+Space Complexity : O(26^L × L)
