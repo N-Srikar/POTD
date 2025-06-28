@@ -1,0 +1,74 @@
+Counting elements in two arrays
+________________________________________________________
+
+class Solution {
+    public static ArrayList<Integer> countLessEq(int a[], int b[]) {
+        Arrays.sort(b);  // Sort b[] once
+        ArrayList<Integer> res = new ArrayList<>();
+        Map<Integer, Integer> cache = new HashMap<>();
+
+        for (int x : a) {
+            if (cache.containsKey(x)) {
+                res.add(cache.get(x));
+            } else {
+                int count = upperBound(b, x);
+                cache.put(x, count);
+                res.add(count);
+            }
+        }
+
+        return res;
+    }
+
+    // Find number of elements <= target using upper_bound
+    private static int upperBound(int[] arr, int target) {
+        int low = 0, high = arr.length;
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (arr[mid] <= target) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        return low;
+    }
+}
+
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+You are given two unsorted arrays a[] and b[]. Both arrays may contain duplicate elements. For each element in a[], your task is to count how many elements in b[] are less than or equal to that element.
+
+
+
+
+
+Approach : 
+Sort array b[]:
+Sorting allows us to apply binary search for counting how many elements are ≤ x.
+
+Initialize a result list res[] to store answers for each element in a[].
+
+Use a HashMap cache to memoize results for repeated elements in a[]:
+If an element x in a[] has already been processed, use the cached result.
+Otherwise, perform binary search on sorted b[] to count how many elements are ≤ x, store it in cache, and add it to res.
+
+Binary Search Logic (upperBound):
+A custom binary search function returns the first index i where b[i] > x.
+This index equals the number of elements ≤ x in b[].
+
+Return the result list.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n + n logn)
+Space Complexity : O(n + u)
