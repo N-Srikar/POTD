@@ -1,0 +1,78 @@
+Split Array Largest Sum
+_______________________________________________________
+
+class Solution {
+    public int splitArray(int[] arr, int k) {
+        int low = 0, high = 0;
+        for (int num : arr) {
+            low = Math.max(low, num);  // at least one number per subarray
+            high += num;               // sum if no split
+        }
+
+        int answer = high;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (canSplit(arr, k, mid)) {
+                answer = mid;
+                high = mid - 1;  // try for a better minimum
+            } else {
+                low = mid + 1;   // need to increase max sum
+            }
+        }
+
+        return answer;
+    }
+
+    private boolean canSplit(int[] arr, int k, int maxSum) {
+        int subarrays = 1, currSum = 0;
+
+        for (int num : arr) {
+            if (currSum + num > maxSum) {
+                subarrays++;
+                currSum = num;
+                if (subarrays > k) return false;
+            } else {
+                currSum += num;
+            }
+        }
+
+        return true;
+    }
+}
+
+_______________________________________________________
+
+
+
+
+Problem Statement :
+Given an array arr[] and an integer k, divide the array into k contiguous subarrays such that the maximum sum among these subarrays is minimized. Find this minimum possible maximum sum.
+
+
+
+
+
+Approach : 
+Define search space:
+low = max(arr) → minimum possible max sum (you can’t split a number itself)
+high = sum(arr) → maximum possible max sum (no split at all)
+
+Binary Search between low and high:
+For each mid (possible max sum), 
+check if it is possible to split the array into ≤ k subarrays such that no subarray has sum > mid.
+If it is possible, try to minimize further (move high = mid - 1), 
+else increase it (move low = mid + 1).
+
+The first feasible value of mid is the answer.
+
+To check feasibility, greedily form subarrays: keep adding to current sum until it exceeds mid, then start a new subarray.
+
+
+
+
+
+
+Complexity :
+Time Complexity : O(n * log S)
+Space Complexity : O(1)
