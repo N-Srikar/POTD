@@ -1,0 +1,87 @@
+Max min Height
+_______________________________________________________
+
+class Solution {
+    public int maxMinHeight(int[] arr, int k, int w) {
+        int n = arr.length;
+        int low = Arrays.stream(arr).min().getAsInt();
+        int high = low + k;
+        int ans = low;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (canReach(arr, n, k, w, mid)) {
+                ans = mid;
+                low = mid + 1; // try for higher minimum
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        return ans;
+    }
+
+    private boolean canReach(int[] arr, int n, int k, int w, int target) {
+        int[] effect = new int[n + 1]; // To store diff array
+        int used = 0;
+        int add = 0;
+
+        for (int i = 0; i < n; i++) {
+            add += effect[i];
+
+            int currHeight = arr[i] + add;
+            if (currHeight < target) {
+                int diff = target - currHeight;
+                used += diff;
+                if (used > k) return false;
+
+                add += diff;
+                if (i + w < n) {
+                    effect[i + w] -= diff; // Remove effect after w range
+                }
+            }
+        }
+
+        return true;
+    }
+}
+
+_______________________________________________________
+
+
+
+Problem Statement :
+Given a garden with n flowers planted in a row, that is represented by an array arr[], where arr[i] denotes the height of the ith flower.You will water them for k days. In one day you can water w continuous flowers. Whenever you water a flower its height increases by 1 unit. You have to maximize the minimum height of all flowers after  k days of watering.
+
+
+
+
+
+Approach :
+Binary Search Range:
+Minimum possible height = min of arr
+Max possible height = min + k (you can increase any flower at most k times in total)
+
+Binary Search Logic:
+Mid = (low + high) / 2
+Check if it's possible to make every flower at least mid high using at most k operations (each watering operation is 1 day, affects w flowers).
+
+Feasibility Check using Greedy + Prefix Sum:
+Maintain an effect[] array to apply waterings efficiently using prefix sum technique.
+
+Traverse from left to right, 
+if current height (including effect so far) is less than mid, 
+add water to make up the difference using a sliding window.
+
+Keep count of total water used.
+
+If total water used > k → not possible.
+
+
+
+
+
+
+Complexity :
+Time Complexity : O(n logk)
+Space Complexity : O(n)
