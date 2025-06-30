@@ -1,0 +1,53 @@
+594. Longest Harmonious Subsequence
+_______________________________________________________
+
+public class Solution {
+    public int findLHS(int[] nums) {
+        Arrays.sort(nums);
+        int j = 0;
+        int maxLength = 0;
+        
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] - nums[j] > 1) {
+                j++;
+            }
+            if (nums[i] - nums[j] == 1) {
+                maxLength = Math.max(maxLength, i - j + 1);
+            }
+        }
+        return maxLength;
+    }
+}
+_______________________________________________________
+
+
+
+
+Problem Statement :
+We define a harmonious array as an array where the difference between its maximum value and its minimum value is exactly 1.
+
+Given an integer array nums, return the length of its longest harmonious subsequence among all its possible subsequences.
+
+
+
+
+Approach : 
+Sort the Array:
+Sorting brings numbers close to each other, making it easy to check the difference between the smallest and largest elements in any window.
+
+Sliding Window Technique:
+Use two pointers (j and i) to represent the current window.
+Expand the window by moving i forward.
+If the difference between nums[i] and nums[j] exceeds 1, move j forward to shrink the window.
+If the difference is exactly 1, update the maximum length if the current window is longer.
+
+Result:
+After processing the entire array, the maximum length found is the answer.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(1)
