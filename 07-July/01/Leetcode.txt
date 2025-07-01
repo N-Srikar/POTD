@@ -1,0 +1,48 @@
+3330. Find the Original Typed String I
+_________________________________________________________
+
+class Solution {
+    public int possibleStringCount(String word) {
+        int n=word.length();
+        int count=n;
+        for(int i=1;i<word.length();i++){
+            if(word.charAt(i)!=word.charAt(i-1)){
+                count--;
+            }
+        }
+        return count;
+    }
+}
+_________________________________________________________
+
+
+
+
+Problem Statement :
+Alice is attempting to type a specific string on her computer. However, she tends to be clumsy and may press a key for too long, resulting in a character being typed multiple times.
+
+Although Alice tried to focus on her typing, she is aware that she may still have done this at most once.
+
+You are given a string word, which represents the final output displayed on Alice's screen.
+
+Return the total number of possible original strings that Alice might have intended to type.
+
+
+
+
+
+Approach : 
+Start with count = 1 (the original string is always possible).
+
+Loop through the string and check if current character == previous character.
+If yes, it means Alice might have pressed this key too long → increase count by 1.
+
+Return count.
+
+ 
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
