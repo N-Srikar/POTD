@@ -1,0 +1,94 @@
+3333. Find the Original Typed String II
+________________________________________________________
+
+public class Solution {
+    private static final int MOD = 1000000007;
+
+    public int possibleStringCount(String word, int k) {
+        if (word.isEmpty()) return 0;
+
+        List<Integer> groups = new ArrayList<>();
+        int count = 1;
+        for (int i = 1; i < word.length(); i++) {
+            if (word.charAt(i) == word.charAt(i - 1)) count++;
+            else {
+                groups.add(count);
+                count = 1;
+            }
+        }
+        groups.add(count);
+
+        long total = 1;
+        for (int num : groups) total = (total * num) % MOD;
+
+        if (k <= groups.size()) return (int)total;
+
+        int[] dp = new int[k];
+        dp[0] = 1;
+        for (int num : groups) {
+            int[] newDp = new int[k];
+            long sum = 0;
+            for (int s = 0; s < k; s++) {
+                if (s > 0) sum = (sum + dp[s - 1]) % MOD;
+                if (s > num) sum = (sum - dp[s - num - 1] + MOD) % MOD;
+                newDp[s] = (int)sum;
+            }
+            dp = newDp;
+        }
+        long invalid = 0;
+        for (int s = groups.size(); s < k; s++) invalid = (invalid + dp[s]) % MOD;
+
+        return (int)((total - invalid + MOD) % MOD);
+    }
+}
+________________________________________________________
+
+
+
+
+
+
+Problem Statement :
+Alice is attempting to type a specific string on her computer. However, she tends to be clumsy and may press a key for too long, resulting in a character being typed multiple times.
+
+You are given a string word, which represents the final output displayed on Alice's screen. You are also given a positive integer k.
+
+Return the total number of possible original strings that Alice might have intended to type, if she was trying to type a string of size at least k.
+
+Since the answer may be very large, return it modulo 10^9 + 7.
+
+
+
+
+
+
+Approach : 
+Group Consecutive Characters:
+Traverse the string and group consecutive identical characters, storing their counts in a list groups.
+
+Calculate Total Possible Original Strings:
+The total number of possible original strings is the product of the counts in groups because for each group, we can choose any number from 1 to its count.
+
+Check if Original Strings are Automatically Valid:
+If the number of groups is at least k, every original string formed will have at least k characters (since each group contributes at least one character). Thus, the answer is the total number of possible original strings.
+
+Dynamic Programming to Count Valid Original Strings:
+If the number of groups is less than k, we need to count how many original strings have a sum of chosen counts that is at least k.
+Use dynamic programming where dp[s] represents the number of ways to achieve a sum s of chosen counts.
+Initialize dp[0] = 1 (one way to have sum 0).
+For each group, update the DP array to include new sums by choosing between 1 and the group’s count.
+After processing all groups, sum the DP values for sums from groups.size() to k-1 to find invalid strings (sum less than k).
+Subtract the invalid count from the total to get the number of valid original strings.
+
+Final Calculation:
+The result is (total - invalid) % MOD, ensuring it’s non-negative by adding MOD before taking modulo.
+
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n * k)
+Space Complexity : O(n + k)
