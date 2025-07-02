@@ -1,0 +1,60 @@
+Longest subarray with Atmost two distinct integers
+________________________________________________________
+
+class Solution {
+    public int totalElements(int[] arr) {
+        int left = 0, right = 0;
+        int maxLen = 0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        while (right < arr.length) {
+            // Add the current element to the map
+            map.put(arr[right], map.getOrDefault(arr[right], 0) + 1);
+            right++;
+
+            // If more than 2 distinct integers, shrink window
+            while (map.size() > 2) {
+                map.put(arr[left], map.get(arr[left]) - 1);
+                if (map.get(arr[left]) == 0) {
+                    map.remove(arr[left]);
+                }
+                left++;
+            }
+
+            // Update max length
+            maxLen = Math.max(maxLen, right - left);
+        }
+
+        return maxLen;
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given an array arr[] consisting of positive integers, your task is to find the length of the longest subarray that contains at most two distinct integers.
+
+
+
+
+
+Approach :
+Initialize two pointers (left and right) at the start of the array.
+
+Use a HashMap to store the count of each integer in the current window.
+Expand the right pointer and add elements to the map.
+If the map has more than 2 distinct integers, 
+shrink the window from the left by moving left and updating the map.
+
+Track the maximum length of the window when the map has at most 2 keys.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
