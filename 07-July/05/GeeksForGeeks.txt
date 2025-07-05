@@ -1,0 +1,47 @@
+Max Score from Subarray Mins
+________________________________________________________
+
+class Solution {
+    public int maxSum(int arr[]) {
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < arr.length - 1; i++) {
+            int currentSum = arr[i] + arr[i + 1];
+            if (currentSum > max) {
+                max = currentSum;
+            }
+        }
+        return max;
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+You are given an array arr[] of integers. Your task is to find the maximum sum of the smallest and second smallest elements across all subarrays (of size >= 2) of the given array.
+
+
+
+
+Approach : 
+Initialize
+Set max to Integer.MIN_VALUE.
+
+Loop
+For each index i from 0 to arr.length - 2:
+
+Compute & Compare
+Calculate currentSum = arr[i] + arr[i+1].
+If currentSum > max, update max = currentSum.
+
+Return
+After the loop, return max.
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
