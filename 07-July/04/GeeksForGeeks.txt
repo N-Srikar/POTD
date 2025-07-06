@@ -1,0 +1,58 @@
+Subarrays With At Most K Distinct Integers
+_________________________________________________________
+
+class Solution {
+    public int countAtMostK(int arr[], int k) {
+        int n = arr.length;
+        Map<Integer, Integer> freq = new HashMap<>();
+        int left = 0, ans = 0;
+
+        for (int right = 0; right < n; right++) {
+            freq.put(arr[right], freq.getOrDefault(arr[right], 0) + 1);
+
+            while (freq.size() > k) {
+                freq.put(arr[left], freq.get(arr[left]) - 1);
+                if (freq.get(arr[left]) == 0) {
+                    freq.remove(arr[left]);
+                }
+                left++;
+            }
+
+            ans += (right - left + 1);
+        }
+
+        return ans;
+    }
+}
+
+_________________________________________________________
+
+
+
+Problem Statement : 
+You are given an array arr[] of positive integers and an integer k, find the number of subarrays in arr[] where the count of distinct integers is at most k.
+
+Note: A subarray is a contiguous part of an array.
+
+
+
+
+
+
+Approach : 
+Initialize 2 pointers left = 0, right to iterate.
+
+Use a HashMap to count frequency of elements in current window.
+If size of map > k → move left pointer to shrink window.
+For each right, the number of valid subarrays ending at right is (right - left + 1).
+
+Accumulate this count.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(k)
