@@ -1,0 +1,52 @@
+1394. Find Lucky Integer in an Array
+________________________________________________________
+
+class Solution {
+    public int findLucky(int[] arr) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int n : arr) {
+            map.put(n, map.getOrDefault(n, 0) + 1);
+        }
+
+        int luckyInteger = -1;
+
+        for (int key : map.keySet()) {
+            if (map.get(key) == key) {
+                luckyInteger = key; 
+            }
+        }
+        return luckyInteger;  
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given an array of integers arr, a lucky integer is an integer that has a frequency in the array equal to its value.
+
+Return the largest lucky integer in the array. If there is no lucky integer return -1.
+
+
+
+
+
+Approach :
+Count Frequencies: 
+First, we need to count how many times each number appears in the array.
+
+Check Lucky Condition: 
+Then, we look through these counts to find numbers where the count equals the number itself.
+
+Return the Largest: 
+If there are multiple such numbers, we return the largest one. If none exist, we return -1.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
