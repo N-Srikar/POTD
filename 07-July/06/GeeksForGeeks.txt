@@ -1,0 +1,95 @@
+Maximum Sum Combination
+________________________________________________________
+
+class Solution {
+    public ArrayList<Integer> topKSumPairs(int[] a, int[] b, int k) {
+        int n = a.length;
+        Arrays.sort(a);
+        Arrays.sort(b);
+        
+        PriorityQueue<Pair> maxHeap = new PriorityQueue<>((p1, p2) -> p2.sum - p1.sum);
+        Set<String> visited = new HashSet<>();
+
+        int i = n - 1;
+        int j = n - 1;
+
+        maxHeap.offer(new Pair(a[i] + b[j], i, j));
+        visited.add(i + "#" + j);
+
+        ArrayList<Integer> result = new ArrayList<>();
+
+        while (k-- > 0 && !maxHeap.isEmpty()) {
+            Pair curr = maxHeap.poll();
+            result.add(curr.sum);
+
+            int x = curr.i, y = curr.j;
+
+            if (x - 1 >= 0) {
+                String key1 = (x - 1) + "#" + y;
+                if (!visited.contains(key1)) {
+                    maxHeap.offer(new Pair(a[x - 1] + b[y], x - 1, y));
+                    visited.add(key1);
+                }
+            }
+
+            if (y - 1 >= 0) {
+                String key2 = x + "#" + (y - 1);
+                if (!visited.contains(key2)) {
+                    maxHeap.offer(new Pair(a[x] + b[y - 1], x, y - 1));
+                    visited.add(key2);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    static class Pair {
+        int sum, i, j;
+
+        Pair(int sum, int i, int j) {
+            this.sum = sum;
+            this.i = i;
+            this.j = j;
+        }
+    }
+}
+
+________________________________________________________
+
+
+
+
+
+Problem Statement : 
+You are given two integer arrays a[] and b[] of equal size. A sum combination is formed by adding one element from a[] and one from b[], using each index pair (i, j) at most once. Return the top k maximum sum combinations, sorted in non-increasing order.
+
+
+
+
+
+Approach : 
+Sort both arrays a and b in ascending order.
+Use a Max-Heap (PriorityQueue) to keep track of the maximum possible sums.
+
+Start with the largest possible pair: a[n-1] + b[n-1], and push it into the heap.
+
+Maintain a visited set to avoid repeating index pairs.
+
+While k > 0:
+Pop the max sum pair from the heap.
+Add its sum to the result list.
+
+Push two possible next candidates into the heap:
+(i-1, j) — move in a
+(i, j-1) — move in b
+
+Only push if the new index pair hasn't been visited.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(k)
