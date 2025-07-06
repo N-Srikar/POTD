@@ -1,0 +1,85 @@
+1865. Finding Pairs With a Certain Sum
+__________________________________________________________
+
+class FindSumPairs {
+    int[] n1, n2;
+    Map<Integer, Integer> m = new HashMap<>();
+
+    public FindSumPairs(int[] nums1, int[] nums2) {
+        n1 = nums1;
+        n2 = nums2;
+        for (int x : n2) m.put(x, m.getOrDefault(x, 0) + 1);
+    }
+
+    public void add(int i, int v) {
+        m.put(n2[i], m.get(n2[i]) - 1);
+        n2[i] += v;
+        m.put(n2[i], m.getOrDefault(n2[i], 0) + 1);
+    }
+
+    public int count(int t) {
+        int c = 0;
+        for (int x : n1) c += m.getOrDefault(t - x, 0);
+        return c;
+    }
+}
+__________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given two integer arrays nums1 and nums2. You are tasked to implement a data structure that supports queries of two types:
+
+Add a positive integer to an element of a given index in the array nums2.
+Count the number of pairs (i, j) such that nums1[i] + nums2[j] equals a given value (0 <= i < nums1.length and 0 <= j < nums2.length).
+
+Implement the FindSumPairs class:
+FindSumPairs(int[] nums1, int[] nums2) 
+Initializes the FindSumPairs object with two integer arrays nums1 and nums2.
+
+void add(int index, int val) 
+Adds val to nums2[index], i.e., apply nums2[index] += val.
+
+int count(int tot) 
+Returns the number of pairs (i, j) such that nums1[i] + nums2[j] == tot.
+
+
+
+
+
+Approach : 
+1. Initialization
+Store nums1 and nums2 in the class.
+Create a frequency map (HashMap) for nums2 to track how many times each number appears.
+
+2. Add Operation (add(index, val))
+Step 1: Decrease the count of the old value at nums2[index] in the frequency map.
+Step 2: Update nums2[index] += val.
+Step 3: Increase the count of the new value in the frequency map.
+
+3. Count Operation (count(target))
+Initialize a counter total = 0.
+For each number in nums1:
+Calculate its complement (target - num).
+Check how many times this complement appears in nums2 (using the frequency map).
+Add this count to total.
+
+4. Return total.
+
+
+
+
+
+Complexity : 
+Constructor
+Time Complexity : O(n)
+Space Complexity : O(u)
+
+add(i, v)
+Time Complexity : O(1)
+Space Complexity : O(1)
+
+count(t)
+Time Complexity : O(m)
+Space Complexity : O(1)
