@@ -1,0 +1,72 @@
+1353. Maximum Number of Events That Can Be Attended
+________________________________________________________
+
+class Solution {
+    public int maxEvents(int[][] events) {
+        Arrays.sort(events, (a, b) -> Integer.compare(a[0], b[0]));
+        
+        int day = 0, index = 0 , n = events.length ,result = 0;      
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        while (!pq.isEmpty() || index < n) {
+            if (pq.isEmpty()) {
+                day = events[index][0];
+            }
+            while (index < n && events[index][0] <= day) {
+                pq.offer(events[index][1]);
+                index++;
+            }
+            pq.poll();
+            result++; 
+            day++;    
+
+            while (!pq.isEmpty() && pq.peek() < day) {
+                pq.poll();
+            }
+        }
+        return result;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given an array of events where events[i] = [startDayi, endDayi]. 
+Every event i starts at startDayi and ends at endDayi.
+
+You can attend an event i at any day d where startTimei <= d <= endTimei. You can only attend one event at any time d.
+
+Return the maximum number of events you can attend.
+
+
+
+
+
+Approach :
+1 . Sorting Events: 
+The events are sorted by their start days to ensure we process them in the order they begin. This helps in efficiently adding events to the heap as they become available.
+
+2 . Heap Management: 
+The min-heap is used to keep track of the end days of the events. By always selecting the event with the smallest end day, we ensure that we attend events that free up days the soonest, allowing us to attend more events overall.
+
+3 . Processing Days:
+Adding Events: For each day, we add all events that start on or before that day to the heap. This ensures that all available events are considered for attendance.
+
+Removing Expired Events: We remove any events from the heap that have already ended before the current day, as they can no longer be attended.
+
+Attending Events: If there are events left in the heap, we attend the one with the earliest end day, increment our count of attended events, and move to the next day.
+
+4 . Result: 
+The total number of events attended is returned, which is the maximum possible given the constraints.
+
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(n)
