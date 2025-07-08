@@ -1,0 +1,71 @@
+Next element with greater frequency
+________________________________________________________
+
+class Solution {
+    public ArrayList<Integer> findGreater(int[] arr) {
+        int n = arr.length;
+        ArrayList<Integer> result = new ArrayList<>(Collections.nCopies(n, -1));
+        Map<Integer, Integer> freqMap = new HashMap<>();
+
+        // Step 1: Calculate frequencies
+        for (int num : arr) {
+            freqMap.put(num, freqMap.getOrDefault(num, 0) + 1);
+        }
+
+        Stack<Integer> stack = new Stack<>();
+
+        // Step 2: Traverse from right to left
+        for (int i = n - 1; i >= 0; i--) {
+            int currFreq = freqMap.get(arr[i]);
+
+            // Pop elements with freq <= current's freq
+            while (!stack.isEmpty() && freqMap.get(stack.peek()) <= currFreq) {
+                stack.pop();
+            }
+
+            // Top of the stack has higher frequency
+            if (!stack.isEmpty()) {
+                result.set(i, stack.peek());
+            }
+
+            // Push current element into stack
+            stack.push(arr[i]);
+        }
+
+        return result;
+    }
+}
+
+________________________________________________________
+
+
+
+
+
+Problem Statement : 
+Given an array arr[] of integers, for each element, find the closest (distance wise) to its right that has a higher frequency than the current element.
+If no such element exists, return -1 for that position.
+
+
+
+
+
+Approach : 
+Step 1: Frequency Count
+Use a HashMap to count the frequency of each element in the array.
+
+Step 2: Stack-based Right-to-Left Traversal
+Traverse the array from right to left.
+Use a stack to keep track of candidates for the "next greater frequency".
+For each element arr[i], remove elements from the stack whose frequency is less than or equal to the current element’s frequency.
+If stack is not empty after cleanup, its top is the next element with greater frequency.
+Push arr[i] into the stack.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
