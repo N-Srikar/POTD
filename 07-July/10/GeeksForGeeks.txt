@@ -1,0 +1,60 @@
+Find the longest string
+________________________________________________________
+
+class Solution {
+    public String longestString(String[] words) {
+        Arrays.sort(words); // Sort lexicographically
+        Set<String> set = new HashSet<>();
+        String result = "";
+
+        for (String word : words) {
+            if (word.length() == 1 || set.contains(word.substring(0, word.length() - 1))) {
+                set.add(word);
+                if (word.length() > result.length() || 
+                   (word.length() == result.length() && word.compareTo(result) < 0)) {
+                    result = word;
+                }
+            }
+        }
+
+        return result;
+    }
+}
+
+________________________________________________________
+
+
+
+
+
+Problem Statement : 
+Given an array of strings words[]. Find the longest string in words[] such that every prefix of it is also present in the array words[]. 
+
+Note: If multiple strings have the same maximum length, return the lexicographically smallest one.
+
+
+
+
+
+Approach : 
+Sort the array of words lexicographically.
+
+Use a HashSet to keep track of valid prefixes.
+
+Traverse through each word:
+If the word has length 1 or its prefix (word without last char) is already in the set, it's valid.
+Add it to the set.
+
+Update the answer if:
+Its length is greater, or
+Length is equal and it is lexicographically smaller.
+
+Return the final answer.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n log n + n * k)
+Space Complexity : O(n * k)
