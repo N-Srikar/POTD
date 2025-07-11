@@ -1,0 +1,77 @@
+Trail of ones
+________________________________________________________
+
+class Solution {
+    public int countConsec(int n) {
+        // zeroEnd = # of valid strings of length i ending in '0'
+        // oneEnd  = # of valid strings of length i ending in '1'
+        int zeroEnd = 1;  // for i=1: {"0"}
+        int oneEnd  = 1;  // for i=1: {"1"}
+
+        // Build up to length n
+        for (int i = 2; i <= n; i++) {
+            // If we place '0' at the end, we can follow either a string ending in 0 or in 1:
+            int newZero = zeroEnd + oneEnd;
+            // If we place '1' at the end, the previous character *must* be '0':
+            int newOne  = zeroEnd;
+            
+            zeroEnd = newZero;
+            oneEnd  = newOne;
+        }
+        
+        // total strings without any consecutive 1's:
+        int noConsec = zeroEnd + oneEnd;
+        // total binary strings of length n = 2^n
+        int total    = 1 << n;     // safe for n ≤ 30
+        
+        // desired = those with ≥1 occurrence of "11"
+        return total - noConsec;
+    }
+}
+
+
+________________________________________________________
+
+
+
+
+
+Problem Statement :
+Given an integer n, the task is to count the number of binary strings of length n that contains at least one pair of consecutive 1's.
+
+Note: A binary string is a sequence made up of only 0's and 1's.
+
+
+
+
+
+
+Approach :
+Total binary strings of length n = 2^n.
+Count binary strings with no consecutive 1’s (call this noConsec)
+
+Use dynamic programming:
+Let zeroEnd = number of valid strings ending in '0'
+Let oneEnd = number of valid strings ending in '1'
+
+Base case (n = 1): zeroEnd = 1, oneEnd = 1
+For i = 2 to n:
+newZero = zeroEnd + oneEnd       // '0' can follow both
+newOne  = zeroEnd                // '1' can only follow '0'
+
+Update: 
+zeroEnd = newZero, oneEnd = newOne
+
+Total strings without consecutive 1's = zeroEnd + oneEnd.
+
+Answer = total strings − strings with no consecutive 1's
+result = (1 << n) − (zeroEnd + oneEnd)
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
