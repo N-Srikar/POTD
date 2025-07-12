@@ -1,0 +1,72 @@
+Gold Mine Problem
+_______________________________________________________
+
+class Solution {
+    public int maxGold(int[][] mat) {
+        int n = mat.length;
+        int m = mat[0].length;
+        int[][] dp = new int[n][m];
+
+        // Fill the last column
+        for (int i = 0; i < n; i++) {
+            dp[i][m - 1] = mat[i][m - 1];
+        }
+
+        // Traverse from second last column to first
+        for (int j = m - 2; j >= 0; j--) {
+            for (int i = 0; i < n; i++) {
+                int right = dp[i][j + 1];
+                int rightUp = (i > 0) ? dp[i - 1][j + 1] : 0;
+                int rightDown = (i < n - 1) ? dp[i + 1][j + 1] : 0;
+
+                dp[i][j] = mat[i][j] + Math.max(right, Math.max(rightUp, rightDown));
+            }
+        }
+
+        // Find max in first column
+        int maxGold = 0;
+        for (int i = 0; i < n; i++) {
+            maxGold = Math.max(maxGold, dp[i][0]);
+        }
+
+        return maxGold;
+    }
+}
+
+_______________________________________________________
+
+
+Problem Statement :
+Given a gold mine called mat[][]. 
+Each field in this mine contains a positive integer which is the amount of gold in tons. 
+
+Initially, the miner can start from any row in the first column. From a given cell, the miner can move -
+to the cell diagonally up towards the right
+to the right
+to the cell diagonally down towards the right
+
+Find out the maximum amount of gold that he can collect until he can no longer move.
+
+
+
+
+
+Approach : 
+Create a dp[][] matrix of the same size as mat[][].
+
+Fill the last column of dp with the values of mat (as no further moves are possible from there).
+
+Loop through columns from m-2 to 0.
+
+For each cell (i, j) in that column, compute the maximum of the three allowed moves and update dp[i][j].
+
+The answer will be the maximum value in the first column of dp.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n × m)
+Space Complexity : O(n × m)
