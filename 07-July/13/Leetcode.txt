@@ -1,0 +1,73 @@
+2410. Maximum Matching of Players With Trainers
+_______________________________________________________
+
+class Solution {
+    public int matchPlayersAndTrainers(int[] players, int[] trainers) {
+        Arrays.sort(players);
+        Arrays.sort(trainers);
+        
+        int count = 0;
+        int i = 0; // pointer for players
+        int j = 0; // pointer for trainers
+        
+        while (i < players.length && j < trainers.length) {
+            if (players[i] <= trainers[j]) {
+                // Match found, move both pointers
+                count++;
+                i++;
+                j++;
+            } else {
+                // Current trainer can't train this player, try next trainer
+                j++;
+            }
+        }
+        return count;
+    }
+}
+_______________________________________________________
+
+
+
+
+Problem Statement :
+You are given a 0-indexed integer array players, where players[i] represents the ability of the ith player. You are also given a 0-indexed integer array trainers, where trainers[j] represents the training capacity of the jth trainer.
+
+The ith player can match with the jth trainer if the player's ability is less than or equal to the trainer's training capacity. Additionally, the ith player can be matched with at most one trainer, and the jth trainer can be matched with at most one player.
+
+Return the maximum number of matchings between players and trainers that satisfy these conditions.
+
+
+
+
+
+
+Approach : 
+Sort Both Arrays
+Sort players in ascending order (to start with the weakest player).
+Sort trainers in ascending order (to start with the least capable trainer).
+
+Two-Pointer Technique
+Initialize two pointers, 
+i (for players) and j (for trainers), both starting at 0.
+
+Compare players[i] with trainers[j]:
+If players[i] ≤ trainers[j]:
+A valid match is found → increment count.
+Move both pointers forward (since this player and trainer are now matched).
+
+Else (players[i] > trainers[j]):
+The current trainer is too weak → skip this trainer (move j forward).
+
+Repeat until either all players or all trainers are processed.
+
+Return the Count
+The total number of valid matches (count) is the answer.
+
+
+
+
+
+
+Complexity :
+Time Complexity : O(n logn + m logm)
+Space Complexity : O(1)
