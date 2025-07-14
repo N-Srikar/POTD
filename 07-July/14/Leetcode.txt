@@ -1,0 +1,67 @@
+1290. Convert Binary Number in a Linked List to Integer
+________________________________________________________
+
+class Solution {
+    public int getDecimalValue(ListNode head) {
+        int count = 1; // Initialize power multiplier
+        int num = 0;   // Final decimal value
+        ListNode cur = head;
+
+        // First pass: find the length of the list to determine the initial power of 2
+        while (cur != null) {
+            cur = cur.next;
+            count *= 2; // Double count for each node to simulate shifting left
+        }
+
+        count /= 2; // Adjust count (it will be one step too far after last iteration)
+
+        cur = head; // Reset pointer to head
+
+        // Second pass: compute decimal value
+        while (cur != null) {
+            num += cur.val * count; // Add the current bit's decimal contribution
+            count /= 2;             // Move to the next lower power of 2
+            cur = cur.next;
+        }
+
+        return num; // Return the final decimal number
+    }
+}
+________________________________________________________
+
+
+
+
+
+Problem Statement :
+Given head which is a reference node to a singly-linked list. The value of each node in the linked list is either 0 or 1. The linked list holds the binary representation of a number.
+
+Return the decimal value of the number in the linked list.
+
+The most significant bit is at the head of the linked list.
+
+
+
+
+
+Approach : 
+irst Pass: Compute Length (n)
+Traverse the list to find the number of nodes n.
+Set count = 2^n, then divide once by 2 to get: count = 2^(n - 1)
+
+Second Pass: Calculate Decimal Value
+Traverse the list again:
+For each node with value a:
+num += aᵢ × count
+count /= 2
+
+
+This gives the decimal equivalent of the binary number in the linked list.
+
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(1)
