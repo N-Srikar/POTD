@@ -1,0 +1,66 @@
+Cutting Binary String
+________________________________________________________
+
+class Solution {
+    public int cuts(String s) {
+        int n = s.length();
+
+        // Precompute powers of 5 in binary
+        Set<String> powerOf5 = new HashSet<>();
+        for (long i = 1; ; i *= 5) {
+            String bin = Long.toBinaryString(i);
+            if (bin.length() > n) break;
+            powerOf5.add(bin);
+        }
+
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0; // Empty string requires 0 cuts
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                String sub = s.substring(j, i);
+                if (s.charAt(j) != '0' && powerOf5.contains(sub)) {
+                    if (dp[j] != Integer.MAX_VALUE) {
+                        dp[i] = Math.min(dp[i], dp[j] + 1);
+                    }
+                }
+            }
+        }
+
+        return dp[n] == Integer.MAX_VALUE ? -1 : dp[n];
+    }
+}
+
+________________________________________________________
+
+
+
+
+
+Problem Statement :
+You are given a binary string s consisting only of characters '0' and '1'. Your task is to split this string into the minimum number of non-empty substrings such that:
+Each substring represents a power of 5 in decimal (e.g., 1, 5, 25, 125, ...).
+No substring should have leading zeros.
+
+Return the minimum number of such pieces the string can be divided into.
+Note: If it is not possible to split the string in this way, return -1.
+
+
+
+
+
+Approach : 
+Precompute binary strings of powers of 5 up to the length of s.
+
+Use Dynamic Programming:
+Let dp[i] be the minimum cuts needed to split s[0...i-1].
+Try all substrings s[j...i-1], and if it’s a power of 5 and has no leading zero, update dp[i] = min(dp[i], dp[j] + 1).
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n^2)
+Space Complexity: O(n)
