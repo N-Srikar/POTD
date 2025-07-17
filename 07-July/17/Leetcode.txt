@@ -1,0 +1,48 @@
+3202. Find the Maximum Length of Valid Subsequence II
+________________________________________________________
+
+class Solution {
+    public int maximumLength(int[] nums, int k) {
+        int dp[][] = new int[k][k], max = 0;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < k; j++) {
+                max = Math.max(max, dp[nums[i] % k][j] = dp[j][nums[i] % k] + 1);
+            }
+        }
+        return max;
+    }
+}
+________________________________________________________
+
+
+
+Problem Statement :
+You are given an integer array nums and a positive integer k.
+A subsequence sub of nums with length x is called valid if it satisfies:
+
+(sub[0] + sub[1]) % k == (sub[1] + sub[2]) % k == ... == (sub[x - 2] + sub[x - 1]) % k.
+Return the length of the longest valid subsequence of nums.
+
+
+
+
+Approach : 
+Initialization:
+Initialize a 2D DP array dp of size k x k to keep track of the length of subsequences ending with different remainders modulo k.
+
+DP Transition:
+Iterate through each element in nums.
+For each element nums[i], update the DP table such that for each remainder j from 0 to k-1, update dp[nums[i] % k][j] to dp[j][nums[i] % k] + 1.
+Simultaneously, update the maximum length max by comparing it with the current DP value being updated.
+
+Result:
+The result will be stored in max, which represents the length of the longest valid subsequence found.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n * k)
+Space Complexity : O(k^2)
