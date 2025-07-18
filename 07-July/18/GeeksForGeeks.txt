@@ -1,0 +1,39 @@
+LCM Triplet
+________________________________________________________
+
+class Solution {
+    int lcmTriplets(int n) {
+        if (n < 3) return n;
+        if (n == 3) return 6;
+        if (n % 2 == 1) return n * (n - 1) * (n - 2);
+        if (n % 3 != 0) return n * (n - 1) * (n - 3);
+        return (n - 1) * (n - 2) * (n - 3);
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given a number n, find the maximum possible LCM that can be obtained by selecting three numbers less than or equal to n.
+Note : LCM stands for Lowest Common Multiple.
+
+
+
+
+
+Approach :
+If n < 3: return n.
+If n == 3: return 6.
+If n is odd: return n * (n - 1) * (n - 2).
+If n is even and n % 3 != 0: return n * (n - 1) * (n - 3).
+Else (n is divisible by both 2 and 3): return (n - 1) * (n - 2) * (n - 3).
+
+
+
+
+Complexity : 
+Time Complexity : O(1)
+Space Complexity : O(1)
