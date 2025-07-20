@@ -1,0 +1,74 @@
+Count Numbers Containing Specific Digits
+_________________________________________________________
+
+class Solution {
+    public int countValid(int n, int[] arr) {
+        Set<Integer> forbidden = new HashSet<>();
+        for (int digit : arr) {
+            forbidden.add(digit);
+        }
+
+        List<Integer> allowed = new ArrayList<>();
+        List<Integer> allowedNonZero = new ArrayList<>();
+        for (int i = 0; i <= 9; i++) {
+            if (!forbidden.contains(i)) {
+                allowed.add(i);
+                if (i != 0) {
+                    allowedNonZero.add(i);
+                }
+            }
+        }
+
+        if (allowedNonZero.size() == 0) return (int)(Math.pow(10, n - 1) * 9);  // All invalid
+
+        int d = allowed.size();
+        int d1 = allowedNonZero.size();
+
+        // Count of numbers with only allowed digits
+        int onlyAllowed = d1 * (int)Math.pow(d, n - 1);
+
+        // Total n-digit numbers
+        int total = 9 * (int)Math.pow(10, n - 1);
+
+        return total - onlyAllowed;
+    }
+}
+
+_________________________________________________________
+
+
+
+
+
+Problem Statement :
+You are given an integer n representing the number of digits in a number, and an array arr[] containing digits from 0 to 9. Your have to count how many n-digit positive integers can be formed such that at least one digit from the array arr[] appears in the number.
+
+
+
+
+
+Approach : 
+Step 1: Build allowed digits (digits NOT in arr[])
+Let forbiddenDigits = set(arr[])
+Let allowedDigits = all digits (0-9) except forbiddenDigits
+
+Step 2: Count how many n-digit numbers can be formed using only allowed digits
+First digit: can't be 0 → from allowedDigits excluding 0
+Other digits: from all allowedDigits
+If number of allowed digits is small (especially < 1 for first digit), count is 0.
+
+Let:
+d = total allowed digits
+d1 = number of allowed digits excluding 0 (for the first digit)
+Valid numbers = d1 × d^(n-1)
+
+Step 3: Total valid = total n-digit numbers - those without any digit from arr[]
+Answer = total_n_digit_numbers - only_allowed_digit_numbers
+
+
+
+
+
+Complexity : 
+Time Complexity : O(1)
+Space Complexity : O(1)
