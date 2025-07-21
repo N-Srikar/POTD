@@ -1,0 +1,114 @@
+Count the Coprimes
+______________________________________________________
+
+class Solution {
+    public int cntCoprime(int[] arr) {
+        int n = arr.length;
+        if (n < 2) return 0;
+
+        // 1) Find maximum
+        int M = 0;
+        for (int x : arr) {
+            if (x > M) M = x;
+        }
+
+        // 2) Frequency
+        int[] freq = new int[M + 1];
+        for (int x : arr) {
+            freq[x]++;
+        }
+
+        // 3) Count multiples: cnt[d] = #elements divisible by d
+        int[] cnt = new int[M + 1];
+        for (int d = 1; d <= M; d++) {
+            for (int j = d; j <= M; j += d) {
+                cnt[d] += freq[j];
+            }
+        }
+
+        // 4) Compute Mobius μ[1..M] by linear sieve
+        int[] mu = new int[M + 1];
+        boolean[] isComposite = new boolean[M + 1];
+        List<Integer> primes = new ArrayList<>();
+
+        mu[1] = 1;
+        for (int i = 2; i <= M; i++) {
+            if (!isComposite[i]) {
+                primes.add(i);
+                mu[i] = -1;         // prime => μ = -1
+            }
+            for (int p : primes) {
+                long ip = 1L * i * p;
+                if (ip > M) break;
+                isComposite[(int)ip] = true;
+                if (i % p == 0) {
+                    mu[(int)ip] = 0; // squared factor => μ = 0
+                    break;
+                } else {
+                    mu[(int)ip] = -mu[i];
+                }
+            }
+        }
+
+        // 5) Inclusion-Exclusion sum
+        long answer = 0;
+        for (int d = 1; d <= M; d++) {
+            int c = cnt[d];
+            if (c > 1 && mu[d] != 0) {
+                long pairs = (long)c * (c - 1) / 2;
+                answer += mu[d] * pairs;
+            }
+        }
+
+        return (int) answer;
+    }
+}
+
+______________________________________________________
+
+
+
+Problem Statement : 
+You are given an array arr[] of positive integers. Your task is to count the number of pairs (i, j) such that:
+0 ≤ i < j ≤ n-1
+gcd(arr[i], arr[j]) = 1
+
+In other words, count the number of unordered pairs of indices (i, j) where the elements at those positions are co-prime.
+
+
+
+
+Approach : 
+Find maximum value
+Scan arr[] to get M = max(arr).
+
+Build frequency array
+freq[x] = number of occurrences of x in arr.
+
+Count multiples
+For each d from 1 to M,
+so that cnt[d] is the count of elements divisible by d.
+
+Compute Mobius function μ[1..M] via a linear sieve:
+μ[1] = 1
+Maintain a list of primes.
+For each i from 2 to M:
+If i is unmarked, it’s prime → μ[i] = -1, add to primes.
+For each prime p in primes:
+If i * p > M, break.
+Mark i*p as composite.
+If i % p == 0, then μ[i*p] = 0 and break the prime‐loop.
+Else μ[i*p] = -μ[i].
+
+Inclusion–Exclusion
+Number of pairs with gcd exactly 1 is
+
+Return that sum.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n logn)
+Space Complexity : O(n)
