@@ -1,0 +1,103 @@
+1948. Delete Duplicate Folders in System
+_______________________________________________________
+
+class Solution {
+    static class Node {
+        String name;
+        TreeMap<String, Node> children;
+        String signature;
+
+        public Node(String name) {
+            this.name = name;
+            this.children = new TreeMap<>();
+        }
+    }
+
+    public List<List<String>> deleteDuplicateFolder(List<List<String>> paths) {
+        Node root = new Node("");
+        for (List<String> path : paths) {
+            Node curr = root;
+            for (String folder : path) {
+                curr.children.putIfAbsent(folder, new Node(folder));
+                curr = curr.children.get(folder);
+            }
+        }
+
+        Map<String, Integer> countMap = new HashMap<>();
+        dfs(root, countMap);
+
+        List<List<String>> result = new ArrayList<>();
+        List<String> currentPath = new ArrayList<>();
+        for (Node child : root.children.values()) {
+            dfs2(child, currentPath, result, countMap);
+        }
+        return result;
+    }
+
+    private void dfs(Node node, Map<String, Integer> countMap) {
+        if (node.children.isEmpty()) {
+            node.signature = "";
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Node child : node.children.values()) {
+            dfs(child, countMap);
+            sb.append(child.name).append('(').append(child.signature).append(')');
+        }
+        node.signature = sb.toString();
+        countMap.put(node.signature, countMap.getOrDefault(node.signature, 0) + 1);
+    }
+
+    private void dfs2(Node node, List<String> currentPath, List<List<String>> result, Map<String, Integer> countMap) {
+        if (!node.children.isEmpty() && countMap.getOrDefault(node.signature, 0) >= 2) {
+            return;
+        }
+        currentPath.add(node.name);
+        result.add(new ArrayList<>(currentPath));
+        for (Node child : node.children.values()) {
+            dfs2(child, currentPath, result, countMap);
+        }
+        currentPath.remove(currentPath.size() - 1);
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement : 
+Due to a bug, there are many duplicate folders in a file system. You are given a 2D array paths, where paths[i] is an array representing an absolute path to the ith folder in the file system.
+
+For example, ["one", "two", "three"] represents the path "/one/two/three".
+Two folders (not necessarily on the same level) are identical if they contain the same non-empty set of identical subfolders and underlying subfolder structure. The folders do not need to be at the root level to be identical. If two or more folders are identical, then mark the folders as well as all their subfolders.
+
+
+
+
+
+
+
+Approach : 
+Build the File Tree (Trie-like)
+Insert each folder path into a tree node structure.
+Each node stores:
+Folder name
+TreeMap of children (for ordered serialization)
+Signature string (initially empty)
+
+Serialize Subtrees via Post-order DFS
+Traverse tree bottom-up to create a unique signature string per subtree.
+Record signature frequencies in a map.
+Example format: b(c())d() for a node with children b → c, d.
+
+Prune Duplicate Subtrees via Second DFS
+Traverse tree top-down.
+If a node’s signature appears more than once, skip it (i.e., delete).
+Else, collect the path for output.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(N)
+Space Complexity : O(N)
