@@ -1,0 +1,52 @@
+1957. Delete Characters to Make Fancy String
+________________________________________________________
+
+class Solution {
+    public String makeFancyString(String s) {
+        char prev = s.charAt (0);
+        int freq = 1;
+        StringBuilder res = new StringBuilder ();
+        res.append (s.charAt (0));
+        for (int i = 1; i < s.length (); i++) {
+            if (s.charAt (i) == prev)
+                freq++;
+            else {
+                prev = s.charAt (i);
+                freq = 1;
+            }
+            if (freq < 3)
+                res.append (s.charAt (i));
+        }
+        return res.toString ();
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement :
+A fancy string is a string where no three consecutive characters are equal.
+
+Given a string s, delete the minimum possible number of characters from s to make it fancy.
+
+Return the final string after the deletion. It can be shown that the answer will always be unique.
+
+
+
+
+
+Approach : 
+Append the first character to the result (no point deleting it!).
+Keep a prev variable and a freq variable marking the frequency of the character seen just before. Initialize prev with the first character of the string and freq with 1.
+If the current character is equal to prev, increment freq by 1, else change prev to the current character and reset freq = 1.
+If freq < 3, append the current character to the result, else skip the character.
+After the loop ends, return the resultant string.
+
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(n)
