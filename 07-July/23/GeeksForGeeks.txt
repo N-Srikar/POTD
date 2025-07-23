@@ -1,0 +1,44 @@
+Sum of Subarrays
+________________________________________________________
+
+class Solution {
+    public int subarraySum(int[] arr) {
+        int totalSum = 0;
+        int n = arr.length;
+
+        for (int i = 0; i < n; i++) {
+            totalSum += arr[i] * (i + 1) * (n - i);
+        }
+
+        return totalSum;
+    }
+}
+
+________________________________________________________
+
+
+
+Problem Statement : 
+Given an array arr[], find the sum of all the subarrays of the given array.
+
+Note: It is guaranteed that the total sum will fit within a 32-bit integer range.
+
+
+
+
+Approach :
+For each element at index i:
+It appears in (i + 1) * (n - i) subarrays:
+(i + 1) choices to pick starting index before or at i
+(n - i) choices to pick ending index at or after i
+
+So, its total contribution to the sum of all subarrays is:
+arr[i] * (i + 1) * (n - i)
+
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(1)
