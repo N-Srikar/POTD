@@ -1,0 +1,89 @@
+1717. Maximum Score From Removing Substrings
+_______________________________________________________
+
+class Solution {
+    public int pop(StringBuilder str, char a, char b) {
+        int count = 0;
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (!stack.isEmpty() && ch == b && stack.peek() == a) {
+                stack.pop();
+                count++;
+            } else {
+                stack.push(ch);
+            }
+        }
+
+        str.setLength(0);
+        while (!stack.isEmpty()) {
+            str.append(stack.pop());
+        }
+        str.reverse();
+        return count;
+    }
+
+    public int maximumGain(String s, int x, int y) {
+        StringBuilder sb = new StringBuilder(s);
+        int c1 = 0, c2 = 0;
+
+        if (x > y) {
+            c1 = pop(sb, 'a', 'b');
+            c2 = pop(sb, 'b', 'a');
+        } else {
+            c2 = pop(sb, 'b', 'a');
+            c1 = pop(sb, 'a', 'b');
+        }
+
+        return c1 * x + c2 * y;
+    }
+}
+
+_______________________________________________________
+
+
+
+
+
+
+Problem Statement : 
+You are given a string s and two integers x and y. You can perform two types of operations any number of times.
+
+Remove substring "ab" and gain x points.
+For example, when removing "ab" from "cabxbae" it becomes "cxbae".
+Remove substring "ba" and gain y points.
+For example, when removing "ba" from "cabxbae" it becomes "cabxe".
+Return the maximum points you can gain after applying the above operations on s.
+
+ 
+
+
+
+
+Approach : 
+Greedy Strategy Based on Value:
+Always remove the more valuable substring first ("ab" if x > y, "ba" if y > x).
+This ensures maximum score since overlapping patterns like "aba" or "bab" can only yield one pair at a time.
+
+Stack-Based Removal (pop function):
+Traverse the string using a stack.
+If the current character forms the target pair with the top of the stack, pop and count the score.
+Otherwise, push the character onto the stack.
+After traversal, rebuild the string from the stack (in reverse order).
+
+Two-Pass Removal:
+First pass: Remove the higher-value pair.
+Second pass: Remove the remaining lower-value pair from the updated string.
+
+Final Score Calculation:
+Multiply the count of each removed pair by its respective score (x or y) and return the sum.
+
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
