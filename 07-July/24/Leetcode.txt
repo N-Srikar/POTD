@@ -1,0 +1,118 @@
+2322. Minimum Score After Removals on a Tree
+________________________________________________________
+
+import java.util.*;
+
+class Solution {
+    private int[] subtreeXor;
+    private Set<Integer>[] descendants;
+    private List<Integer>[] graph;
+
+    private void dfs(int node, int parent, int[] nums) {
+        subtreeXor[node] = nums[node];
+        descendants[node].add(node);
+
+        for (int neighbor : graph[node]) {
+            if (neighbor != parent) {
+                dfs(neighbor, node, nums);
+                subtreeXor[node] ^= subtreeXor[neighbor];
+                descendants[node].addAll(descendants[neighbor]);
+            }
+        }
+    }
+
+    public int minimumScore(int[] nums, int[][] edges) {
+        int n = nums.length;
+        graph = new ArrayList[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        for (int[] edge : edges) {
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
+        }
+
+        subtreeXor = new int[n];
+        descendants = new HashSet[n];
+        for (int i = 0; i < n; i++) {
+            descendants[i] = new HashSet<>();
+        }
+
+        dfs(0, -1, nums);
+
+        int totalXor = subtreeXor[0];
+        int minScore = Integer.MAX_VALUE;
+
+        for (int i = 1; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int xorI = subtreeXor[i];
+                int xorJ = subtreeXor[j];
+                int val1, val2, val3;
+
+                if (descendants[i].contains(j)) {
+                    val1 = xorJ;
+                    val2 = xorI ^ xorJ;
+                    val3 = totalXor ^ xorI;
+                } else if (descendants[j].contains(i)) {
+                    val1 = xorI;
+                    val2 = xorJ ^ xorI;
+                    val3 = totalXor ^ xorJ;
+                } else { 
+                    val1 = xorI;
+                    val2 = xorJ;
+                    val3 = totalXor ^ xorI ^ xorJ;
+                }
+                
+                int maxVal = Math.max(val1, Math.max(val2, val3));
+                int minVal = Math.min(val1, Math.min(val2, val3));
+                minScore = Math.min(minScore, maxVal - minVal);
+            }
+        }
+
+        return minScore;
+    }
+}
+________________________________________________________
+
+
+
+Problem Statement : 
+There is an undirected connected tree with n nodes labeled from 0 to n - 1 and n - 1 edges.
+
+You are given a 0-indexed integer array nums of length n where nums[i] represents the value of the ith node. You are also given a 2D integer array edges of length n - 1 where edges[i] = [ai, bi] indicates that there is an edge between nodes ai and bi in the tree.
+
+Remove two distinct edges of the tree to form three connected components. For a pair of removed edges, the following steps are defined:
+
+Get the XOR of all the values of the nodes for each of the three components respectively.
+The difference between the largest XOR value and the smallest XOR value is the score of the pair.
+
+Return the minimum score of any possible pair of edge removals on the given tree.
+
+
+
+
+
+
+
+Approach : 
+Our game plan is straightforward:
+Build the Graph: Convert the edges list into an adjacency list, which is perfect for tree traversals.
+
+DFS Pre-computation: We'll run a single DFS from a root (let's pick node 0). 
+This DFS will have a "post-order" nature, meaning we process a node's children before finalizing the calculations for the node itself. 
+For each node, our DFS will compute:
+subtree_xor[node]: The XOR sum of all node values in the subtree rooted at node.
+descendants[node]: A set containing all nodes that are descendants of node (including the node itself).
+
+Iterate Through All Cuts: 
+After the DFS, we have all the info we need. We can simulate cutting any two edges by picking two nodes, i and j, and considering the edges that connect them to their parents. 
+For every pair of nodes (i, j) (where i != j and neither is the root), 
+there are three geometric scenarios for how their subtrees are related.
+
+
+
+
+
+Complexity : 
+Time complexity: O(n^2)
+Space complexity: O(n^2)
