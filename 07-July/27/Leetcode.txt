@@ -1,0 +1,53 @@
+2210. Count Hills and Valleys in an Array
+________________________________________________________
+
+class Solution {
+    public int countHillValley(int[] nums) {
+        int count = 0;
+        int left = 0;
+
+        for (int i = 1; i < nums.length - 1; i++) {
+            if (nums[i] != nums[i + 1]) {
+                if ((nums[i] > nums[left] && nums[i] > nums[i + 1]) || 
+                    (nums[i] < nums[left] && nums[i] < nums[i + 1])) {
+                    count++;
+                }
+                left = i;
+            }
+        }
+        return count;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given a 0-indexed integer array nums. An index i is part of a hill in nums if the closest non-equal neighbors of i are smaller than nums[i]. Similarly, an index i is part of a valley in nums if the closest non-equal neighbors of i are larger than nums[i]. Adjacent indices i and j are part of the same hill or valley if nums[i] == nums[j].
+
+Note that for an index to be part of a hill or valley, it must have a non-equal neighbor on both the left and right of the index.
+
+Return the number of hills and valleys in nums.
+
+
+
+
+
+Approach : 
+iterate through the array from index 1 to length−2
+skip consecutive duplicates by comparing the current element with the next one.
+use a left pointer to track the last distinct element before the current index.
+Now, check if the current element is greater than both neighbors ‘‘hill" or smaller than both ‘‘valley".
+If a hill or valley is found, increment count.
+Continue the process until the end of the array.
+
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
