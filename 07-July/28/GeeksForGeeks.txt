@@ -1,0 +1,76 @@
+Make Matrix Beautiful
+_______________________________________________________
+
+class Solution {
+    public static int balanceSums(int[][] mat) {
+        int n = mat.length;
+        int[] rowSum = new int[n];
+        int[] colSum = new int[n];
+        
+        int maxSum = 0;
+        
+        // Step 1: Compute row sums and column sums
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                rowSum[i] += mat[i][j];
+                colSum[j] += mat[i][j];
+            }
+        }
+        
+        // Step 2: Find the target max sum
+        for (int i = 0; i < n; i++) {
+            maxSum = Math.max(maxSum, rowSum[i]);
+            maxSum = Math.max(maxSum, colSum[i]);
+        }
+
+        int count = 0;
+        
+        // Step 3: Greedy balancing using row and column pointers
+        int i = 0, j = 0;
+        while (i < n && j < n) {
+            // find minimum of how much row i and column j can be incremented
+            int diff = Math.min(maxSum - rowSum[i], maxSum - colSum[j]);
+            mat[i][j] += diff;
+            rowSum[i] += diff;
+            colSum[j] += diff;
+            count += diff;
+            
+            // move to next row or column if that one is balanced
+            if (rowSum[i] == maxSum) i++;
+            if (colSum[j] == maxSum) j++;
+        }
+        
+        return count;
+    }
+}
+
+_______________________________________________________
+
+
+
+Problem Statement :
+A beautiful matrix is defined as a square matrix in which the sum of elements in every row and every column is equal. Given a square matrix mat[][], your task is to determine the minimum number of operations required to make the matrix beautiful.
+In one operation, you are allowed to increment the value of any single cell by 1.
+
+
+
+
+
+
+Approach : 
+Compute sum of each row and column.
+
+Determine the target sum = maximum of all row/column sums.
+
+For each cell, increment the value to make its row sum and column sum move toward the target.
+
+Greedily, we iterate through the matrix and increase cells to reduce the difference.
+
+
+
+
+
+
+Complexity :
+Time Complexity : O(n^2)
+Space Complexity : O(n)
