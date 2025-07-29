@@ -1,0 +1,77 @@
+ASCII Range Sum
+_______________________________________________________
+
+class Solution {
+    public ArrayList<Integer> asciirange(String s) {
+        int len=s.length();
+        int prefix[] = new int[len];
+        
+        for(int i=0 ; i<len ; i++){
+            if(i==0){
+                prefix[i] = 97 + s.charAt(i)-'a';
+                continue;
+            }
+            prefix[i] = prefix[i-1] + 97 + s.charAt(i)-'a';        
+        }
+        
+        int arr[] = new int[26];
+        int sum[] = new int[26];
+        
+        Arrays.fill(arr,-1);
+        
+        for(int i=0 ; i<len ; i++){
+            char ch=s.charAt(i);
+            int idx=ch-'a';
+            if(arr[idx]==-1){
+                arr[idx]=i;
+            }
+            else{
+                int asciisum = prefix[i]-prefix[arr[idx]]- (ch-'a'+97);
+                sum[idx]=asciisum;
+            }
+        }
+        
+        ArrayList<Integer> res = new ArrayList<>();
+        for(int i=0 ; i<26 ; i++){
+            if(sum[i]!=0){
+                res.add(sum[i]);
+            }
+        }
+        
+        return res;
+    }
+}
+_______________________________________________________
+
+
+
+Problem Statement : 
+Given a string s consisting of lowercase English letters, for every character whose first and last occurrences are at different positions, calculate the sum of ASCII values of characters strictly between its first and last occurrence.
+
+Return all such non-zero sums (order does not matter).
+
+
+
+
+Approach : 
+Prefix Sum Array Construction:
+Build a prefix sum array prefix[] where each index i stores the cumulative sum of ASCII values of characters from the start of the string up to index i.
+
+Track First Occurrence:
+Create an array arr[] of size 26 (for lowercase letters) initialized with -1 to store the first occurrence index of each character.
+
+Compute ASCII Range Sums:
+For each character in the string:
+If it's the first occurrence, store the index in arr[].
+If it's a repeat, calculate the sum of ASCII values strictly between its first and last occurrence using the prefix sum array, and store it in sum[].
+
+Collect Results:
+Traverse the sum[] array and add all non-zero values to the result list.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(1)
