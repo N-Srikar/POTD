@@ -1,0 +1,65 @@
+Subarrays with sum K
+________________________________________________________
+
+class Solution {
+    public int cntSubarrays(int[] arr, int target) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        int len = arr.length;
+        int count = 0;
+        int sum = 0;
+        for(int i=0 ; i<len ; i++){
+            sum+=arr[i];
+
+            if(sum==target){
+                count++;
+            }
+            
+            int diff = sum - target;
+            if(map.containsKey(diff)){
+                count += map.get(diff);
+            }
+            
+            map.put(sum,map.getOrDefault(sum,0)+1);
+        }
+        return count;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+Given an unsorted array arr[] of integers, find the number of subarrays whose sum exactly equal to a given number k.
+
+
+
+
+Approach :
+Initialize:
+sum = 0: Cumulative/prefix sum.
+count = 0: To store the total number of valid subarrays.
+map: Stores frequency of prefix sums seen so far.
+
+Traverse the array:
+Add arr[i] to sum.
+
+Check if prefix sum equals target:
+If sum == target, increment count (subarray from start to i is valid).
+
+Check if there exists a prefix sum that when subtracted gives target:
+Compute diff = sum - target.
+If diff exists in map, add map.get(diff) to count.
+
+Update the map:
+Store the current sum in the map with its frequency: map.put(sum, map.getOrDefault(sum, 0) + 1).
+
+Return count at the end.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
