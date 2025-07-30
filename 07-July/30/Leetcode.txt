@@ -1,0 +1,72 @@
+2419. Longest Subarray With Maximum Bitwise AND
+________________________________________________________
+
+class Solution {
+    public int longestSubarray(int[] arr) {
+        int maxand = 0;
+        int len = arr.length;
+        for(int i=0 ; i<len ; i++){
+            maxand = Math.max(arr[i],maxand);
+        }
+        int maxlen = 1;
+        boolean flag = false;
+        int maxandidx = -1;
+        for(int i=0 ; i<len ; i++){
+            if(arr[i]==maxand && !flag){
+                flag = true;
+                maxandidx = i;
+            }
+            else if(arr[i]!=maxand && flag){
+                flag = false;
+            }
+            if(flag){
+                maxlen = Math.max(maxlen,i-maxandidx+1);
+            }
+        }
+        return maxlen;
+    }
+}
+________________________________________________________
+
+
+
+
+
+Problem Statement : 
+You are given an integer array nums of size n.
+
+Consider a non-empty subarray from nums that has the maximum possible bitwise AND.
+
+In other words, let k be the maximum value of the bitwise AND of any subarray of nums. Then, only subarrays with a bitwise AND equal to k should be considered.
+Return the length of the longest such subarray.
+
+The bitwise AND of an array is the bitwise AND of all the numbers in it.
+
+A subarray is a contiguous sequence of elements within an array.
+
+
+
+
+
+
+Approach : 
+Find the Maximum Element (maxand) in the Array:
+Bitwise AND of any subarray will always be ≤ the minimum element in it.
+So, to get the maximum AND, we need subarrays where all elements are equal to the maximum element in the array.
+
+Traverse the Array to Find Longest Streak of maxand:
+Track consecutive elements equal to maxand using a flag and a starting index maxandidx.
+Whenever you find a new maxand, start counting the subarray.
+If the streak breaks (i.e., element != maxand), reset the flag.
+Update maxlen with the current streak length i - maxandidx + 1.
+
+Return maxlen:
+This gives the length of the longest contiguous subarray having bitwise AND equal to the maximum possible value.
+
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(1)
