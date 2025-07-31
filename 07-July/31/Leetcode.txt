@@ -1,0 +1,55 @@
+898. Bitwise ORs of Subarrays
+________________________________________________________
+
+class Solution {
+    public int subarrayBitwiseORs(int[] arr) {
+        Set<Integer> res = new HashSet<>();
+        Set<Integer> cur = new HashSet<>();
+
+        for (int num : arr) {
+            Set<Integer> next = new HashSet<>();
+            next.add(num);
+            for (int x : cur) {
+                next.add(x | num);
+            }
+            cur = next;
+            res.addAll(cur);
+        }
+
+        return res.size();
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+Given an integer array arr, return the number of distinct bitwise ORs of all the non-empty subarrays of arr.
+
+The bitwise OR of a subarray is the bitwise OR of each integer in the subarray. The bitwise OR of a subarray of one integer is that integer.
+
+A subarray is a contiguous non-empty sequence of elements within an array.
+
+
+
+
+Approach
+Initialize two sets:
+res to store all unique OR results across all subarrays.
+cur to store OR results of subarrays ending at current index.
+
+For each number in arr:
+Create a new next set starting with the current number.
+For every value x in cur, compute x | num and add to next.
+Assign next to cur and merge it into res.
+
+Return the size of res.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n * logM)
+Space Complexity : O(n * logM)
