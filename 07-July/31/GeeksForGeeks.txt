@@ -1,0 +1,87 @@
+Powerful Integer
+________________________________________________________
+
+import java.util.*;
+
+class Solution {
+    public int powerfulInteger(int[][] intervals, int k) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+
+        // Step 1: Build difference map
+        for (int[] interval : intervals) {
+            int start = interval[0];
+            int end = interval[1];
+
+            map.put(start, map.getOrDefault(start, 0) + 1);
+            map.put(end + 1, map.getOrDefault(end + 1, 0) - 1);
+        }
+
+        int curr = 0;
+        int maxPowerful = -1;
+        int lastPos = -1;
+
+        // Step 2: Sweep line technique
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int pos = entry.getKey();
+            int delta = entry.getValue();
+
+            // If we were in a powerful range and current pos is not continuous, update maxPowerful
+            if (curr >= k && lastPos != -1) {
+                maxPowerful = Math.max(maxPowerful, pos - 1); // last valid integer in powerful range
+            }
+
+            curr += delta;
+
+            // Start a new powerful segment
+            if (curr >= k) {
+                lastPos = pos;
+            } else {
+                lastPos = -1;
+            }
+        }
+
+        return maxPowerful;
+    }
+}
+
+________________________________________________________
+
+
+
+
+
+
+Problem Statement : 
+You are given a 2D integer array intervals[][] of length n, where each intervals[i] = [start, end] represents a closed interval (i.e., all integers from start to end, inclusive). You are also given an integer k. An integer is called Powerful if it appears in at least k intervals. Find the maximum Powerful Integer.
+
+Note: If no integer occurs at least k times return -1.
+
+
+
+
+
+Approach : 
+Initialize a TreeMap<Integer, Integer>:
+It will store the difference array logic: +1 at start, -1 at end + 1 for each interval.
+
+Process each interval [start, end]:
+map[start] += 1
+map[end + 1] -= 1
+
+Sweep through the sorted keys in the map:
+Maintain a running count of overlapping intervals.
+When count >= k, we are in a "powerful range".
+Track the last start of such range.
+
+Update the result (maxPowerful):
+Whenever a powerful range ends, update maxPowerful to pos - 1 (last included integer).
+
+Return the maximum powerful integer found, or -1 if none.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n log n)
+Space Complexity : O(n) 
