@@ -1,0 +1,69 @@
+904. Fruit Into Baskets
+________________________________________________________
+
+class Solution {
+    public int totalFruit(int[] fruits) {
+        int start = 0,end = 0;
+        int n = fruits.length,maxLen = 0;
+        Map<Integer,Integer> map = new HashMap<>();
+        while(end<n)
+        {
+            map.put(fruits[end],map.getOrDefault(fruits[end],0)+1);
+            while(map.size()>=3)
+            {
+                map.put(fruits[start],map.get(fruits[start])-1);
+                if(map.get(fruits[start]) == 0) map.remove(fruits[start]);
+                start++;
+            }
+            int currLen = end-start+1;
+            maxLen = Math.max(maxLen,currLen);
+            end++;
+        }
+        return maxLen;
+    }
+}
+_________________________________________________________
+
+
+
+
+Problem Statement : 
+You are visiting a farm that has a single row of fruit trees arranged from left to right. The trees are represented by an integer array fruits where fruits[i] is the type of fruit the ith tree produces.
+
+You want to collect as much fruit as possible. However, the owner has some strict rules that you must follow:
+
+You only have two baskets, and each basket can only hold a single type of fruit. There is no limit on the amount of fruit each basket can hold.
+
+Starting from any tree of your choice, you must pick exactly one fruit from every tree (including the start tree) while moving to the right. The picked fruits must fit in one of your baskets.
+
+Once you reach a tree with fruit that cannot fit in your baskets, you must stop.
+
+
+Given the integer array fruits, return the maximum number of fruits you can pick.
+
+
+
+
+
+
+
+
+Approach :
+We initialize two pointers: start and end to define our sliding window.
+
+A HashMap stores the count of each fruit type in the current window.
+
+Expand the window by moving end and adding fruits to the map.
+
+If the map has more than 2 fruit types, shrink the window from start until we're back to only two types .
+
+Keep updating the maximum length (maxLen) at each valid window.
+
+
+
+
+
+
+Complexity :
+Time complexity: O(n)
+Space complexity: O(1)
