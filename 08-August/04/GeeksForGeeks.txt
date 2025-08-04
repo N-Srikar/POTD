@@ -1,0 +1,63 @@
+Maximum sum Rectangle
+________________________________________________________
+
+class Solution {
+    public int maxRectSum(int[][] mat) {
+        int n = mat.length;
+        int m = mat[0].length;
+        int maxSum = Integer.MIN_VALUE;
+
+        for (int left = 0; left < m; left++) {
+            int[] temp = new int[n];
+
+            for (int right = left; right < m; right++) {
+                for (int i = 0; i < n; i++) {
+                    temp[i] += mat[i][right];
+                }
+
+                int currMax = kadane(temp);
+                maxSum = Math.max(maxSum, currMax);
+            }
+        }
+
+        return maxSum;
+    }
+
+    private int kadane(int[] arr) {
+        int max = arr[0], curr = arr[0];
+        for (int i = 1; i < arr.length; i++) {
+            curr = Math.max(arr[i], curr + arr[i]);
+            max = Math.max(max, curr);
+        }
+        return max;
+    }
+}
+
+________________________________________________________
+
+
+
+Problem statement :
+Given a 2D matrix mat[][] with dimensions n×m. Find the maximum possible sum of any submatrix within the given matrix.
+
+
+
+
+Approach :
+Initialize maxSum to negative infinity.
+
+Fix two columns: left and right.
+
+For each left to right, compress the matrix rows into a 1D array temp[] where each element is the sum of that row from left to right.
+
+Apply Kadane’s Algorithm on temp[] to find the maximum subarray sum.
+
+Update maxSum if current Kadane result is greater.
+
+
+
+
+
+Complexity : 
+Time Complexity: O(m² * n)
+Space Complexity: O(n)
