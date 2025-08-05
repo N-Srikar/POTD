@@ -1,0 +1,64 @@
+Palindrome Sentence
+________________________________________________________
+
+class Solution {
+    public boolean isPalinSent(String s) {
+        String lower = s.toLowerCase();
+        int i = 0, j = lower.length() - 1;
+
+        while (i < j) {
+            while (i < j && !Character.isLetterOrDigit(lower.charAt(i))) {
+                i++;
+            }
+            while (i < j && !Character.isLetterOrDigit(lower.charAt(j))) {
+                j--;
+            }
+
+            if (lower.charAt(i) != lower.charAt(j)) {
+                return false;
+            }
+
+            i++;
+            j--;
+        }
+
+        return true;
+    }
+}
+
+________________________________________________________
+
+
+
+
+
+Problem Statement :
+Given a single string s, the task is to check if it is a palindrome sentence or not.
+A palindrome sentence is a sequence of characters, such as word, phrase, or series of symbols that reads the same backward as forward after converting all uppercase letters to lowercase and removing all non-alphanumeric characters (including spaces and punctuation).
+
+
+
+
+
+Approach :
+Convert the input string s to lowercase.
+
+Initialize two pointers:
+i at the start (0)
+j at the end (s.length() - 1)
+
+While i < j:
+Skip any non-alphanumeric characters at i and j
+
+Compare s.charAt(i) and s.charAt(j)
+If they don’t match, return false
+If they match, move inward: i++, j--
+If the loop finishes, return true
+
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(1) 
