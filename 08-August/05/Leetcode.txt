@@ -1,0 +1,70 @@
+3477. Fruits Into Baskets II
+_______________________________________________________
+
+class Solution {
+    public int numOfUnplacedFruits(int[] fruits, int[] baskets) {
+        boolean occupied[] = new boolean[baskets.length];
+        for(int i=0 ; i<fruits.length ; i++){
+            for(int j=0; j<baskets.length ; j++){
+                if(!occupied[j] && baskets[j]>=fruits[i]){
+                    occupied[j]=true;
+                    break;
+                }
+            }
+        }
+        int count=0;
+        for(boolean i:occupied) if(!i) count++;
+        return count;
+    }
+}
+_______________________________________________________
+
+
+
+
+Problem Statement :
+You are given two arrays of integers, fruits and baskets, each of length n, where fruits[i] represents the quantity of the ith type of fruit, and baskets[j] represents the capacity of the jth basket.
+
+From left to right, place the fruits according to these rules:
+
+Each fruit type must be placed in the leftmost available basket with a capacity greater than or equal to the quantity of that fruit type.
+Each basket can hold only one type of fruit.
+If a fruit type cannot be placed in any basket, it remains unplaced.
+Return the number of fruit types that remain unplaced after all possible allocations are made.
+
+
+
+
+
+Approach : 
+1. Initialize the occupied Array:
+Create a boolean[] occupied array to track which baskets have been filled. Initially, all baskets are unoccupied, so the array is filled with false.
+
+2. Iterate through fruits:
+Iterate through the fruits[] array, which represents the quantity of each fruit type.
+
+3. Find the First Available Basket:
+For each fruit type (from fruits[i]), iterate through the baskets[] array to find the first available basket (i.e., a basket that:
+Is not already occupied (!occupied[j]).
+Has a capacity greater than or equal to the current fruit's quantity (baskets[j] >= fruits[i]).
+
+If such a basket is found:
+Mark the basket as occupied (occupied[j] = true).
+Move to the next fruit type.
+
+4. Track Unplaced Fruits:
+After trying to place all fruits, check which baskets remain unoccupied.
+Count the number of baskets in the occupied[] array that are still false, as these represent the unplaced fruits.
+
+5. Return the Result:
+Return the number of unplaced fruit types (count of unoccupied baskets) after going through all the fruits.
+
+
+
+
+
+
+
+Complexity :
+Time Complexity : O(n * m)
+Space Complexity : O(m)
