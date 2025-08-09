@@ -1,0 +1,59 @@
+Longest Periodic Proper Prefix
+________________________________________________________
+
+class Solution {
+    int getLongestPrefix(String s) {
+        int n = s.length();
+        if (n <= 1) return -1;
+
+        int[] lps = new int[n];
+        int len = 0, i = 1;
+        while (i < n) {
+            if (s.charAt(i) == s.charAt(len)) {
+                lps[i++] = ++len;
+            } else {
+                if (len != 0) len = lps[len - 1];
+                else lps[i++] = 0;
+            }
+        }
+
+        int L = lps[n - 1];          
+        if (L == 0) return -1;       
+
+        while (L > 0 && lps[L - 1] > 0) {
+            L = lps[L - 1];
+        }
+
+        return n - L; 
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given a string s, find the length of longest periodic proper prefix of s. If no such prefix exists, return -1.
+A periodic proper prefix is a non empty prefix of s (but not the whole string), such that repeating this prefix enough times produces a string that starts with s.
+
+
+
+
+Approach :
+Let n = s.length(). A prefix of length k works iff repeating that prefix builds a string that starts with s.
+This is equivalent to s.substring(k) == s.substring(0, n-k).
+
+That means n - k is a border length (a prefix that is also a suffix). So every border L gives a valid k = n - L.
+
+To get the longest k we must pick the smallest positive border L.
+
+Compute KMP lps array. Start with L = lps[n-1] and follow the lps chain down to the smallest positive border (the last non-zero in the chain). Then return k = n - L. If no border (L == 0), return -1.
+
+
+
+
+
+Complexity :
+Time Complexity : O(n)
+Space Complexity : O(n)
