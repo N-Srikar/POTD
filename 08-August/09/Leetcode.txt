@@ -1,0 +1,27 @@
+231. Power of Two
+______________________________________________________
+
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if(n==0 || n<0) return false;
+        return (n & (n-1)) == 0;
+    }
+}
+______________________________________________________
+
+
+
+Problem Statement :
+Given an integer n, return true if it is a power of two. Otherwise, return false.
+
+
+
+Approach :
+if a number is negative or 0 ----> return false
+else check using bit manipulation trick ----> n & (n-1) == 0
+
+
+
+Complexity :
+Time Complexity : O(1)
+Space Complexity : O(1)
