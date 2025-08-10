@@ -1,0 +1,63 @@
+869. Reordered Power of 2
+________________________________________________________
+
+class Solution {
+    public boolean reorderedPowerOf2(int n) {
+        int target[] = freq(n);
+
+        for(int i=0 ; i<=30 ; i++){
+            int powerof2 = (int)Math.pow(2,i);
+            if(equal(target,freq(powerof2))){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int[] freq(int n){
+        int arr[] = new int[10];
+        while(n>0){
+            arr[n%10]++;
+            n/=10;
+        }
+        return arr;
+    }
+
+    public static boolean equal(int a[], int b[]){
+        for(int i=0 ; i<10 ; i++){
+            if(a[i]!=b[i]) return false;
+        }
+        return true;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement : 
+You are given an integer n. We reorder the digits in any order (including the original order) such that the leading digit is not zero.
+
+Return true if and only if we can do this so that the resulting number is a power of two.
+
+
+
+
+
+Approach : 
+Build a digit frequency array freq[10] for the input N.
+
+For every power of two 2^i where i = 0 to 30 :
+Compute the digit frequency for 2^i.
+
+Compare the two frequency arrays :
+if identical, return true.
+If no power of two matches, return false.
+
+
+
+
+
+Complexity :
+Time Complexity : O(log N)
+Space Complexity : O(1)
