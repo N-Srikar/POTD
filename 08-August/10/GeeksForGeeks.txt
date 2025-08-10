@@ -1,0 +1,66 @@
+Palindrome SubStrings
+_______________________________________________________
+
+class Solution {
+    public int countPS(String s) {
+        int n = s.length();
+        int count = 0;
+        
+        for(int i=0 ; i<n ; i++){
+            count += expand(s,i,i);
+            count += expand(s,i,i+1);
+        }
+        
+        return count;
+    }
+    
+    public static int expand(String s, int left, int right){
+        int count=0;
+        
+        while(left>=0 && right<s.length() && s.charAt(left)==s.charAt(right)){
+            if(right-left+1>=2) count++;
+            left--;
+            right++;
+        }
+        
+        return count;
+    }
+}
+_______________________________________________________
+
+
+
+
+
+Problem Statement :
+Given a string s, count all palindromic sub-strings present in the string. The length of the palindromic sub-string must be greater than or equal to 2.
+
+Note: A substring is palindromic if it reads the same forwards and backwards.
+
+
+
+
+
+Approach :
+Idea:
+Every palindrome has a center (can be 1 char for odd length or between 2 chars for even length).
+Expand outwards from each center while the substring remains a palindrome.
+Only count palindromes of length ≥ 2.
+
+Steps:
+Loop over each index i in the string:
+Expand around (i, i) → odd length palindromes.
+Expand around (i, i+1) → even length palindromes.
+In expansion, check length ≥ 2 before counting.
+
+Why Efficient:
+We avoid generating all substrings explicitly.
+Just expand in-place using two pointers.
+
+
+
+
+
+Complexity :
+Time Complexity : O(n²)
+Space Complexity : O(1)
