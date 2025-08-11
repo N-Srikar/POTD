@@ -1,0 +1,67 @@
+2438. Range Product Queries of Powers
+________________________________________________________
+
+class Solution {
+    final int MOD = 1000000007;
+
+    public int[] productQueries(int n, int[][] queries) {
+        List<Integer> powers = new ArrayList<>();
+        int power = 1;
+
+        while (n > 0) {
+            if ((n & 1) == 1) {
+                powers.add(power);
+            }
+            power <<= 1;
+            n >>= 1;
+        }
+
+        int[] result = new int[queries.length];
+        for (int i = 0; i < queries.length; i++) {
+            int p = 1;
+            for (int j = queries[i][0]; j <= queries[i][1]; j++) {
+                p = (int)(((long)p * powers.get(j)) % MOD);
+            }
+            result[i] = p;
+        }
+
+        return result;
+    }
+}
+________________________________________________________
+
+
+
+
+Problem Statement :
+Given a positive integer n, there exists a 0-indexed array called powers, composed of the minimum number of powers of 2 that sum to n. The array is sorted in non-decreasing order, and there is only one way to form the array.
+
+You are also given a 0-indexed 2D integer array queries, where queries[i] = [lefti, righti]. Each queries[i] represents a query where you have to find the product of all powers[j] with lefti <= j <= righti.
+
+Return an array answers, equal in length to queries, where answers[i] is the answer to the ith query. Since the answer to the ith query may be too large, each answers[i] should be returned modulo 10^9 + 7.
+
+
+
+
+
+Approach : 
+Extract powers of 2 from n :
+n & 1 checks if the least significant bit is 1.
+power starts at 1 (2^0) and doubles each loop.
+If bit is 1, add that power to powers.
+Then shift n right to process the next bit.
+Result: powers contains exactly the powers of 2 that sum to n, in ascending order.
+
+Answer each query :
+For each query:
+Start p at 1 (multiplicative identity).
+Loop from index l to r in powers.
+Multiply p by each power in range, taking % MOD to avoid overflow and large numbers.
+Append the result p to result.
+
+
+
+
+Complexity : 
+Time Complexity : O(q * logn)
+Space Complexity : O(q + logn)
