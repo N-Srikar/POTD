@@ -1,0 +1,107 @@
+Maximum Non-Overlapping Odd Palindrome Sum
+________________________________________________________
+
+class Solution {
+    public int maxSum(String s) {
+        int n = s.length();
+        if (n < 2) return 0;
+
+        // Manacher (odd centers) on original
+        int[] d = manacherOdd(s);
+
+        // bestEnding[j] = best odd palindrome length that ends at j
+        int[] bestEnding = computeBestEndingFromRadii(d);
+
+        // do same on reversed string to get bestStarting
+        String rev = new StringBuilder(s).reverse().toString();
+        int[] dRev = manacherOdd(rev);
+        int[] bestEndingRev = computeBestEndingFromRadii(dRev);
+
+        // map reversed-ending to original-starting
+        int[] bestStarting = new int[n];
+        for (int L = 0; L < n; L++) bestStarting[L] = bestEndingRev[n - 1 - L];
+
+        // prefix and suffix maxima
+        int[] prefix = new int[n], suffix = new int[n];
+        prefix[0] = bestEnding[0];
+        for (int i = 1; i < n; i++) prefix[i] = Math.max(prefix[i - 1], bestEnding[i]);
+        suffix[n - 1] = bestStarting[n - 1];
+        for (int i = n - 2; i >= 0; i--) suffix[i] = Math.max(suffix[i + 1], bestStarting[i]);
+
+        // try all splits
+        int ans = 0;
+        for (int i = 0; i < n - 1; i++) ans = Math.max(ans, prefix[i] + suffix[i + 1]);
+        return ans;
+    }
+
+    // Manacher for odd-length palindromes: d[i] = radius (>=1)
+    private int[] manacherOdd(String s) {
+        int n = s.length();
+        int[] d = new int[n];
+        int l = 0, r = -1;
+        for (int i = 0; i < n; i++) {
+            int k = (i > r) ? 1 : Math.min(d[l + r - i], r - i + 1);
+            while (i - k >= 0 && i + k < n && s.charAt(i - k) == s.charAt(i + k)) k++;
+            d[i] = k;
+            if (i + k - 1 > r) {
+                l = i - k + 1;
+                r = i + k - 1;
+            }
+        }
+        return d;
+    }
+
+    // Given manacher radii d (length n), compute best palindrome length ending at each index j in O(n)
+    private int[] computeBestEndingFromRadii(int[] d) {
+        int n = d.length;
+        int[] expire = new int[n];
+        for (int i = 0; i < n; i++) expire[i] = i + d[i] - 1; // last right index this center can produce
+
+        ArrayDeque<Integer> dq = new ArrayDeque<>();
+        int[] bestEnding = new int[n];
+        for (int j = 0; j < n; j++) {
+            // add center j (centers arrive in increasing i)
+            dq.addLast(j);
+            // evict centers whose coverage ended before j
+            while (!dq.isEmpty() && expire[dq.peekFirst()] < j) dq.removeFirst();
+            // front of deque is smallest i among centers covering j -> gives max length 2*(j-i)+1
+            int iAct = dq.peekFirst(); // safe because center j itself always has expire >= j
+            bestEnding[j] = 2 * (j - iAct) + 1;
+        }
+        return bestEnding;
+    }
+}
+
+
+________________________________________________________
+
+
+
+Problem Statement :
+Given a string s consisting of lowercase English letters, find the maximum possible sum of the lengths of any two non-empty and non-overlapping palindromic substrings of odd length.
+
+Formally, choose any two substrings s[i...j] and s[k...l] such that 1 ≤ i ≤ j < k ≤ l ≤ s.size(), both substrings are palindromes of odd length, and they do not overlap. Return the maximum sum of their lengths.
+
+Note: A palindrome is a string that reads the same forward and backward. A substring is a contiguous sequence of characters within the string.
+
+
+
+
+Approach : 
+Run Manacher (odd-only) to get d[i] = radius at center i (palindromes are intervals [i-(d[i]-1), i+(d[i]-1)]).
+
+For each right endpoint j, the best odd palindrome ending at j comes from the active center with the smallest index i such that i ≤ j ≤ i + d[i] - 1.
+Why smallest i? length = 2*(j-i)+1 → decreases with i, so minimal i gives maximal length.
+Maintain active centers in increasing i and evict those whose coverage ended before j (use ArrayDeque) — this yields bestEnding[j] in O(1) amortized per j.
+
+Do the same for starting positions by running the same procedure on the reversed string; map results back to bestStarting.
+
+Build prefix/suffix maxima from bestEnding/bestStarting. Check all splits and take max of prefix[i] + suffix[i+1].
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n)
+Space Complexity : O(n)
