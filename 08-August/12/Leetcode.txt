@@ -1,0 +1,88 @@
+2787. Ways to Express an Integer as Sum of Powers
+________________________________________________________
+
+class Solution {
+    static final int MOD = 1000000007;
+    int[][] memo;
+
+    public int numberOfWays(int n, int x) {
+        ArrayList<Integer> powers = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            int power = (int) Math.pow(i, x);
+            if (power <= n) {
+                powers.add(power);
+            } else {
+                break;
+            }
+        }
+
+        memo = new int[powers.size() + 1][n + 1];
+        for (int i = 0; i <= powers.size(); i++) {
+            Arrays.fill(memo[i], -1);
+        }
+
+        return dfs(powers, 0, n, 0);
+    }
+
+    public int dfs(ArrayList<Integer> powers, int idx, int target, int sum) {
+        if (sum == target) return 1;
+        if (sum > target || idx == powers.size()) return 0;
+
+        if (memo[idx][sum] != -1) return memo[idx][sum];
+
+        int notTake = dfs(powers, idx + 1, target, sum);
+        int take = dfs(powers, idx + 1, target, sum + powers.get(idx));
+
+        return memo[idx][sum] = (int) ((notTake + (long) take) % MOD);
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement : 
+Given two positive integers n and x.
+Return the number of ways n can be expressed as the sum of the xth power of unique positive integers.
+Since the result can be very large, return it modulo 10^9 + 7.
+
+
+
+
+
+Approach : 
+Generate Powers:
+For each integer i, compute i^x until it exceeds n.
+Store valid powers in a list powers.
+
+Initialize Memoization Table:
+Create a 2D array memo[idx][sum] to cache results.
+idx: current index in powers list.
+sum: current accumulated sum.
+
+Recursive DFS:
+Base cases:
+If sum == target: return 1 (valid way).
+If sum > target or idx == powers.size(): return 0 (invalid).
+
+Memoization:
+If result is already computed for (idx, sum), return it.
+
+Recurrence:
+notTake: skip current power.
+take: include current power in sum.
+Store result in memo[idx][sum].
+
+Return the Count:
+Start DFS from index 0 and sum 0.
+
+
+
+
+
+
+
+Complexity :
+Time Complexity : O(m × n)
+Space Complexity : O(m × n)
