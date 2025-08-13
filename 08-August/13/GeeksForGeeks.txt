@@ -1,0 +1,59 @@
+Tywin's War Strategy
+_______________________________________________________
+
+class Solution {
+    public int minSoldiers(int[] arr, int k) {
+        int n = arr.length;
+        int neededLucky = (n + 1) / 2;
+        
+        List<Integer> adds = new ArrayList<>();
+        for (int soldiers : arr) {
+            int rem = soldiers % k;
+            adds.add(rem == 0 ? 0 : k - rem);
+        }
+        
+        Collections.sort(adds);
+        
+        int total = 0;
+        for (int i = 0; i < neededLucky; i++) {
+            total += adds.get(i);
+        }
+        
+        return total;
+    }
+}
+
+_______________________________________________________
+
+
+
+Problem Statement : 
+You are given an array arr[] of size n, where arr[i] represents the number of soldiers in the i-th troop. You are also given an integer k. A troop is considered "lucky" if its number of soldiers is a multiple of k. Find the minimum total number of soldiers to add across all troops so that at least ⌈n / 2⌉ troops become lucky.
+
+
+
+
+
+Approach : 
+Calculate neededLucky = ceil(n / 2) — minimum number of lucky troops required.
+
+For each troop:
+If arr[i] % k == 0 → already lucky → need 0 soldiers.
+Else → soldiers to add = k - (arr[i] % k).
+
+Store these additions in a list.
+
+Sort the list.
+
+Take the smallest additions until you reach neededLucky lucky troops.
+
+Sum them → answer.
+
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n log n) 
+Space Complexity : O(n) 
