@@ -23,7 +23,7 @@ An integer n is a power of three, if there exists an integer x such that n == 3x
 
 
 Approach : 
-If ( n \leq 0 ), return false since negative numbers and zero are not powers of three.
+If ( n < 0 ), return false since negative numbers and zero are not powers of three.
 Repeatedly divide ( n ) by 3 as long as it is divisible.
 If the final value is 1, return true; otherwise, return false.
 
