@@ -1,59 +1,49 @@
 Farthest Smaller Right
 ______________________________________________________
 
+import java.util.*;
+
 class Solution {
     public ArrayList<Integer> farMin(int[] arr) {
         int n = arr.length;
-        ArrayList<Integer> res = new ArrayList<>(Collections.nCopies(n, -1));
-        if (n == 0) return res;
-
-        // Coordinate compress values
-        int[] vals = Arrays.copyOf(arr, n);
-        Arrays.sort(vals);
-        ArrayList<Integer> uniq = new ArrayList<>();
-        uniq.add(vals[0]);
-        for (int k = 1; k < n; k++) {
-            if (vals[k] != vals[k - 1]) uniq.add(vals[k]);
+        int[] suf = new int[n];
+        suf[n - 1] = arr[n - 1];
+        for (int i = n - 2; i >= 0; i--) {
+            int v = arr[i];
+            int prev = suf[i + 1];
+            suf[i] = v < prev ? v : prev;
         }
 
-        Map<Integer, Integer> rank = new HashMap<>();
-        for (int k = 0; k < uniq.size(); k++) rank.put(uniq.get(k), k + 1); // 1-based
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
 
-        // BIT for prefix maximum (stores index+1, 0 = none)
-        int m = uniq.size();
-        int[] bit = new int[m + 1];
+        for (int i = 0; i < n - 1; i++) {
+            int a = arr[i];
 
-        // BIT helpers
-        class BIT {
-            void update(int idx, int value) {
-                while (idx <= m) {
-                    bit[idx] = Math.max(bit[idx], value);
-                    idx += idx & -idx;
+            // quick rejects / accepts to avoid binary search
+            if (suf[i + 1] >= a) continue;         // no smaller to the right
+            if (suf[n - 1] < a) {                   // last element itself is smaller
+                ans[i] = n - 1;
+                continue;
+            }
+
+            // binary search last index p in [i+1..n-1] where suf[p] < a
+            int l = i + 1, r = n - 1, best = -1;
+            while (l <= r) {
+                int mid = (l + r) >>> 1;
+                if (suf[mid] < a) {
+                    best = mid;      // try farther right
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
                 }
             }
-            int query(int idx) {
-                int ans = 0;
-                while (idx > 0) {
-                    ans = Math.max(ans, bit[idx]);
-                    idx -= idx & -idx;
-                }
-                return ans;
-            }
-        }
-        BIT fen = new BIT();
-
-        // Process from right to left
-        for (int i = n - 1; i >= 0; i--) {
-            int r = rank.get(arr[i]);
-            if (r - 1 >= 1) {
-                int q = fen.query(r - 1); // returns (j+1) or 0
-                if (q != 0) res.set(i, q - 1);
-            }
-            // store this index for future queries (use i+1 to avoid 0 ambiguity)
-            fen.update(r, i + 1);
+            ans[i] = best; // best is guaranteed >= i+1 here
         }
 
-        return res;
+        ArrayList<Integer> out = new ArrayList<>(n);
+        for (int v : ans) out.add(v);
+        return out;
     }
 }
 

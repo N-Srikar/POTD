@@ -1,0 +1,44 @@
+2348. Number of Zero-Filled Subarrays
+________________________________________________________
+
+class Solution {
+    public long zeroFilledSubarray(int[] nums) {
+        long cnt = 0, streak = 0;
+        for (int num : nums) {
+            streak = (num == 0) ? streak + 1 : 0;
+            cnt += streak;
+        }
+        return cnt;
+    }
+}
+________________________________________________________
+
+
+
+Problem Statement :
+Given an integer array nums, return the number of subarrays filled with 0.
+
+A subarray is a contiguous non-empty sequence of elements within an array.
+
+
+
+
+
+
+Approach :
+We traverse the array once while maintaining a counter (streak) for consecutive zeros.
+
+If the current element is 0, we extend the streak by +1.
+Every new zero extends all previous zero-subarrays and also forms a new single-element subarray.
+So we add streak to our answer.
+If the current element is non-zero, we reset streak = 0 because a zero-filled subarray cannot continue past it.
+
+By accumulating in this way, we efficiently count all zero-filled subarrays in a single pass.
+
+
+
+
+
+Complexity :
+Time complexity : O (N)
+Space complexity : O (1)
