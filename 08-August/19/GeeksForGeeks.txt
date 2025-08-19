@@ -1,0 +1,89 @@
+Farthest Smaller Right
+______________________________________________________
+
+class Solution {
+    public ArrayList<Integer> farMin(int[] arr) {
+        int n = arr.length;
+        ArrayList<Integer> res = new ArrayList<>(Collections.nCopies(n, -1));
+        if (n == 0) return res;
+
+        // Coordinate compress values
+        int[] vals = Arrays.copyOf(arr, n);
+        Arrays.sort(vals);
+        ArrayList<Integer> uniq = new ArrayList<>();
+        uniq.add(vals[0]);
+        for (int k = 1; k < n; k++) {
+            if (vals[k] != vals[k - 1]) uniq.add(vals[k]);
+        }
+
+        Map<Integer, Integer> rank = new HashMap<>();
+        for (int k = 0; k < uniq.size(); k++) rank.put(uniq.get(k), k + 1); // 1-based
+
+        // BIT for prefix maximum (stores index+1, 0 = none)
+        int m = uniq.size();
+        int[] bit = new int[m + 1];
+
+        // BIT helpers
+        class BIT {
+            void update(int idx, int value) {
+                while (idx <= m) {
+                    bit[idx] = Math.max(bit[idx], value);
+                    idx += idx & -idx;
+                }
+            }
+            int query(int idx) {
+                int ans = 0;
+                while (idx > 0) {
+                    ans = Math.max(ans, bit[idx]);
+                    idx -= idx & -idx;
+                }
+                return ans;
+            }
+        }
+        BIT fen = new BIT();
+
+        // Process from right to left
+        for (int i = n - 1; i >= 0; i--) {
+            int r = rank.get(arr[i]);
+            if (r - 1 >= 1) {
+                int q = fen.query(r - 1); // returns (j+1) or 0
+                if (q != 0) res.set(i, q - 1);
+            }
+            // store this index for future queries (use i+1 to avoid 0 ambiguity)
+            fen.update(r, i + 1);
+        }
+
+        return res;
+    }
+}
+
+______________________________________________________
+
+
+Problem Statement :
+You are given an array arr[]. For each element at index i (0-based indexing), find the farthest index j to the right (i.e., j > i) such that arr[j] < arr[i]. If no such index exists for a given position, return -1 for that index. Return the resulting array of answers.
+
+
+
+
+
+
+Approach : 
+Coordinate-compress array values to ranks 1..m.
+
+Use a BIT that stores the maximum (index+1) seen for each rank.
+
+Iterate i from n-1 down to 0:
+Query BIT for prefix (rank(arr[i]) - 1) to get the largest index j+1 where arr[j] < arr[i].
+If query result is 0 → no smaller → answer -1, else answer query-1.
+Update BIT at rank(arr[i]) with i+1.
+
+Return results.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n log n)
+Space Complexity : O(n)
