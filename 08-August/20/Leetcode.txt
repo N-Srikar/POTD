@@ -1,0 +1,74 @@
+1277. Count Square Submatrices with All Ones
+______________________________________________________
+
+class Solution {
+    public int countSquares(int[][] matrix) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+
+        int cnt = 0;
+        int[][] dp = new int[n][m];
+
+        // Initialize first column
+        for (int i = 0; i < n; i++) {
+            dp[i][0] = matrix[i][0];
+        }
+        // Initialize first row
+        for (int j = 0; j < m; j++) {
+            dp[0][j] = matrix[0][j];
+        }
+
+        // Fill DP table
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j < m; j++) {
+                if (matrix[i][j] == 1) {
+                    dp[i][j] = 1 + Math.min(dp[i - 1][j - 1],
+                                    Math.min(dp[i - 1][j], dp[i][j - 1]));
+                }
+            }
+        }
+
+        // Count all squares
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                cnt += dp[i][j];
+            }
+        }
+
+        return cnt;
+    }
+}
+______________________________________________________
+
+
+
+
+Problem Statement :
+Given a m * n matrix of ones and zeros, return how many square submatrices have all ones.
+
+ 
+
+
+Approach :
+Use a DP matrix (same size as input).
+dp[i][j] represents the size of the largest square submatrix with bottom-right corner at (i, j).
+
+Initialization:
+First row and first column are the same as the input matrix since they can only form 1x1 squares.
+
+Transition:
+If matrix[i][j] == 1:
+dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]).
+Otherwise, dp[i][j] = 0.
+
+Sum all dp[i][j] values to get the total count of square submatrices.
+Each dp[i][j] not only represents the largest square at (i, j) but also
+contributes all smaller squares within it.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n∗m)
+Space Complexity : O(n∗m)
