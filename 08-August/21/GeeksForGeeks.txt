@@ -1,0 +1,75 @@
+Maximize the minimum difference between k elements
+________________________________________________________
+
+class Solution {
+    public int maxMinDiff(int[] arr, int k) {
+        int n=arr.length;
+        Arrays.sort(arr);
+        int left = 0;
+        int right = arr[n-1]-arr[0];
+        
+        int ans=0;
+        while(left<=right){
+            int mid = left + (right-left)/2;
+            if(possible(arr,mid,k)){
+                ans = mid;
+                left = mid+1;
+            }
+            else{
+                right = mid-1;
+            }
+        }
+        return ans;
+    }
+    
+    public boolean possible(int arr[],int diff,int k){
+        int count=1;
+        int prev=arr[0];
+        for(int i=1 ; i<arr.length ; i++){
+            if(arr[i]-prev >= diff){
+                count++;
+                prev = arr[i];
+            }
+            if(count==k) return true;
+        }
+        return false;
+    }
+}
+
+________________________________________________________
+
+
+
+
+Problem Statement : 
+Given an array arr[] of integers and an integer k, select k elements from the array such that the minimum absolute difference between any two of the selected elements is maximized. Return this maximum possible minimum difference.
+
+
+
+
+Approach : 
+Sort the array → ensures relative order so we can greedily check spacing.
+
+Binary Search on Answer
+The minimum possible difference = 0.
+The maximum possible difference = arr[n-1] - arr[0].
+Use binary search to find the largest d such that it’s possible to select k elements with at least d spacing.
+
+Check feasibility (possible function)
+Start with the first element.
+Greedily pick the next element only if it is at least d apart from the last chosen.
+If we can pick k elements, then d is feasible.
+
+Update binary search
+If feasible, try larger d (move left = mid + 1).
+Otherwise, try smaller d (move right = mid - 1).
+
+Return the maximum feasible d.
+
+
+
+
+
+Complexity : 
+Time Complexity : O(n log n)
+Space Complexity : O(1)
