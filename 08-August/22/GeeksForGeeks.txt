@@ -1,0 +1,92 @@
+Median in a row-wise sorted Matrix
+_______________________________________________________
+
+class Solution {
+    public int median(int[][] mat) {
+        int n = mat.length;
+        int m = mat[0].length;
+        
+        // Minimum and maximum elements in the matrix
+        int low = Integer.MAX_VALUE;
+        int high = Integer.MIN_VALUE;
+        
+        for (int i = 0; i < n; i++) {
+            low = Math.min(low, mat[i][0]);
+            high = Math.max(high, mat[i][m - 1]);
+        }
+
+        int desired = (n * m + 1) / 2;
+
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            int count = 0;
+
+            for (int i = 0; i < n; i++) {
+                count += countLessThanOrEqualTo(mat[i], mid);
+            }
+
+            if (count < desired) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+
+        return low;
+    }
+
+    // Helper function to count elements <= target in a sorted row using binary search
+    private int countLessThanOrEqualTo(int[] row, int target) {
+        int l = 0, r = row.length;
+        while (l < r) {
+            int mid = (l + r) / 2;
+            if (row[mid] <= target) {
+                l = mid + 1;
+            } else {
+                r = mid;
+            }
+        }
+        return l;
+    }
+}
+
+_______________________________________________________
+
+
+
+
+
+Problem Statement:
+
+Given an array arr[] of integers and an integer k, select k elements from the array such that the minimum absolute difference between any two of the selected elements is maximized.
+Return this maximum possible minimum difference.
+
+
+
+
+
+Approach:
+1. Sort the Array
+Sorting ensures elements are in increasing order so we can greedily check spacing.
+
+2. Binary Search on the Answer
+The minimum possible difference: 0
+The maximum possible difference: arr[n-1] - arr[0]
+Use binary search to find the largest minimum difference d such that it is possible to select k elements with at least d spacing.
+
+3. Feasibility Check (possible function)
+Start with the first element.
+Greedily pick the next element only if it is at least d apart from the previously chosen one.
+If we can pick at least k elements this way, then d is feasible.
+
+4. Binary Search Updates
+If feasible → try larger d: left = mid + 1
+Else → try smaller d: right = mid - 1
+
+
+
+
+
+Complexity:
+Time Complexity : O(n log n)
+Space Complexity : O(1)
